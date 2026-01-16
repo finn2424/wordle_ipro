@@ -14,6 +14,7 @@ This document serves as a log for the tools, resources, and methodologies used d
 - **IDE**: Visual Studio Code
 - **Version Control**: Git & GitHub
 - **Frameworks**: Angular (Frontend)
+- **Deployment**: for now: GitHub Pages (via `angular-cli-ghpages`)
 
 ### Workflows
 - **Update Docs**: A workflow (`.agent/workflows/update-docs.md`) to automatically check for and document changes in the repository.
@@ -37,6 +38,11 @@ AI is utilized for generating visual design assets and providing file templates 
 ### Feature: UI/UX
 - **Approach**: [Pending]
 - **Tooling**: [Pending]
+
+### Feature: Deployment
+- **Decision**: Use GitHub Pages for hosting the frontend.
+- **Reasoning**: Free, easy integration with GitHub repository, and sufficient for static frontend hosting.
+- **Implementation**: Configured `angular-cli-ghpages` and added `deploy-gh-pages` script to `package.json`.
 
 ---
 *This document will be updated continuously as the project evolves.*
