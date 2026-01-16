@@ -7,6 +7,7 @@
 - [x] Create Mockups for Game Interface
 - [x] Create MILESTONES.md and basic README.md
 - [x] Create simple flowchart for game logic
+- [x] Implement Mockup Viewer (Prototyping Tool)
 
 ## Milestone 2: Functionalities & Requirements
 **Deadline:** 2026-01-19

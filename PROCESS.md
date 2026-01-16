@@ -15,6 +15,9 @@ This document serves as a log for the tools, resources, and methodologies used d
 - **Version Control**: Git & GitHub
 - **Frameworks**: Angular (Frontend)
 
+### Workflows
+- **Update Docs**: A workflow (`.agent/workflows/update-docs.md`) to automatically check for and document changes in the repository.
+
 ## 🤖 AI Usage Report
 
 ### Role of AI
