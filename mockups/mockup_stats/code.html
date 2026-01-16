@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wordle Desktop Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e01f80",
+                        "background-light": "#f5f5f5",
+                        "background-dark": "#1f1f1f",
+                        "game-correct": "#4CAF50",
+                        "game-present": "#FACC15", 
+                        "game-absent": "#94a3b8",
+                        "text-main": "#171114",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    animation: {
+                        'bounce-short': 'bounce-short 0.3s ease-in-out 1'
+                    },
+                    keyframes: {
+                        'bounce-short': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5%)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", "Noto Sans", sans-serif;
+        }::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tile-filled {
+            border-color: #64748b;
+            animation: pop 0.1s ease-in-out forwards;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-text-main dark:text-white transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-800 px-10 py-4 shadow-sm bg-white/80 dark:bg-background-dark/95 backdrop-blur-sm z-10 sticky top-0">
+<div class="flex items-center gap-2">
+<button class="md:hidden flex items-center justify-center p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<h1 class="text-3xl md:text-4xl font-bold tracking-[0.2em] font-display text-text-main dark:text-white uppercase select-none">Wordle</h1>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">help</span>
+</button>
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">bar_chart</span>
+</button>
+</div>
+</header>
+<main class="layout-container flex h-full grow flex-col items-center justify-center py-6 md:py-8 px-4 w-full max-w-7xl mx-auto">
+<div class="grid grid-cols-5 gap-3 md:gap-4 mb-8 p-2 md:p-4 select-none" style="max-width: 400px;">
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-absent text-white text-3xl font-bold uppercase rounded shadow-sm">G</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-absent text-white text-3xl font-bold uppercase rounded shadow-sm">H</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-correct text-white text-3xl font-bold uppercase rounded shadow-sm">O</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-present text-white text-3xl font-bold uppercase rounded shadow-sm">S</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-absent text-white text-3xl font-bold uppercase rounded shadow-sm">T</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-present text-white text-3xl font-bold uppercase rounded shadow-sm">S</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-present text-white text-3xl font-bold uppercase rounded shadow-sm">P</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-correct text-white text-3xl font-bold uppercase rounded shadow-sm">O</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-absent text-white text-3xl font-bold uppercase rounded shadow-sm">I</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-transparent bg-game-absent text-white text-3xl font-bold uppercase rounded shadow-sm">L</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-primary bg-white dark:bg-background-dark text-text-main dark:text-white text-3xl font-bold uppercase rounded shadow-md tile-filled">P</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-primary bg-white dark:bg-background-dark text-text-main dark:text-white text-3xl font-bold uppercase rounded shadow-md tile-filled">R</div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-background-dark text-text-main dark:text-white text-3xl font-bold uppercase rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-background-dark text-text-main dark:text-white text-3xl font-bold uppercase rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-background-dark text-text-main dark:text-white text-3xl font-bold uppercase rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+<div class="flex items-center justify-center aspect-square w-14 md:w-16 border-2 border-gray-200 dark:border-gray-700 bg-transparent rounded"></div>
+</div>
+<div class="flex flex-col gap-2 w-full max-w-[500px] px-2 select-none">
+<div class="flex gap-1.5 justify-center w-full">
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">Q</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">W</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">E</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">R</button>
+<button class="h-14 flex-1 rounded-lg bg-game-absent text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">T</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">Y</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">U</button>
+<button class="h-14 flex-1 rounded-lg bg-game-absent text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">I</button>
+<button class="h-14 flex-1 rounded-lg bg-game-correct text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">O</button>
+<button class="h-14 flex-1 rounded-lg bg-game-present text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">P</button>
+</div>
+<div class="flex gap-1.5 justify-center w-full px-4">
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">A</button>
+<button class="h-14 flex-1 rounded-lg bg-game-present text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">S</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">D</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">F</button>
+<button class="h-14 flex-1 rounded-lg bg-game-absent text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">G</button>
+<button class="h-14 flex-1 rounded-lg bg-game-absent text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">H</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">J</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">K</button>
+<button class="h-14 flex-1 rounded-lg bg-game-absent text-white hover:opacity-90 font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">L</button>
+</div>
+<div class="flex gap-1.5 justify-center w-full">
+<button class="h-14 flex-[1.5] rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-xs md:text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center uppercase">Enter</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">Z</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">X</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">C</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">V</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">B</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">N</button>
+<button class="h-14 flex-1 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all">M</button>
+<button class="h-14 flex-[1.5] rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-text-main dark:text-white font-bold text-sm shadow-sm active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">backspace</span>
+</button>
+</div>
+</div>
+<div class="fixed top-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+</div>
+</main>
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+<div class="relative w-full max-w-sm rounded-xl bg-white dark:bg-background-dark p-6 shadow-2xl ring-1 ring-gray-200 dark:ring-gray-700">
+<button class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="text-center text-sm font-bold uppercase tracking-widest mb-6">Statistics</h2>
+<div class="flex justify-between gap-2 mb-8 text-center">
+<div class="flex flex-col items-center flex-1">
+<span class="text-3xl font-bold">12</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Played</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<span class="text-3xl font-bold">100</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Win %</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<span class="text-3xl font-bold">4</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Current<br/>Streak</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<span class="text-3xl font-bold">9</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Max<br/>Streak</span>
+</div>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest mb-3">Guess Distribution</h3>
+<div class="flex flex-col gap-2 text-sm font-bold">
+<div class="flex items-center gap-2">
+<span class="w-2">1</span>
+<div class="bg-gray-500 dark:bg-gray-600 text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 8%">1</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2">2</span>
+<div class="bg-gray-500 dark:bg-gray-600 text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 25%">3</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2">3</span>
+<div class="bg-game-correct text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 60%">7</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2">4</span>
+<div class="bg-gray-500 dark:bg-gray-600 text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 8%">1</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2">5</span>
+<div class="bg-gray-500 dark:bg-gray-600 text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 0%">0</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2">6</span>
+<div class="bg-gray-500 dark:bg-gray-600 text-white text-right px-2 py-0.5 min-w-[1.5rem]" style="width: 0%">0</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>
