@@ -21,6 +21,8 @@
 - [x] Implement Main App Layout (Header, Game Container)
 - [x] Develop `GameGrid` Component (Responsive 6x5 Grid)
 - [x] Develop `VirtualKeyboard` Component with click events
+- [ ] Develop `InstructionsModal` Component
+- [ ] Develop `StatisticsModal` Component
 
 ## Milestone 4: Core Implementation (Wordle)
 **Deadline:** 2026-01-30
