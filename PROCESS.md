@@ -65,6 +65,17 @@ AI is utilized for generating visual design assets and providing file templates 
   - **ng-bootstrap**: Native Angular components for Bootstrap widgets (modals, tooltips, etc.) without jQuery dependency.
   - **@angular/localize**: Added for internationalization support required by ng-bootstrap.
 
+### Feature: Shared SCSS Architecture
+- **Decision**: Implement a centralized CSS variables system and shared component styling.
+- **Reasoning**:
+  - **Maintainability**: Centralizing colors and design tokens in one place makes theme updates easier.
+  - **Consistency**: Shared styles ensure uniform appearance across components (e.g., tiles in the game grid and instructions modal).
+  - **Separation of Concerns**: Variables are separate from component styles, following best practices.
+- **Implementation**:
+  - **`_variables.scss`**: Defines CSS custom properties (`:root`) for app theme colors, game logic colors (correct, present, absent), and keyboard colors.
+  - **`_tiles.scss`**: Contains reusable `.tile` class and state modifiers (`.tile-correct`, `.tile-present`, `.tile-absent`) used by `GameGrid` and `InstructionsModal`.
+  - Both files are located in `wordle-frontend/src/styles/` and imported via `styles.scss`.
+
 ### Feature: Deployment
 - **Decision**: Use GitHub Pages for hosting the frontend.
 - **Reasoning**: Free, easy integration with GitHub repository, and sufficient for static frontend hosting.
