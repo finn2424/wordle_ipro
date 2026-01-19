@@ -58,8 +58,11 @@ AI is utilized for generating visual design assets and providing file templates 
 - **Reasoning**: [Pending]
 
 ### Feature: UI/UX
-- **Approach**: [Pending]
-- **Tooling**: [Pending]
+- **Approach**: Modern, responsive design using Bootstrap 5 as the foundation.
+- **Tooling**:
+  - **Bootstrap 5**: Core CSS framework for responsive grid, utilities, and base component styles.
+  - **ng-bootstrap**: Native Angular components for Bootstrap widgets (modals, tooltips, etc.) without jQuery dependency.
+  - **@angular/localize**: Added for internationalization support required by ng-bootstrap.
 
 ### Feature: Deployment
 - **Decision**: Use GitHub Pages for hosting the frontend.

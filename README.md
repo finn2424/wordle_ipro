@@ -10,7 +10,7 @@ This repository contains the source code for the **Wordle IPRO** project. The ap
 
 ### Frontend
 - **Framework**: Angular (Latest)
-- **Styling**: SCSS / Vanilla CSS (Responsive & Modern Design)
+- **Styling**: SCSS, Bootstrap 5, ng-bootstrap (Responsive & Modern Design)
 - **State Management**: Angular Signals
 
 ### Backend
