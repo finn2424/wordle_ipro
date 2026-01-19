@@ -14,7 +14,7 @@
 **Deadline:** 2026-01-19
 - [x] Select & Initialize Backend Technology (.NET 10 with Kull.GenericBackend)
 - [x] Define Detailed Game Rules → See [GAME_RULES.md](./GAME_RULES.md)
-- [ ] Select Word Dictionary Source (API vs Local JSON)
+- [x] Select Word Dictionary Source (API vs Local JSON) -> First store in DB, later maybe API
 
 ## Milestone 3: MVP (Basic UI & Infra)
 **Deadline:** 2026-01-23
@@ -34,6 +34,7 @@
 **Deadline:** 2026-02-06
 - [ ] Design API Specification (Endpoints for Game State & User Stats)
 - [ ] Provision SQL Database & Define Schema (Users, Games, Attempts)
+- [ ] Populate Database with Word Dictionary
 - [ ] Implement Backend Endpoints for Storing Game Results
 - [ ] Integrate Frontend with Backend Stats API
 - [ ] Create `StatisticsModal` (Win %, Streak, Guess Distribution Chart)
