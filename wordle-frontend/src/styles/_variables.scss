@@ -1,0 +1,19 @@
+:root {
+    // App Theme Colors
+    --app-color-dark: #1a1a1b;
+    --app-color-background: #f8f9fa;
+    --app-color-surface: #ffffff;
+    --app-color-border: #dee2e6;
+    --app-color-white: #ffffff;
+
+    // Game Logic Colors
+    --game-color-correct: #4CAF50;
+    --game-color-present: #FACC15;
+    --game-color-absent: #94a3b8;
+
+    // Keyboard Colors
+    --keyboard-color-bg: #d3d6da;
+    --keyboard-color-bg-hover: #c4c7cb;
+    --keyboard-color-bg-active: #a8abad;
+    --keyboard-color-text: var(--app-color-dark);
+}

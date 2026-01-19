@@ -2,13 +2,13 @@ main {
     padding: 20px;
     text-align: center;
     font-family: 'Inter', sans-serif;
-    background-color: #f5f5f5;
+    background-color: var(--app-color-background);
     min-height: 100vh;
 }
 
 h1 {
     font-size: 2.5rem;
-    color: #333;
+    color: var(--app-color-dark);
     margin-bottom: 30px;
     font-weight: 700;
 }
@@ -25,7 +25,7 @@ h1 {
     max-width: 90%;
     width: 1000px;
     /* Limit max width for better viewing on desktop */
-    background: white;
+    background: var(--app-color-surface);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -39,9 +39,9 @@ h1 {
     h2 {
         margin-top: 0;
         margin-bottom: 20px;
-        color: #444;
+        color: var(--app-color-dark);
         font-size: 1.5rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--app-color-border);
         padding-bottom: 10px;
     }
 

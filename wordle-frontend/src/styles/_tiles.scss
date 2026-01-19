@@ -2,7 +2,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid #dee2e6;
+    border: 2px solid var(--app-color-border);
     font-weight: 700;
     text-transform: uppercase;
     user-select: none;
@@ -11,21 +11,21 @@
     border-radius: 5px;
 
     &.tile-correct {
-        background-color: #4CAF50;
-        border-color: #4CAF50;
-        color: white;
+        background-color: var(--game-color-correct);
+        border-color: var(--game-color-correct);
+        color: var(--app-color-white);
     }
 
     &.tile-present {
-        background-color: #FACC15;
-        border-color: #FACC15;
-        color: white;
+        background-color: var(--game-color-present);
+        border-color: var(--game-color-present);
+        color: var(--app-color-white);
     }
 
     &.tile-absent {
-        background-color: #94a3b8;
-        border-color: #94a3b8;
-        color: white;
+        background-color: var(--game-color-absent);
+        border-color: var(--game-color-absent);
+        color: var(--app-color-white);
     }
 
     width: 40px;
