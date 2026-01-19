@@ -42,6 +42,7 @@
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17
 - [ ] Optimize Production Build (AOT, Lazy Loading)
+- [ ] Make vanilla JS version of frontend
 - [ ] Deploy Frontend & Backend to Cloud Provider
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script
