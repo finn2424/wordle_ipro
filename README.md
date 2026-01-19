@@ -26,6 +26,7 @@ This repository contains the source code for the **Wordle IPRO** project. The ap
 wordle_ipro/
 ├── wordle-frontend/      # Angular frontend application
 ├── wordle-backend/       # .NET Web API backend
+├── GAME_RULES.md         # How to play Wordle
 ├── MILESTONES.md         # Project roadmap and deadlines
 ├── PROCESS.md            # Development process & decisions
 └── README.md             # This file

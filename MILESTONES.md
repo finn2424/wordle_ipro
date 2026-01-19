@@ -13,7 +13,7 @@
 ## Milestone 2: Functionalities & Requirements
 **Deadline:** 2026-01-19
 - [x] Select & Initialize Backend Technology (.NET 10 with Kull.GenericBackend)
-- [ ] Define Detailed Game Rules (e.g., Word length: 5, Max attempts: 6)
+- [x] Define Detailed Game Rules → See [GAME_RULES.md](./GAME_RULES.md)
 - [ ] Select Word Dictionary Source (API vs Local JSON)
 
 ## Milestone 3: MVP (Basic UI & Infra)
