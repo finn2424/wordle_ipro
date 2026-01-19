@@ -1,0 +1,16 @@
+<div class="keyboard-container">
+    @for (row of rows; track $index) {
+    <div class="keyboard-row">
+        @for (key of row; track key) {
+        <button type="button" class="key" [class.wide]="key === 'Enter' || key === 'Backspace'" (click)="onKey(key)"
+            [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
+            @if (key === 'Backspace') {
+            ⌫
+            } @else {
+            {{ key }}
+            }
+        </button>
+        }
+    </div>
+    }
+</div>

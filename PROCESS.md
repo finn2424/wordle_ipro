@@ -28,6 +28,7 @@ AI is utilized for generating visual design assets and providing file templates 
 - **Design**: Used Stitch to generate the mockups for the application.
 - **Documentation**: Used an AI assistant to generate the template for `MILESTONES.md` based on a whiteboard photo.
 - **Prototyping**: Used AI (Antigravity) to quickly implement a viewer to display the mockups within the web application.
+- **Styling**: Used AI (Antigravity) for quick, fancy styling of UI components (e.g., GameGrid, VirtualKeyboard).
 
 ## 📝 Implementation Log & Decisions
 
