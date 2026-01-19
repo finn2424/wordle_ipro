@@ -15,16 +15,8 @@
 }
 
 .tile {
+    // Inherit base styles from shared _tiles.scss
     width: 100%;
     height: 100%;
-    border: 2px solid #d3d6da;
-    border-radius: 5px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
     font-size: 2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    user-select: none;
-    box-sizing: border-box;
 }

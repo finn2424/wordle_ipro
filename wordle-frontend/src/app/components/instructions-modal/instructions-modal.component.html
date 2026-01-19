@@ -1,0 +1,52 @@
+<div class="modal-header border-0 pb-0">
+    <h2 class="modal-title text-uppercase fw-bold ls-1">How to play</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+</div>
+<div class="modal-body pt-2">
+    <p class="fs-5 mb-3 text-muted">Guess the word in 6 tries.</p>
+    <ul class="list-unstyled text-muted fs-6 mb-4">
+        <li class="mb-2 d-flex align-items-start">
+            <span class="bull me-2">•</span>
+            <span>Each guess must be a valid 5-letter word.</span>
+        </li>
+        <li class="d-flex align-items-start">
+            <span class="bull me-2">•</span>
+            <span>The color of the tiles will change to show how close your guess was to the word.</span>
+        </li>
+    </ul>
+
+    <h5 class="fw-bold mb-3">Examples</h5>
+
+    <div class="mb-3">
+        <div class="d-flex gap-1 mb-2">
+            <div class="tile tile-correct">W</div>
+            <div class="tile">E</div>
+            <div class="tile">A</div>
+            <div class="tile">R</div>
+            <div class="tile">Y</div>
+        </div>
+        <p class="text-muted small"><strong>W</strong> is in the word and in the correct spot.</p>
+    </div>
+
+    <div class="mb-3">
+        <div class="d-flex gap-1 mb-2">
+            <div class="tile">P</div>
+            <div class="tile tile-present">I</div>
+            <div class="tile">L</div>
+            <div class="tile">L</div>
+            <div class="tile">S</div>
+        </div>
+        <p class="text-muted small"><strong>I</strong> is in the word but in the wrong spot.</p>
+    </div>
+
+    <div class="mb-3">
+        <div class="d-flex gap-1 mb-2">
+            <div class="tile">V</div>
+            <div class="tile">A</div>
+            <div class="tile">G</div>
+            <div class="tile tile-absent">U</div>
+            <div class="tile">E</div>
+        </div>
+        <p class="text-muted small"><strong>U</strong> is not in the word in any spot.</p>
+    </div>
+</div>
