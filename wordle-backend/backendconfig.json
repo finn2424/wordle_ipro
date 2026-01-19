@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Kull-AG/kull-generic-backend/master/backendconfig.schema.json",
+  "Entities": {
+  }
+}

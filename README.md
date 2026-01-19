@@ -13,9 +13,11 @@ This repository contains the source code for the **Wordle IPRO** project. The ap
 - **Styling**: SCSS / Vanilla CSS (Responsive & Modern Design)
 - **State Management**: Angular Signals
 
-### Backend (Planned)
-- **Runtime**: Node.js / .NET (To be finalized)
-- **Database**: SQL Server
+### Backend
+- **Runtime**: .NET 10 (ASP.NET Core Web API)
+- **Framework**: [Kull.GenericBackend](https://github.com/Kull-AG/kull-generic-backend) for rapid API development
+- **Database**: SQL Server (via `Microsoft.Data.SqlClient`)
+- **API Documentation**: Swagger/OpenAPI (via Swashbuckle)
 - **Authentication**: None (Guest Mode only)
 
 ## 📂 Project Structure
@@ -23,7 +25,9 @@ This repository contains the source code for the **Wordle IPRO** project. The ap
 ```bash
 wordle_ipro/
 ├── wordle-frontend/      # Angular frontend application
+├── wordle-backend/       # .NET Web API backend
 ├── MILESTONES.md         # Project roadmap and deadlines
+├── PROCESS.md            # Development process & decisions
 └── README.md             # This file
 ```
 

@@ -12,7 +12,7 @@
 
 ## Milestone 2: Functionalities & Requirements
 **Deadline:** 2026-01-19
-- [ ] Select & Initialize Backend Technology (e.g., .NET / Node.js)
+- [x] Select & Initialize Backend Technology (.NET 10 with Kull.GenericBackend)
 - [ ] Define Detailed Game Rules (e.g., Word length: 5, Max attempts: 6)
 - [ ] Select Word Dictionary Source (API vs Local JSON)
 

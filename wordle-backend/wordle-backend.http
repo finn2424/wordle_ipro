@@ -1,0 +1,6 @@
+@wordle_backend_HostAddress = http://localhost:5031
+
+GET {{wordle_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -40,6 +40,19 @@ AI is utilized for generating visual design assets and providing file templates 
   - **TypeScript**: First-class support for TypeScript ensures type safety for our game logic (interfaces for Guesses, GameState, etc.), reducing runtime errors.
   - **Tooling**: Angular CLI provides out-of-the-box build optimization, SCSS support, and PWA capabilities, which are manually configured in a native setup.
 
+### Decision: Backend Technology (.NET vs. Node.js)
+- **Decision**: .NET 10 (ASP.NET Core) chosen over Node.js.
+- **Reasoning**:
+  - **Kull.GenericBackend**: This library enables rapid API development by exposing SQL stored procedures directly as REST endpoints. This drastically reduces boilerplate code for CRUD operations and allows focusing on database logic.
+  - **Type Safety**: C# and .NET provide strong type safety, which reduces runtime errors when handling API requests and database responses.
+  - **SQL Server Integration**: Native integration with SQL Server via `Microsoft.Data.SqlClient` simplifies database connectivity.
+  - **Swagger/OpenAPI**: Swashbuckle provides automatic API documentation generation, useful for frontend integration.
+  - **Scalability**: ASP.NET Core is highly performant and suitable for production workloads.
+- **Implementation Details**:
+  - Project: `wordle-backend/`
+  - Target Framework: .NET 10
+  - Key Packages: `Kull.GenericBackend`, `Microsoft.Data.SqlClient`, `Swashbuckle.AspNetCore`
+
 ### Feature: Game Logic
 - **Decision**: [Pending]
 - **Reasoning**: [Pending]
