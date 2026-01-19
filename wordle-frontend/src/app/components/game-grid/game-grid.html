@@ -1,0 +1,11 @@
+<div class="grid-container">
+    @for (row of rows(); track $index) {
+    <div class="grid-row">
+        @for (letter of [0, 1, 2, 3, 4]; track $index) {
+        <div class="tile">
+            {{ row[letter] }}
+        </div>
+        }
+    </div>
+    }
+</div>

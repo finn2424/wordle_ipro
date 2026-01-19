@@ -18,8 +18,8 @@
 
 ## Milestone 3: MVP (Basic UI & Infra)
 **Deadline:** 2026-01-23
-- [ ] Implement Main App Layout (Header, Game Container)
-- [ ] Develop `GameGrid` Component (Responsive 6x5 Grid)
+- [x] Implement Main App Layout (Header, Game Container)
+- [x] Develop `GameGrid` Component (Responsive 6x5 Grid)
 - [ ] Develop `VirtualKeyboard` Component with click events
 
 ## Milestone 4: Core Implementation (Wordle)
