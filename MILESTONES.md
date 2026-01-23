@@ -27,11 +27,16 @@
 
 ## Milestone 4: Core Implementation (Wordle)
 **Deadline:** 2026-01-30
-- [ ] Implement `GameService` for State Management (Signals/Subject)
+- [x] Implement `GameService` for State Management (Signals/Subject)
+    - [x] Verify Implementation (Unit Tests)
 - [ ] Develop Logic for Word Validation & Color Coding (Correct, Present, Absent)
+    - [ ] Verify Logic & Colors
 - [ ] Handle Keyboard Input (Physical & Virtual)
+    - [ ] Verify Input Handling
 - [ ] Implement Win/Loss Conditions & Notifications
+    - [ ] Verify Win/Loss Logic and rules integration from [GAME_RULES.md](./GAME_RULES.md)
 - [ ] Add CSS Animations (Flip reveal, Invalid shake)
+    - [ ] Verify Animations
 
 ## Milestone 5: Statistics & Database
 **Deadline:** 2026-02-06

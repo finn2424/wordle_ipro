@@ -1,0 +1,116 @@
+import { Injectable, computed, signal } from '@angular/core';
+
+export interface GameState {
+    guesses: string[];
+    currentGuess: string;
+    answer: string;
+    gameStatus: 'playing' | 'won' | 'lost';
+    error: string | null;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class GameService {
+    // Private writable signal for internal state
+    private state = signal<GameState>({
+        guesses: [],
+        currentGuess: '',
+        answer: 'WORDL', // hardcoded for now, will be dynamic later
+        gameStatus: 'playing',
+        error: null,
+    });
+
+    // Public readonly signals for components to consume
+    readonly guesses = computed(() => this.state().guesses);
+    readonly currentGuess = computed(() => this.state().currentGuess);
+    readonly gameStatus = computed(() => this.state().gameStatus);
+    readonly error = computed(() => this.state().error);
+
+    constructor() { }
+
+    /**
+     * Adds a letter to the current guess if possible.
+     * @param letter The letter to add (should be a single character).
+     */
+    addLetter(letter: string): void {
+        if (this.state().gameStatus !== 'playing') return;
+
+        this.state.update((currentState) => {
+            if (currentState.currentGuess.length < 5) {
+                return {
+                    ...currentState,
+                    currentGuess: currentState.currentGuess + letter.toUpperCase(),
+                    error: null
+                };
+            }
+            return currentState;
+        });
+    }
+
+    /**
+     * Removes the last letter from the current guess.
+     */
+    removeLetter(): void {
+        if (this.state().gameStatus !== 'playing') return;
+
+        this.state.update((currentState) => {
+            if (currentState.currentGuess.length > 0) {
+                return {
+                    ...currentState,
+                    currentGuess: currentState.currentGuess.slice(0, -1),
+                    error: null
+                };
+            }
+            return currentState;
+        });
+    }
+
+    /**
+     * Submits the current guess.
+     */
+    submitGuess(): void {
+        if (this.state().gameStatus !== 'playing') return;
+
+        this.state.update((currentState) => {
+            const guess = currentState.currentGuess;
+
+            // Basic validation: must be 5 letters
+            if (guess.length !== 5) {
+                return { ...currentState, error: 'Not enough letters' };
+            }
+
+            // TODO: Add dictionary validation here
+
+            const newGuesses = [...currentState.guesses, guess];
+            let newStatus: 'playing' | 'won' | 'lost' = 'playing';
+
+            if (guess === currentState.answer) {
+                newStatus = 'won';
+            } else if (newGuesses.length >= 6) {
+                newStatus = 'lost';
+            }
+
+            return {
+                ...currentState,
+                guesses: newGuesses,
+                currentGuess: '',
+                gameStatus: newStatus,
+                error: null,
+            };
+        });
+    }
+
+    /**
+     * Resets the game to its initial state.
+     */
+    startNewGame(): void {
+        this.state.set({
+            guesses: [],
+            currentGuess: '',
+            answer: 'WORDL', // TODO: Pick random word
+            gameStatus: 'playing',
+            error: null,
+        });
+    }
+}
