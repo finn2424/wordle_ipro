@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { LetterStatus } from '../../services/game.service';
 
 @Component({
   selector: 'app-virtual-keyboard',
@@ -9,6 +10,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 })
 export class VirtualKeyboard {
   keyPress = output<string>();
+  letterStatus = input<{ [key: string]: LetterStatus }>({});
 
   readonly rows = [
     ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],

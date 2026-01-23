@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { LetterStatus } from '../../services/game.service';
 
 @Component({
@@ -10,6 +10,8 @@ import { LetterStatus } from '../../services/game.service';
 export class GameGrid {
   evaluatedGuesses = input<{ word: string; validation: LetterStatus[] }[]>([]);
   currentGuess = input<string>('');
+  error = input<string | null>(null);
+  errorCleared = output<void>();
 
   rows = computed(() => {
     const guesses = this.evaluatedGuesses();

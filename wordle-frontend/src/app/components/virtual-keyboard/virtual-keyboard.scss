@@ -50,4 +50,19 @@
         max-width: 65px;
         font-size: 0.7rem;
     }
+
+    &.key-correct {
+        background-color: var(--game-color-correct);
+        color: var(--app-color-white);
+    }
+
+    &.key-present {
+        background-color: var(--game-color-present);
+        color: var(--app-color-white);
+    }
+
+    &.key-absent {
+        background-color: var(--game-color-absent);
+        color: var(--app-color-white);
+    }
 }

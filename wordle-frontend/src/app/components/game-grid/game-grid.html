@@ -1,6 +1,7 @@
 <div class="grid-container">
     @for (row of rows(); track $index) {
-    <div class="grid-row">
+    <div class="grid-row" [class.shake]="error() && $index === evaluatedGuesses().length"
+        (animationend)="errorCleared.emit()">
         @for (item of row; track $index) {
         <div class="tile" [class.tile-correct]="item.status === 'correct'"
             [class.tile-present]="item.status === 'present'" [class.tile-absent]="item.status === 'absent'">

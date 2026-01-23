@@ -1,4 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { App } from './app';
 import { GameService } from './services/game.service';
 import { describe, it, expect, beforeEach, vi, type MockInstance } from 'vitest';
@@ -20,10 +21,12 @@ describe('App', () => {
       guesses: signal([]),
       currentGuess: signal(''),
       evaluatedGuesses: computed(() => []),
+      error: signal(null),
       addLetter: vi.fn(),
       removeLetter: vi.fn(),
       submitGuess: vi.fn(),
       startNewGame: vi.fn(),
+      clearError: vi.fn(),
     };
 
     modalServiceMock = {
@@ -137,6 +140,14 @@ describe('App', () => {
       gameServiceMock.gameStatus.set('playing');
       fixture.detectChanges();
       expect(modalServiceMock.open).not.toHaveBeenCalled();
+    });
+
+    it('should call clearError when grid emits errorCleared', () => {
+      // Simulate errorCleared event from app-game-grid
+      const grid = fixture.debugElement.query(By.css('app-game-grid'));
+      grid.triggerEventHandler('errorCleared', null);
+
+      expect(gameServiceMock.clearError).toHaveBeenCalled();
     });
   });
 });

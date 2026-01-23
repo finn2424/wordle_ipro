@@ -2,8 +2,11 @@
     @for (row of rows; track $index) {
     <div class="keyboard-row">
         @for (key of row; track key) {
-        <button type="button" class="key" [class.wide]="key === 'Enter' || key === 'Backspace'" (click)="onKey(key)"
-            [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
+        <button type="button" class="key" [class.wide]="key === 'Enter' || key === 'Backspace'"
+            [class.key-correct]="letterStatus()[key] === 'correct'"
+            [class.key-present]="letterStatus()[key] === 'present'"
+            [class.key-absent]="letterStatus()[key] === 'absent'" (click)="onKey(key)"
+            (mousedown)="$event.preventDefault()" [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
             @if (key === 'Backspace') {
             ⌫
             } @else {

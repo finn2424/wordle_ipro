@@ -35,8 +35,8 @@
     - [x] Verify Input Handling
 - [x] Implement Win/Loss Conditions & Notifications
     - [x] Verify Win/Loss Logic and rules integration from [GAME_RULES.md](./GAME_RULES.md)
-- [ ] Add CSS Animations (Flip reveal, Invalid shake)
-    - [ ] Verify Animations
+- [x] Add CSS Animations (Flip reveal, Invalid shake)
+    - [x] Verify Animations
 
 ## Milestone 5: Statistics & Database
 **Deadline:** 2026-02-06
@@ -45,10 +45,12 @@
 - [ ] Populate Database with Word Dictionary
 - [ ] Implement Backend Endpoints for Storing Game Results
 - [ ] Integrate Frontend with Backend Stats API
+- [ ] Integrate word validation with backend and word selection
 - [ ] Create `StatisticsModal` (Win %, Streak, Guess Distribution Chart)
 
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17
+- [ ] Refactor and refine styling
 - [ ] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend
 - [ ] Deploy Frontend & Backend to Cloud Provider

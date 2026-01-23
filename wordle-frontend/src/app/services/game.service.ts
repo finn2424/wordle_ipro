@@ -38,6 +38,32 @@ export class GameService {
         }));
     });
 
+    readonly letterStatus = computed(() => {
+        const statusMap: { [key: string]: LetterStatus } = {};
+        const evaluated = this.evaluatedGuesses();
+
+        for (const guess of evaluated) {
+            for (let i = 0; i < guess.word.length; i++) {
+                const char = guess.word[i];
+                const currentStatus = statusMap[char];
+                const newStatus = guess.validation[i];
+
+                if (currentStatus === 'correct') {
+                    continue; // Already correct, ignore
+                }
+
+                if (newStatus === 'correct') {
+                    statusMap[char] = 'correct';
+                } else if (newStatus === 'present') {
+                    statusMap[char] = 'present';
+                } else if (newStatus === 'absent' && !currentStatus) {
+                    statusMap[char] = 'absent';
+                }
+            }
+        }
+        return statusMap;
+    });
+
     constructor() { }
 
     /**
@@ -154,5 +180,12 @@ export class GameService {
         }
 
         return result;
+    }
+
+    /**
+     * Clears the current error.
+     */
+    clearError(): void {
+        this.state.update((s) => ({ ...s, error: null }));
     }
 }
