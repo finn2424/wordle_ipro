@@ -41,8 +41,10 @@
         background-color: var(--keyboard-color-bg-hover);
     }
 
-    &:active {
+    &:active,
+    &.pressed {
         background-color: var(--keyboard-color-bg-active);
+        transform: scale(0.95);
     }
 
     &.wide {

@@ -1,4 +1,4 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './components/header/header.component';
@@ -19,6 +19,8 @@ import { GameOverModalComponent } from './components/game-over-modal/game-over-m
 export class App {
   protected gameService = inject(GameService);
   private modalService = inject(NgbModal);
+
+  @ViewChild(VirtualKeyboard) virtualKeyboard!: VirtualKeyboard;
 
   constructor() {
     effect(() => {
@@ -43,12 +45,21 @@ export class App {
     if (event.ctrlKey || event.altKey || event.metaKey) return;
 
     const key = event.key;
+    let virtualKey = '';
+
     if (key === 'Enter') {
       this.gameService.submitGuess();
+      virtualKey = 'Enter';
     } else if (key === 'Backspace') {
       this.gameService.removeLetter();
+      virtualKey = 'Backspace';
     } else if (/^[a-zA-Z]$/.test(key)) {
       this.gameService.addLetter(key);
+      virtualKey = key.toUpperCase();
+    }
+
+    if (virtualKey && this.virtualKeyboard) {
+      this.virtualKeyboard.triggerAnimation(virtualKey);
     }
   }
 

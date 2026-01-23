@@ -42,11 +42,13 @@
 **Deadline:** 2026-02-06
 - [ ] Design API Specification (Endpoints for Game State & User Stats)
 - [ ] Provision SQL Database & Define Schema (Users, Games, Attempts)
-- [ ] Populate Database with Word Dictionary
+- [ ] Populate Database with Word Dictionary for Validation
 - [ ] Implement Backend Endpoints for Storing Game Results
+- [ ] Implement "Valid English Word" Rule (Backend Dictionary Validation & Random Selection)
+    - [ ] Verify Dictionary Check & Random Word
 - [ ] Integrate Frontend with Backend Stats API
-- [ ] Integrate word validation with backend and word selection
-- [ ] Create `StatisticsModal` (Win %, Streak, Guess Distribution Chart)
+- [ ] Create `StatisticsModal` (Games Played, Win %, Cur/Max Streak, Guess Distribution)
+    - [ ] Verify Statistics Calculation & Display per GAME_RULES.md
 
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17

@@ -5,8 +5,9 @@
         <button type="button" class="key" [class.wide]="key === 'Enter' || key === 'Backspace'"
             [class.key-correct]="letterStatus()[key] === 'correct'"
             [class.key-present]="letterStatus()[key] === 'present'"
-            [class.key-absent]="letterStatus()[key] === 'absent'" (click)="onKey(key)"
-            (mousedown)="$event.preventDefault()" [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
+            [class.key-absent]="letterStatus()[key] === 'absent'" [class.pressed]="pressedKeys().has(key)"
+            (click)="onKey(key)" (mousedown)="$event.preventDefault()"
+            [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
             @if (key === 'Backspace') {
             ⌫
             } @else {
