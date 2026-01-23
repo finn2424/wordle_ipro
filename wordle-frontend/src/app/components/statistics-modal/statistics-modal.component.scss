@@ -1,0 +1,11 @@
+.ls-1 {
+    letter-spacing: 0.1em;
+}
+
+.modal-body {
+
+    // Ensure numbers don't wrap weirdly on small screens
+    .fs-2 {
+        line-height: 1.2;
+    }
+}

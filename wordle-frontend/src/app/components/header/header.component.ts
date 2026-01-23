@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InstructionsModalComponent } from '../instructions-modal/instructions-modal.component';
+import { StatisticsModalComponent } from '../statistics-modal/statistics-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,10 @@ export class HeaderComponent {
 
   openInstructions() {
     this.modalService.open(InstructionsModalComponent, { size: 'md' });
+  }
+
+  openStatistics() {
+    this.modalService.open(StatisticsModalComponent, { size: 'md' });
   }
 }
 
