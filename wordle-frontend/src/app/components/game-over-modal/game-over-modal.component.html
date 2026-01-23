@@ -1,0 +1,30 @@
+<div class="modal-header border-0 pb-0">
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+</div>
+<div class="modal-body text-center pt-0 pb-4">
+    <h2 class="fw-bold mb-3 ls-1">
+        @if (isWin) {
+        YOU WON!
+        } @else {
+        GAME OVER
+        }
+    </h2>
+
+    @if (!isWin) {
+    <p class="mb-3">The word was:</p>
+    } @else {
+    <p class="mb-3">Solved in</p>
+    <p class="fw-bold fs-4 mb-4">{{ guesses }} Guesses</p>
+    }
+    <div class="d-flex justify-content-center gap-3 mb-4">
+        @for (char of solution.split(''); track $index) {
+        <div class="tile tile-correct text-white border-0">{{ char }}</div>
+        }
+    </div>
+
+    <div class="d-grid gap-2 col-8 mx-auto mt-4">
+        <button class="btn btn-success fw-bold text-uppercase py-2 rounded-pill shadow-sm" (click)="playAgain()">
+            Play Again
+        </button>
+    </div>
+</div>

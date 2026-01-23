@@ -23,7 +23,7 @@
 - [x] Develop UI of `VirtualKeyboard` Component with click events
 - [x] Develop UI of `InstructionsModal` Component
 - [x] Develop UI of `StatisticsModal` Component
-- [ ] Develop UI of `GameOverModal` Component
+- [x] Develop UI of `GameOverModal` Component
 
 ## Milestone 4: Core Implementation (Wordle)
 **Deadline:** 2026-01-30
