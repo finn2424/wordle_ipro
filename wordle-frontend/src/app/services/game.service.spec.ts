@@ -85,4 +85,64 @@ describe('GameService', () => {
         }
         expect(service.gameStatus()).toBe('lost');
     });
+
+    describe('calculateValidation', () => {
+        it('should return all correct (green) for exact match', () => {
+            const result = service.calculateValidation('APPLE', 'APPLE');
+            expect(result).toEqual(['correct', 'correct', 'correct', 'correct', 'correct']);
+        });
+
+        it('should return all absent (gray) for no matches', () => {
+            const result = service.calculateValidation('ABCDE', 'FGHIJ');
+            expect(result).toEqual(['absent', 'absent', 'absent', 'absent', 'absent']);
+        });
+
+        it('should handle simple present (yellow) cases', () => {
+            // Answer: STEAL, Guess: LEAST
+            // L: Present (4), E: Present (2), A: Present (3), S: Present (0), T: Present (1)
+            // Wait, LEAST vs STEAL
+            // L!=S, E!=T, A!=E, S!=A, T!=L. No greens.
+            // All present.
+            const result = service.calculateValidation('LEAST', 'STEAL');
+            expect(result).toEqual(['present', 'present', 'present', 'present', 'present']);
+        });
+
+        it('should handle mixed results', () => {
+            // Answer: ALARM, Guess: ALLOY
+            // A==A(G), L==L(G), L!=A, O!=R, Y!=M
+            // Rem Ans: _, _, A, R, M
+            // Rem Gue: _, _, L, O, Y
+            // L(2): in A,R,M? No -> Gray.
+            // O(3): No -> Gray.
+            // Y(4): No -> Gray.
+            const result = service.calculateValidation('ALLOY', 'ALARM');
+            expect(result).toEqual(['correct', 'correct', 'absent', 'absent', 'absent']);
+        });
+
+        it('should handle double letters correctly (only one present)', () => {
+            // Answer: ABBEY, Guess: BABES
+            // B(0)!=A, A(1)!=B, B(2)==B(G), E(3)==E(G), S(4)!=Y
+            // Rem Ans: A, B, _, _, Y
+            // Rem Gue: B, A, _, _, S
+            // B(0) in A,B,Y? Yes -> Yellow. Consume B.
+            // A(1) in A,Y? Yes -> Yellow. Consume A.
+            // S(4) in Y? No -> Gray.
+            const result = service.calculateValidation('BABES', 'ABBEY');
+            expect(result).toEqual(['present', 'present', 'correct', 'correct', 'absent']);
+        });
+
+        it('should handle double letters correctly (excess in guess)', () => {
+            // Answer: ABORT, Guess: BOBBY
+            // B!=A, O!=B, B!=O, B!=R, Y!=T. No greens.
+            // Rem Ans: A, B, O, R, T
+            // Rem Gue: B, O, B, B, Y
+            // B(0) in A,B,O,R,T? Yes -> Yellow. Consume B.
+            // O(1) in A,O,R,T? Yes -> Yellow. Consume O.
+            // B(2) in A,R,T? No -> Gray.
+            // B(3) in A,R,T? No -> Gray.
+            // Y(4) in A,R,T? No -> Gray.
+            const result = service.calculateValidation('BOBBY', 'ABORT');
+            expect(result).toEqual(['present', 'present', 'absent', 'absent', 'absent']);
+        });
+    });
 });

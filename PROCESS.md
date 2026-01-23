@@ -6,9 +6,9 @@ This document serves as a log for the tools, resources, and methodologies used d
 
 ### Design & Prototyping
 - **Mockups**: [Stitch](https://stitch.withgoogle.com)
-  - *Details*: Generated mockups using AI features.
+  - *Details*: I generated mockups using AI features.
 - **Diagrams**: [SmartDraw](https://app.smartdraw.com)
-  - *Details*: Manually created the game logic flowchart.
+  - *Details*: I manually created the game logic flowchart.
 
 ### Development Environment
 - **IDE**: Visual Studio Code
@@ -21,19 +21,21 @@ This document serves as a log for the tools, resources, and methodologies used d
 
 ## 🤖 AI Usage Report
 
-### Role of AI
-AI is utilized for generating visual design assets and providing file templates to structure the project.
+### Role of AI & Developer Responsibility
+I utilize AI as a powerful pair programmer to accelerate development, generate visual design assets, and suggest implementation patterns. However, **I rigorously evaluate, improve, and fine-tune all AI-generated code**.
+
+I leverage my existing expertise in **Angular** to validate AI outputs, ensuring they adhere to best practices (e.g., Signals, modern control flow). This workflow represents a shift from "writing every line" to "orchestrating and refining high-level logic," requiring significant architectural oversight and debugging effort from my side to meet academic standards.
 
 ### Specific Examples
-- **Design**: Used Stitch to generate the mockups for the application.
-- **Documentation**: Used an AI assistant to generate the template for `MILESTONES.md` based on a whiteboard photo.
-- **Prototyping**: Used AI (Antigravity) to quickly implement a viewer to display the mockups within the web application.
-- **Styling**: Used AI (Antigravity) for quick, fancy styling of UI components (e.g., GameGrid, VirtualKeyboard).
+- **Design**: I used Stitch to generate the mockups for the application.
+- **Documentation**: I used an AI assistant to generate the template for `MILESTONES.md` based on a whiteboard photo.
+- **Prototyping**: I used AI (Antigravity) to quickly implement a viewer to display the mockups within the web application.
+- **Styling**: I used AI (Antigravity) for quick, fancy styling of UI components (e.g., GameGrid, VirtualKeyboard).
 
 ## 📝 Implementation Log & Decisions
 
 ### Decision: Frontend Framework (Angular vs. Native HTML/JS)
-- **Decision**: Framework (Angular) chosen over Native HTML/JS.
+- **Decision**: I chose Angular over Native HTML/JS.
 - **Reasoning**:
   - **State Management**: Wordle has a complex state (6 attempts, 5 letters each, keyboard status, game outcome). Angular Signals provide a clean, reactive way to manage this state without the "spaghetti code" often found in manual DOM manipulation.
   - **Component Reusability**: The game grid, rows, and keyboard keys are repeating elements. Angular's component architecture allows us to encapsulate logic and styles for these elements, promoting reusability and cleaner code.
@@ -42,7 +44,7 @@ AI is utilized for generating visual design assets and providing file templates 
   - **Tooling**: Angular CLI provides out-of-the-box build optimization, SCSS support, and PWA capabilities, which are manually configured in a native setup.
 
 ### Decision: Backend Technology (.NET vs. Node.js)
-- **Decision**: .NET 10 (ASP.NET Core) chosen over Node.js.
+- **Decision**: I chose .NET 10 (ASP.NET Core) over Node.js.
 - **Reasoning**:
   - **Kull.GenericBackend**: This library enables rapid API development by exposing SQL stored procedures directly as REST endpoints. This drastically reduces boilerplate code for CRUD operations and allows focusing on database logic.
   - **Type Safety**: C# and .NET provide strong type safety, which reduces runtime errors when handling API requests and database responses.
@@ -55,18 +57,21 @@ AI is utilized for generating visual design assets and providing file templates 
   - Key Packages: `Kull.GenericBackend`, `Microsoft.Data.SqlClient`, `Swashbuckle.AspNetCore`
 
 ### Feature: Game Logic
-- **Decision**: [Pending]
-- **Reasoning**: [Pending]
+- **Decision**: I implemented this using a dedicated `GameService` managing state via Angular Signals.
+- **Implementation**:
+  - **State**: `guesses`, `currentGuess`, `gameStatus`, `error` managed in a private writable signal.
+  - **Computed**: `evaluatedGuesses` derives color codes (`correct`, `present`, `absent`) automatically.
+  - **Validation**: Two-pass algorithm handling duplicate letters correctly (green first, then yellow).
 
 ### Feature: UI/UX
-- **Approach**: Modern, responsive design using Bootstrap 5 as the foundation.
+- **Approach**: I opted for a modern, responsive design using Bootstrap 5 as the foundation.
 - **Tooling**:
   - **Bootstrap 5**: Core CSS framework for responsive grid, utilities, and base component styles.
   - **ng-bootstrap**: Native Angular components for Bootstrap widgets (modals, tooltips, etc.) without jQuery dependency.
   - **@angular/localize**: Added for internationalization support required by ng-bootstrap.
 
 ### Feature: Shared SCSS Architecture
-- **Decision**: Implement a centralized CSS variables system and shared component styling.
+- **Decision**: I implemented a centralized CSS variables system and shared component styling.
 - **Reasoning**:
   - **Maintainability**: Centralizing colors and design tokens in one place makes theme updates easier.
   - **Consistency**: Shared styles ensure uniform appearance across components (e.g., tiles in the game grid and instructions modal).
@@ -77,9 +82,9 @@ AI is utilized for generating visual design assets and providing file templates 
   - Both files are located in `wordle-frontend/src/styles/` and imported via `styles.scss`.
 
 ### Feature: Deployment
-- **Decision**: Use GitHub Pages for hosting the frontend.
+- **Decision**: I use GitHub Pages for hosting the frontend.
 - **Reasoning**: Free, easy integration with GitHub repository, and sufficient for static frontend hosting.
-- **Implementation**: Configured `angular-cli-ghpages` and added `deploy-gh-pages` script to `package.json`.
+- **Implementation**: I configured `angular-cli-ghpages` and added a `deploy-gh-pages` script to `package.json`.
 
 ---
 *This document will be updated continuously as the project evolves.*

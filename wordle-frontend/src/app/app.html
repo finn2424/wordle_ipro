@@ -1,7 +1,7 @@
 <app-header />
 
 <main class="container game-container d-flex flex-column align-items-center">
-    <app-game-grid />
-    <app-virtual-keyboard />
+    <app-game-grid [evaluatedGuesses]="gameService.evaluatedGuesses()" [currentGuess]="gameService.currentGuess()" />
+    <app-virtual-keyboard (keyPress)="handleVirtualKey($event)" />
     <router-outlet />
 </main>

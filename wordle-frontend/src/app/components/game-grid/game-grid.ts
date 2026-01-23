@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+import { LetterStatus } from '../../services/game.service';
 
 @Component({
   selector: 'app-game-grid',
@@ -7,22 +8,40 @@ import { Component, computed, input } from '@angular/core';
   styleUrl: './game-grid.scss'
 })
 export class GameGrid {
-  guesses = input<string[]>([]);
+  evaluatedGuesses = input<{ word: string; validation: LetterStatus[] }[]>([]);
   currentGuess = input<string>('');
 
   rows = computed(() => {
-    const guesses = this.guesses();
+    const guesses = this.evaluatedGuesses();
     const current = this.currentGuess();
-    const rows = Array(6).fill('');
+    const rows: { char: string; status: LetterStatus }[][] = [];
 
     // Fill completed guesses
-    for (let i = 0; i < guesses.length; i++) {
-      rows[i] = guesses[i];
+    for (const guess of guesses) {
+      const row: { char: string; status: LetterStatus }[] = [];
+      for (let i = 0; i < 5; i++) {
+        row.push({ char: guess.word[i], status: guess.validation[i] });
+      }
+      rows.push(row);
     }
 
-    // Fill current guess if not already 6 guesses
-    if (guesses.length < 6) {
-      rows[guesses.length] = current;
+    // Fill current guess
+    if (rows.length < 6) {
+      const currentRow: { char: string; status: LetterStatus }[] = [];
+      for (let i = 0; i < 5; i++) {
+        const char = current[i] || '';
+        currentRow.push({ char, status: 'empty' });
+      }
+      rows.push(currentRow);
+    }
+
+    // Fill remaining empty rows
+    while (rows.length < 6) {
+      const emptyRow: { char: string; status: LetterStatus }[] = [];
+      for (let i = 0; i < 5; i++) {
+        emptyRow.push({ char: '', status: 'empty' });
+      }
+      rows.push(emptyRow);
     }
 
     return rows;
