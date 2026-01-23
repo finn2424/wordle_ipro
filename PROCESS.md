@@ -70,6 +70,13 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **ng-bootstrap**: Native Angular components for Bootstrap widgets (modals, tooltips, etc.) without jQuery dependency.
   - **@angular/localize**: Added for internationalization support required by ng-bootstrap.
 
+### Feature: Animations & Input Handling
+- **Goal**: I wanted to provide immediate visual feedback for both physical and virtual keystrokes.
+- **Implementation**:
+  - **Synchronization**: I captured physical keyboard events in `app.ts` and programmatically triggered the `VirtualKeyboard` animation using `@ViewChild`.
+  - **Reactivity**: I used an Angular Signal (`pressedKeys`) to track active keys, automatically toggling a CSS class for a "pressed" effect.
+  - **Feedback**: This ensures the user sees the virtual key react even when they type on their physical keyboard, creating a cohesive experience.
+
 ### Feature: Shared SCSS Architecture
 - **Decision**: I implemented a centralized CSS variables system and shared component styling.
 - **Reasoning**:
