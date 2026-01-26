@@ -1,0 +1,36 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches: [ "main" ]  # Runs whenever you push to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          # We pass the secret password into the script environment
+          envs: DB_PASSWORD
+          script: |
+            # STOP! Ensure this folder name matches what you clone in Step 4
+            cd /home/debian/wordle_ipro 
+
+            # 1. Pull latest code
+            git pull origin main
+
+            # 2. Create the .env file dynamically on the server
+            # This takes the secret from GitHub and writes it to a file the server can read
+            echo "DB_PASSWORD=$DB_PASSWORD" > .env
+
+            # 3. Build and Run
+            # --build ensures it recompiles your .NET/Angular changes
+            docker compose up -d --build --remove-orphans
+            
+            # 4. Cleanup old images
+            docker image prune -f

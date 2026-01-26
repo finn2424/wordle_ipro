@@ -1,0 +1,48 @@
+services:
+  # 1. SQL Server Express
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: wordle-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Express
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - wordle-net
+    restart: always
+
+  # 2. .NET Backend
+  backend:
+    build: ./backend
+    container_name: wordle-api
+    ports:
+      - "8080:8080" # Exposed for debugging, but Nginx uses internal network
+    depends_on:
+      - db
+    environment:
+      # Note: Server=db matches the service name above
+      - ConnectionStrings__DefaultConnection=Server=db;Database=WordleDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
+    networks:
+      - wordle-net
+    restart: always
+
+  # 3. Angular Frontend
+  frontend:
+    build: ./frontend
+    container_name: wordle-ui
+    ports:
+      - "80:80" # Standard HTTP port
+    depends_on:
+      - backend
+    networks:
+      - wordle-net
+    restart: always
+
+networks:
+  wordle-net:
+    driver: bridge
+
+volumes:
+  sql_data:

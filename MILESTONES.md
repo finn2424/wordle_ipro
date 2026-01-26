@@ -40,6 +40,7 @@
 
 ## Milestone 5: Statistics & Database
 **Deadline:** 2026-02-06
+- [ ] Setup DB and connect to .NET Backend
 - [ ] Design API Specification (Endpoints for Game State & User Stats)
 - [ ] Provision SQL Database & Define Schema (Users, Games, Attempts)
 - [ ] Populate Database with Word Dictionary for Validation
