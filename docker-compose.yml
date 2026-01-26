@@ -15,7 +15,7 @@ services:
 
   # 2. .NET Backend
   backend:
-    build: ./backend
+    build: ./wordle-backend
     container_name: wordle-api
     ports:
       - "8080:8080" # Exposed for debugging, but Nginx uses internal network
@@ -30,7 +30,7 @@ services:
 
   # 3. Angular Frontend
   frontend:
-    build: ./frontend
+    build: ./wordle-frontend
     container_name: wordle-ui
     ports:
       - "80:80" # Standard HTTP port
