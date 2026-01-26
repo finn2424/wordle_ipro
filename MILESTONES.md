@@ -37,6 +37,7 @@
     - [x] Verify Win/Loss Logic and rules integration from [GAME_RULES.md](./GAME_RULES.md)
 - [x] Add CSS Animations (Flip reveal, Invalid shake)
     - [x] Verify Animations
+- [ ] Address items in [FEEDBACK1.md](./FEEDBACK1.md)
 
 ## Milestone 5: Statistics & Database
 **Deadline:** 2026-02-06
@@ -53,7 +54,7 @@
 
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17
-- [ ] Refactor and refine styling
+- [ ] Refactor and refine styling (use css vars, light-dark() function)
 - [ ] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend
 - [x] Setup Docker Containers (Frontend, Backend, Database)
@@ -63,7 +64,7 @@
 - [x] Deploy Frontend & Backend to Cloud Provider
 - [ ] Choose Domain (.nip.io or real domain)
 - [ ] Finish Hosting (Nginx configuration)
-- [ ] Improve Security (avoid known vulnerabilities, configure host VM)
+- [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [ ] Expose Database for Local Development
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script
