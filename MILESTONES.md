@@ -56,6 +56,14 @@
 - [ ] Refactor and refine styling
 - [ ] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend
-- [ ] Deploy Frontend & Backend to Cloud Provider
+- [x] Setup Docker Containers (Frontend, Backend, Database)
+- [x] Configure Nginx Reverse Proxy for API routing
+- [x] Setup VM (Debian 13) with UFW Firewall
+- [x] Implement CI/CD Pipeline (GitHub Actions)
+- [x] Deploy Frontend & Backend to Cloud Provider
+- [ ] Choose Domain (.nip.io or real domain)
+- [ ] Finish Hosting (Nginx configuration)
+- [ ] Improve Security (avoid known vulnerabilities, configure host VM)
+- [ ] Expose Database for Local Development
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script

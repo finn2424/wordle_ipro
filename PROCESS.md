@@ -88,10 +88,34 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **`_tiles.scss`**: Contains reusable `.tile` class and state modifiers (`.tile-correct`, `.tile-present`, `.tile-absent`) used by `GameGrid` and `InstructionsModal`.
   - Both files are located in `wordle-frontend/src/styles/` and imported via `styles.scss`.
 
-### Feature: Deployment
-- **Decision**: I use GitHub Pages for hosting the frontend.
+### Feature: Frontend Deployment (GitHub Pages - Prototyping)
+- **Decision**: I use GitHub Pages for hosting the frontend during development.
 - **Reasoning**: Free, easy integration with GitHub repository, and sufficient for static frontend hosting.
 - **Implementation**: I configured `angular-cli-ghpages` and added a `deploy-gh-pages` script to `package.json`.
+
+### Feature: Production Deployment (Docker & VM)
+- **Decision**: I deployed the full stack using Docker containers on a Debian 13 VM.
+- **Reasoning**:
+  - **Containerization**: Docker ensures consistent environments across development and production. Each service (frontend, backend, database) runs in an isolated container.
+  - **VM Choice (Switch Engine / Debian 13)**: A lightweight, reliable Linux distribution suitable for container workloads.
+  - **Orchestration (Docker Compose)**: Simplifies multi-container management, handles networking, and allows easy scaling.
+  - **Reverse Proxy (Nginx)**: The frontend container uses Nginx to serve the Angular app and proxy `/api/*` requests to the backend container, eliminating CORS issues.
+  - **Security (UFW)**: The firewall is configured to only allow SSH (port 22) and HTTP(S) (port 80/443), minimizing attack surface.
+- **Implementation Details**:
+  - **`wordle-frontend/Dockerfile`**: Multi-stage build with Node.js for compilation and Nginx for serving.
+  - **`wordle-backend/Dockerfile`**: Multi-stage build with .NET SDK for compilation and ASP.NET runtime for execution.
+  - **`wordle-frontend/nginx.conf`**: Serves static files and proxies API requests to the `backend` service.
+  - **`docker-compose.yml`**: Defines the `db`, `backend`, and `frontend` services with proper dependencies and networking.
+
+### Feature: CI/CD Pipeline (GitHub Actions)
+- **Decision**: I set up an automatic deployment workflow using GitHub Actions.
+- **Reasoning**:
+  - **Automation**: Every push to `main` triggers a deployment, reducing manual effort.
+  - **Simplicity**: The `appleboy/ssh-action` allows direct SSH commands to the VM.
+  - **Security (GitHub Secrets)**: Sensitive data (host, credentials, database password) is stored securely in repository secrets, not in code.
+- **Implementation Details**:
+  - **`.github/workflows/deploy.yml`**: Connects to the VM, pulls the latest code, and runs `docker compose up -d --build`.
+  - **`.gitignore`**: Ensures `.env` files (containing secrets) are not committed to the repository.
 
 ---
 *This document will be updated continuously as the project evolves.*
