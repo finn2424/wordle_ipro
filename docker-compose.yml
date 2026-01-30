@@ -33,7 +33,11 @@ services:
     build: ./wordle-frontend
     container_name: wordle-ui
     ports:
-      - "80:80" # Standard HTTP port
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/wordle-fb.duckdns.org/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
+      - /etc/letsencrypt/live/your-name.duckdns.org/privkey.pem:/etc/nginx/ssl/privkey.pem:ro
     depends_on:
       - backend
     networks:
