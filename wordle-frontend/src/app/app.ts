@@ -17,8 +17,8 @@ import { GameOverModalComponent } from './components/game-over-modal/game-over-m
   }
 })
 export class App {
-  protected gameService = inject(GameService);
-  private modalService = inject(NgbModal);
+  protected gameService  = inject(GameService);
+  private   modalService = inject(NgbModal);
 
   @ViewChild(VirtualKeyboard) virtualKeyboard!: VirtualKeyboard;
 
@@ -26,7 +26,7 @@ export class App {
     effect(() => {
       const status = this.gameService.gameStatus();
 
-      if (status === 'won' || status === 'lost') {
+      if ('won' === status || status === 'lost') {
         const modalRef = this.modalService.open(GameOverModalComponent, { centered: true, backdrop: 'static' });
         modalRef.componentInstance.isWin = status === 'won';
         modalRef.componentInstance.solution = this.gameService.answer();

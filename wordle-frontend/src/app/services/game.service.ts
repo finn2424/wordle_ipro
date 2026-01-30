@@ -1,6 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { LetterStatus } from '../components/letter-status';
 
-export type LetterStatus = 'correct' | 'present' | 'absent' | 'empty';
+// export type LetterStatus = 'correct' | 'present' | 'absent' | 'empty';
 
 export interface GameState {
     guesses: string[];
@@ -48,7 +49,7 @@ export class GameService {
                 const currentStatus = statusMap[char];
                 const newStatus = guess.validation[i];
 
-                if (currentStatus === 'correct') {
+                if (currentStatus === LetterStatus.CORRECT) {
                     continue; // Already correct, ignore
                 }
 

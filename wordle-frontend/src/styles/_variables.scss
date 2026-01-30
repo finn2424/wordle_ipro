@@ -1,7 +1,7 @@
 :root {
     // App Theme Colors
     --app-color-dark: #1a1a1b;
-    --app-color-background: #f8f9fa;
+    --app-color-background: light-dark(#f8f9fa, #bd1e1e) ; 
     --app-color-surface: #ffffff;
     --app-color-border: #dee2e6;
     --app-color-white: #ffffff;
