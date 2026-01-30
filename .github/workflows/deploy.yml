@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -26,7 +28,7 @@ jobs:
 
             # 2. Create the .env file dynamically on the server
             # This takes the secret from GitHub and writes it to a file the server can read
-            echo "DB_PASSWORD=$DB_PASSWORD" > .env
+            printf "DB_PASSWORD=%s\n" "$DB_PASSWORD" > .env
 
             # 3. Build and Run
             # --build ensures it recompiles your .NET/Angular changes
