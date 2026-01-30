@@ -117,5 +117,15 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **`.github/workflows/deploy.yml`**: Connects to the VM, pulls the latest code, and runs `docker compose up -d --build`.
   - **`.gitignore`**: Ensures `.env` files (containing secrets) are not committed to the repository.
 
+### Feature: Domain & SSL Configuration
+- **Decision**: I configured a custom domain and SSL via Let's Encrypt only for the production environment.
+- **Implementation**:
+  - **Domain**: `wordle-fb.duckdns.org` (Dynamic DNS via DuckDNS).
+  - **SSL**: Generated Let's Encrypt certificates using `certbot` on the host VM.
+  - **Integration**:
+    - Certificates mounted into the `wordle-ui` container via volumes (`/etc/letsencrypt:/etc/letsencrypt:ro`).
+    - Nginx configured to listen on port 443 (SSL) and redirect HTTP (80) to HTTPS.
+
+
 ---
 *This document will be updated continuously as the project evolves.*

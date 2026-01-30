@@ -41,19 +41,23 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseSwagger(o =>
+if (app.Environment.IsDevelopment())
 {
-    // Depending on your client, set this to true (eg, ng-swagger-gen)
-    o.SerializeAsV2 = false;
-});
+    app.UseSwagger(o =>
+    {
+        // Depending on your client, set this to true (eg, ng-swagger-gen)
+        o.SerializeAsV2 = false;
+    });
+
+    // If needed, Swagger UI, see https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
+}
+
 app.UseRouting();
 app.UseGenericBackend();
-
-// If needed, Swagger UI, see https://github.com/domaindrivendev/Swashbuckle.AspNetCore
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-});
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

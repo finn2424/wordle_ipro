@@ -62,8 +62,9 @@
 - [x] Setup VM (Debian 13) with UFW Firewall
 - [x] Implement CI/CD Pipeline (GitHub Actions)
 - [x] Deploy Frontend & Backend to Cloud Provider
-- [ ] Choose Domain (.nip.io or real domain)
-- [ ] Finish Hosting (Nginx configuration)
+- [x] Choose Domain (.nip.io or real domain) -> wordle-fb.duckdns.org
+- [x] Finish Hosting (Nginx configuration)
+
 - [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [ ] Expose Database for Local Development
 - [ ] Perform Final manual Testing

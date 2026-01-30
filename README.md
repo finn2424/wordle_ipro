@@ -1,5 +1,9 @@
 # Wordle IPRO
 
+[**Live Demo**](https://wordle-fb.duckdns.org)
+
+
+
 A modern, responsive Wordle clone built with Angular and a robust backend. This project serves as a showcase of full-stack web development skills developed for the **IPRO module at FHNW** (University of Applied Sciences and Arts Northwestern Switzerland).
 
 ## 🚀 Project Overview
@@ -70,13 +74,16 @@ wordle_ipro/
 - A Linux VM (e.g., Debian 13) with Docker installed
 - UFW firewall configured to allow ports 80/443 (HTTP/HTTPS) and 22 (SSH)
 - GitHub repository secrets configured: `HOST`, `USERNAME`, `KEY`, `DB_PASSWORD`
+- **Domain**: Pointed to the VM's IP (e.g., `wordle-fb.duckdns.org`)
+- **SSL Certificates**: Generated via Certbot directly on the host machine at `/etc/letsencrypt`
+
 
 ### Architecture
 The application runs as a containerized stack orchestrated by Docker Compose:
 
 | Service | Container | Description |
 |---------|-----------|-------------|
-| **Frontend** | `wordle-ui` | Angular app served via Nginx on port 80 |
+| **Frontend** | `wordle-ui` | Angular app served via Nginx on port 80 & 443 (SSL) |
 | **Backend** | `wordle-api` | .NET 10 API on internal port 8080 |
 | **Database** | `wordle-db` | SQL Server Express 2022 |
 
@@ -93,6 +100,9 @@ The application runs as a containerized stack orchestrated by Docker Compose:
    ```
 
 3. Access the application at `http://localhost`
+
+> **Note**: The `docker-compose.yml` mounts SSL certificates from `/etc/letsencrypt` on the host. If running locally on Windows/Mac without these files, you may need to comment out the volume mount and the 443 server block in `nginx.conf` or map local dummy certificates.
+
 
 ### Automatic Deployment (GitHub Actions)
 
