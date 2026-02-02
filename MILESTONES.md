@@ -37,13 +37,13 @@
     - [x] Verify Win/Loss Logic and rules integration from [GAME_RULES.md](./GAME_RULES.md)
 - [x] Add CSS Animations (Flip reveal, Invalid shake)
     - [x] Verify Animations
-- [ ] Address items in [FEEDBACK1.md](./FEEDBACK1.md)
+- [-] Address items in [FEEDBACK1.md](./FEEDBACK1.md)
 
 ## Milestone 5: Statistics & Database
 **Deadline:** 2026-02-06
-- [ ] Setup DB and connect to .NET Backend
-- [ ] Design API Specification (Endpoints for Game State & User Stats)
-- [ ] Provision SQL Database & Define Schema (Users, Games, Attempts)
+- [x] Setup DB and connect to .NET Backend
+- [x] Design API Specification (Endpoints for Game State & User Stats)
+- [x] Provision SQL Database & Define Schema (Users, Games, Attempts)
 - [ ] Populate Database with Word Dictionary for Validation
 - [ ] Implement Backend Endpoints for Storing Game Results
 - [ ] Implement "Valid English Word" Rule (Backend Dictionary Validation & Random Selection)
@@ -66,6 +66,6 @@
 - [x] Finish Hosting (Nginx configuration)
 
 - [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
-- [ ] Expose Database for Local Development
+- [x] Expose Database for Local Development
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script

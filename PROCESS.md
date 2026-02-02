@@ -148,6 +148,29 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
     - Certificates mounted into the `wordle-ui` container via volumes (`/etc/letsencrypt:/etc/letsencrypt:ro`).
     - Nginx configured to listen on port 443 (SSL) and redirect HTTP (80) to HTTPS.
 
+### Feature: Database Schema & Stored Procedure API
+- **Goal**: Design a robust database schema and leverage SQL stored procedures as the API layer via `Kull.GenericBackend`.
+- **Schema Design** (`wordle-backend/database/schema.sql`):
+  - **`Users`**: Anonymous users identified by a `DeviceId` (GUID), with optional `DisplayName`.
+  - **`WordDictionary`**: Stores valid 5-letter words with flags for answer eligibility and usage tracking.
+  - **`DailyWord`**: Links a specific word to each game date, ensuring one word per day.
+  - **`Games`**: Tracks individual game sessions with status (`playing`, `won`, `lost`) and attempt count.
+  - **`Attempts`**: Records each guess with its validation result (e.g., `CPPAA` for Correct/Present/Absent).
+- **Stored Procedures (API Endpoints)**:
+  - `spUser_GetOrCreate` / `spUser_UpdateDisplayName`: User management.
+  - `spGame_GetTodaysGame`: Retrieves or creates the daily game for a user, selecting a random word if needed.
+  - `spGame_SubmitGuess`: Validates guesses against the dictionary, calculates letter statuses, and updates game state.
+  - `spStats_GetUserStats`: Calculates games played, win rate, streaks, and guess distribution.
+  - `spWord_Validate` / `spWord_BulkAdd`: Dictionary management.
+- **Security**: The schema file contains no sensitive data; credentials are managed via environment variables.
+
+### Feature: Local Development Database Access
+- **Goal**: Allow developers to connect to the production database from their local machine for testing and debugging.
+- **Implementation**:
+  - **SSH Tunnel**: Added an `npm run ssh-db-tunnel` script in `package.json` that creates an SSH tunnel to the VM, forwarding `localhost:1433` to the container's SQL Server.
+  - **Docker Compose**: The `db` service now exposes port `1433` on `127.0.0.1` only, preventing external access while allowing SSH-tunneled connections.
+  - **Backend Port Removal**: Removed direct `8080` port exposure for the backend; it's now accessible only through the internal Docker network via Nginx.
+
 
 ---
 *This document will be updated continuously as the project evolves.*
