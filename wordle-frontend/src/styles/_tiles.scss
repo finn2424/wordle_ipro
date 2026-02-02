@@ -8,7 +8,7 @@
     user-select: none;
     box-sizing: border-box;
     background-color: transparent;
-    border-radius: 5px;
+    border-radius: var(--app-border-radius);
 
     &.tile-correct {
         background-color: var(--game-color-correct);
