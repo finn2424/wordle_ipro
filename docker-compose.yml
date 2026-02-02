@@ -9,6 +9,9 @@ services:
       - MSSQL_PID=Express
     volumes:
       - sql_data:/var/opt/mssql
+    ports:
+      # Binds Host Port 1433 (Localhost Only) -> Container Port 1433
+      - "127.0.0.1:1433:1433"
     networks:
       - wordle-net
     restart: always
@@ -17,8 +20,6 @@ services:
   backend:
     build: ./wordle-backend
     container_name: wordle-api
-    ports:
-      - "8080:8080" # Exposed for debugging, but Nginx uses internal network
     depends_on:
       - db
     environment:
