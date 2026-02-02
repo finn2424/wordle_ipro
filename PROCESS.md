@@ -77,6 +77,13 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **Reactivity**: I used an Angular Signal (`pressedKeys`) to track active keys, automatically toggling a CSS class for a "pressed" effect.
   - **Feedback**: This ensures the user sees the virtual key react even when they type on their physical keyboard, creating a cohesive experience.
 
+### Feature: Individual Field Input
+- **Goal**: Allow users to correct specific letters without deleting the whole word.
+- **Implementation**:
+  - **GameGrid**: Made tiles interactive (`onTileClick`) to set the `focusedIndex`.
+  - **GameService**: Updated `addLetter` and `removeLetter` to respect `focusedIndex` and allow arbitrary cursor placement.
+  - **Visuals**: Highlighted the currently focused tile to indicate where the next letter will be typed.
+
 ### Feature: Shared SCSS Architecture
 - **Decision**: I implemented a centralized CSS variables system and shared component styling.
 - **Reasoning**:

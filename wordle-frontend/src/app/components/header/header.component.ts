@@ -3,6 +3,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InstructionsModalComponent } from '../instructions-modal/instructions-modal.component';
 import { StatisticsModalComponent } from '../statistics-modal/statistics-modal.component';
 
+/**
+ * Top navigation bar component.
+ * Provides access to instructions and statistics modals.
+ */
 @Component({
   selector: 'app-header',
   imports: [],

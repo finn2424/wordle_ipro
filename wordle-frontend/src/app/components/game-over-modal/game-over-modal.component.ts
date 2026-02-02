@@ -1,6 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+/**
+ * Modal displayed when the game ends (win or loss).
+ * Shows the result, the correct solution, and allows starting a new game.
+ */
 @Component({
     selector: 'app-game-over-modal',
     standalone: true,
@@ -23,3 +27,4 @@ export class GameOverModalComponent {
         this.activeModal.close('Play Again');
     }
 }
+

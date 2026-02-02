@@ -22,6 +22,12 @@
 
     // Default state for flip animation
     transform-style: preserve-3d;
+    cursor: pointer; // Allow clicking
+}
+
+.tile-focused {
+    border-width: 3px;
+    border-color: var(--app-color-text-primary, #333);
 }
 
 .tile-correct,

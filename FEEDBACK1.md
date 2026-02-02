@@ -1,7 +1,7 @@
 # Feedback
 
 - [ ] Secure endpoints (user should not be able to cheat by accessing an endpoint)
-- [ ] Individual field input with field highlighting (user should not be forced to input from left to right)
+- [x] Individual field input with field highlighting (user should not be forced to input from left to right)
 - [ ] Rewrite this if/else more clean:
      ```typescript
      if (key === 'Enter') {
@@ -15,7 +15,7 @@
           virtualKey = key.toUpperCase();
         }
     ```
-- [ ] Document code with comments, like GameService
+- [-] Document code with comments, like GameService
 - [ ] Don't check for strings when using types, do it like this instead:
     ```typescript
     export const LetterStatus = {CORRECT: 'correct', PRESENT: 'present', ABSENT: 'absent', EMPTY: 'empty'} as const;

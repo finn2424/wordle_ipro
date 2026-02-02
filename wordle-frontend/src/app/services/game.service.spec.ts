@@ -15,14 +15,16 @@ describe('GameService', () => {
 
     it('should initialize with default state', () => {
         expect(service.guesses()).toEqual([]);
-        expect(service.currentGuess()).toBe('');
+        expect(service.currentGuess()).toEqual(['', '', '', '', '']);
         expect(service.gameStatus()).toBe('playing');
+        expect(service.focusedIndex()).toBe(0);
     });
 
     it('should add letters to current guess', () => {
         service.addLetter('A');
         service.addLetter('B');
-        expect(service.currentGuess()).toBe('AB');
+        expect(service.currentGuess()).toEqual(['A', 'B', '', '', '']);
+        expect(service.focusedIndex()).toBe(2);
     });
 
     it('should not add more than 5 letters', () => {
@@ -31,14 +33,21 @@ describe('GameService', () => {
         service.addLetter('C');
         service.addLetter('D');
         service.addLetter('E');
-        service.addLetter('F');
-        expect(service.currentGuess()).toBe('ABCDE');
+        service.addLetter('F'); // Should just overwrite or do nothing depending on logic at index 4
+        // Logic: stops advancing at 4. If at 4 and filled, overwrites?
+        // Let's verify logic: min(4, index+1). 
+        // 0->A->1->B->2->C->3->D->4->E->4 (clamped to 4).
+        // Then add F at 4 -> 'F'.
+        expect(service.currentGuess()).toEqual(['A', 'B', 'C', 'D', 'F']);
+        expect(service.focusedIndex()).toBe(4);
     });
 
     it('should remove letters', () => {
         service.addLetter('A');
+        // Index is 1. Slot 1 is empty. Backspace should move to 0 and clear it.
         service.removeLetter();
-        expect(service.currentGuess()).toBe('');
+        expect(service.currentGuess()).toEqual(['', '', '', '', '']);
+        expect(service.focusedIndex()).toBe(0);
     });
 
     it('should submit a valid guess', () => {
@@ -49,7 +58,7 @@ describe('GameService', () => {
         service.addLetter('O');
         service.submitGuess();
         expect(service.guesses()).toEqual(['HELLO']);
-        expect(service.currentGuess()).toBe('');
+        expect(service.currentGuess()).toEqual(['', '', '', '', '']);
     });
 
     it('should not submit an invalid guess (length < 5)', () => {
@@ -143,6 +152,29 @@ describe('GameService', () => {
             // Y(4) in A,R,T? No -> Gray.
             const result = service.calculateValidation('BOBBY', 'ABORT');
             expect(result).toEqual(['present', 'present', 'absent', 'absent', 'absent']);
+        });
+    });
+
+    describe('Focus Management', () => {
+        it('should allow setting focus index', () => {
+            service.setFocusedIndex(3);
+            expect(service.focusedIndex()).toBe(3);
+        });
+
+        it('should allow typing at specific index', () => {
+            service.setFocusedIndex(2);
+            service.addLetter('X');
+            expect(service.currentGuess()).toEqual(['', '', 'X', '', '']);
+            expect(service.focusedIndex()).toBe(3);
+        });
+
+        it('should clear specific slot on backspace if occupied', () => {
+            service.setFocusedIndex(0);
+            service.addLetter('A'); // index -> 1
+            service.setFocusedIndex(0); // Focus back on 'A'
+            service.removeLetter(); // Should clear 'A' and stay at 0
+            expect(service.currentGuess()).toEqual(['', '', '', '', '']);
+            expect(service.focusedIndex()).toBe(0);
         });
     });
 });

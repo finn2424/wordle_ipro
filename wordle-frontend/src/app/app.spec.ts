@@ -19,14 +19,17 @@ describe('App', () => {
       gameStatus: signal('playing'),
       answer: signal('WORDL'),
       guesses: signal([]),
-      currentGuess: signal(''),
+      currentGuess: signal(['', '', '', '', '']),
       evaluatedGuesses: computed(() => []),
+      letterStatus: computed(() => ({})),
       error: signal(null),
+      focusedIndex: signal(0),
       addLetter: vi.fn(),
       removeLetter: vi.fn(),
       submitGuess: vi.fn(),
       startNewGame: vi.fn(),
       clearError: vi.fn(),
+      setFocusedIndex: vi.fn(),
     };
 
     modalServiceMock = {
@@ -148,6 +151,12 @@ describe('App', () => {
       grid.triggerEventHandler('errorCleared', null);
 
       expect(gameServiceMock.clearError).toHaveBeenCalled();
+    });
+
+    it('should call setFocusedIndex when grid emits focusRequest', () => {
+      const grid = fixture.debugElement.query(By.css('app-game-grid'));
+      grid.triggerEventHandler('focusRequest', 2);
+      expect(gameServiceMock.setFocusedIndex).toHaveBeenCalledWith(2);
     });
   });
 });

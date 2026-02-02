@@ -1,10 +1,12 @@
 <div class="grid-container">
-    @for (row of rows(); track $index) {
-    <div class="grid-row" [class.shake]="error() && $index === evaluatedGuesses().length"
+    @for (row of rows(); track $index; let rowIndex = $index) {
+    <div class="grid-row" [class.shake]="error() && rowIndex === evaluatedGuesses().length"
         (animationend)="errorCleared.emit()">
-        @for (item of row; track $index) {
+        @for (item of row; track $index; let colIndex = $index) {
         <div class="tile" [class.tile-correct]="item.status === 'correct'"
-            [class.tile-present]="item.status === 'present'" [class.tile-absent]="item.status === 'absent'">
+            [class.tile-present]="item.status === 'present'" [class.tile-absent]="item.status === 'absent'"
+            [class.tile-focused]="rowIndex === evaluatedGuesses().length && colIndex === focusedIndex()"
+            (click)="onTileClick(rowIndex, colIndex)">
             {{ item.char }}
         </div>
         }

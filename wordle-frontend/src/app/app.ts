@@ -7,6 +7,10 @@ import { VirtualKeyboard } from './components/virtual-keyboard/virtual-keyboard'
 import { GameService } from './services/game.service';
 import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
 
+/**
+ * Root component of the Wordle application.
+ * Manages high-level game flow, keyboard events, and modal dialogs.
+ */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, GameGrid, VirtualKeyboard],
@@ -23,6 +27,7 @@ export class App {
   @ViewChild(VirtualKeyboard) virtualKeyboard!: VirtualKeyboard;
 
   constructor() {
+    // Effect to monitor game status and show the game over modal when appropriate
     effect(() => {
       const status = this.gameService.gameStatus();
 
@@ -41,6 +46,12 @@ export class App {
     });
   }
 
+  /**
+   * Handles global keyboard events from the document.
+   * Delegates valid inputs (letters, Enter, Backspace) to the GameService
+   * and triggers visual feedback on the virtual keyboard.
+   * @param event The native KeyboardEvent.
+   */
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.ctrlKey || event.altKey || event.metaKey) return;
 
@@ -63,6 +74,10 @@ export class App {
     }
   }
 
+  /**
+   * Handles input from the virtual on-screen keyboard.
+   * @param key The key string emitted by the virtual keyboard.
+   */
   handleVirtualKey(key: string) {
     if (key === 'Enter') {
       this.gameService.submitGuess();
@@ -73,3 +88,4 @@ export class App {
     }
   }
 }
+

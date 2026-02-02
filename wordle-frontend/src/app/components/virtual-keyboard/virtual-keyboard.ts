@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output, signal, WritableSignal } from '@angular/core';
 import { LetterStatus } from '../../services/game.service';
 
+/**
+ * Renders the on-screen virtual keyboard.
+ * Handles key presses and displays the validation status of each letter.
+ */
 @Component({
   selector: 'app-virtual-keyboard',
   imports: [],
@@ -20,11 +24,20 @@ export class VirtualKeyboard {
     ['Enter', 'Y', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace'],
   ];
 
+  /**
+   * Emits the key press event and triggers visual feedback.
+   * @param key The key string that was pressed.
+   */
   onKey(key: string): void {
     this.triggerAnimation(key);
     this.keyPress.emit(key);
   }
 
+  /**
+   * Temporarily adds the key to the set of pressed keys to trigger CSS animations.
+   * Removes the key after a short delay.
+   * @param key The key to animate.
+   */
   triggerAnimation(key: string) {
     this.pressedKeys.update(keys => {
       const newKeys = new Set(keys);
@@ -41,3 +54,4 @@ export class VirtualKeyboard {
     }, 150);
   }
 }
+

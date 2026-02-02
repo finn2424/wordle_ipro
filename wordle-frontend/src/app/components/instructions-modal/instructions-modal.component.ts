@@ -1,6 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+/**
+ * Modal displaying the rules and instructions of the game.
+ */
 @Component({
     selector: 'app-instructions-modal',
     standalone: true,
@@ -15,3 +18,4 @@ export class InstructionsModalComponent {
         this.activeModal.dismiss('Cross click');
     }
 }
+
