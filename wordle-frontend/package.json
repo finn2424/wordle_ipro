@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "ssh-db-tunnel": "ssh -L 1433:127.0.0.1:1433 debian@86.119.31.169",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
