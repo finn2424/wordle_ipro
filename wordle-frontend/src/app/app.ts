@@ -31,14 +31,14 @@ export class App {
     effect(() => {
       const status = this.gameService.gameStatus();
 
-      if (status === 'won' || status === 'lost') {
+      if ('won' === status || 'lost' === status) {
         const modalRef = this.modalService.open(GameOverModalComponent, { centered: true, backdrop: 'static' });
-        modalRef.componentInstance.isWin = status === 'won';
+        modalRef.componentInstance.isWin = 'won' === status;
         modalRef.componentInstance.solution = this.gameService.answer();
         modalRef.componentInstance.guesses = this.gameService.guesses().length;
 
         modalRef.closed.subscribe((result) => {
-          if (result === 'Play Again') {
+          if ('Play Again' === result) {
             this.gameService.startNewGame();
           }
         });
@@ -85,9 +85,9 @@ export class App {
    * @param key The key string emitted by the virtual keyboard.
    */
   handleVirtualKey(key: string) {
-    if (key === 'Enter') {
+    if ('Enter' === key) {
       this.gameService.submitGuess();
-    } else if (key === 'Backspace') {
+    } else if ('Backspace' === key) {
       this.gameService.removeLetter();
     } else {
       this.gameService.addLetter(key);

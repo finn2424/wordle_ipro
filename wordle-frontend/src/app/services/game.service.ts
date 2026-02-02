@@ -66,15 +66,15 @@ export class GameService {
                 const currentStatus = statusMap[char];
                 const newStatus = guess.validation[i];
 
-                if (currentStatus === 'correct') {
+                if ('correct' === currentStatus) {
                     continue;
                 }
 
-                if (newStatus === 'correct') {
+                if ('correct' === newStatus) {
                     statusMap[char] = 'correct';
-                } else if (newStatus === 'present') {
+                } else if ('present' === newStatus) {
                     statusMap[char] = 'present';
-                } else if (newStatus === 'absent' && !currentStatus) {
+                } else if ('absent' === newStatus && !currentStatus) {
                     statusMap[char] = 'absent';
                 }
             }
@@ -89,7 +89,7 @@ export class GameService {
      * @param letter The single character letter to add.
      */
     addLetter(letter: string): void {
-        if (this.state().gameStatus !== 'playing') return;
+        if ('playing' !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
@@ -114,13 +114,13 @@ export class GameService {
      * Handles both clearing the current slot or moving back to clear the previous one.
      */
     removeLetter(): void {
-        if (this.state().gameStatus !== 'playing') return;
+        if ('playing' !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
             let newIndex = currentState.focusedIndex;
 
-            if (newGuess[newIndex] !== '') {
+            if ('' !== newGuess[newIndex]) {
                 newGuess[newIndex] = '';
             } else {
                 newIndex = Math.max(0, newIndex - 1);
@@ -141,12 +141,12 @@ export class GameService {
      * Updates the game state to 'won' or 'lost' based on the result.
      */
     submitGuess(): void {
-        if (this.state().gameStatus !== 'playing') return;
+        if ('playing' !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const guess = currentState.currentGuess.join('');
 
-            if (guess.length !== WORD_LENGTH || currentState.currentGuess.some(char => char === '')) {
+            if (WORD_LENGTH !== guess.length || currentState.currentGuess.some(char => '' === char)) {
                 return { ...currentState, error: 'Not enough letters' };
             }
 
@@ -208,9 +208,9 @@ export class GameService {
 
         // Second pass: Identify present but misplaced letters (Yellow)
         for (let i = 0; i < WORD_LENGTH; i++) {
-            if (guessArr[i] !== '') {
+            if ('' !== guessArr[i]) {
                 const indexInAnswer = answerArr.indexOf(guessArr[i]);
-                if (indexInAnswer !== -1) {
+                if (-1 !== indexInAnswer) {
                     result[i] = 'present';
                     answerArr[indexInAnswer] = ''; // Consumes the letter from the answer to prevent double counting
                 }
