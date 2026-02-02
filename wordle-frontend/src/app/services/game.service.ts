@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 
-export type LetterStatus = 'correct' | 'present' | 'absent' | 'empty';
+import { LetterStatus, GameStatus } from '../models/game-types';
 
 export const WORD_LENGTH = 5;
 export const MAX_GUESSES = 6;
@@ -12,7 +12,7 @@ export interface GameState {
     guesses: string[];
     currentGuess: string[];
     answer: string;
-    gameStatus: 'playing' | 'won' | 'lost';
+    gameStatus: GameStatus;
     error: string | null;
     focusedIndex: number;
 }
@@ -28,7 +28,7 @@ export class GameService {
         guesses: [],
         currentGuess: this.createEmptyGuess(),
         answer: 'WORDL', // hardcoded for now, will be dynamic later
-        gameStatus: 'playing',
+        gameStatus: GameStatus.PLAYING,
         error: null,
         focusedIndex: 0
     });
@@ -66,16 +66,16 @@ export class GameService {
                 const currentStatus = statusMap[char];
                 const newStatus = guess.validation[i];
 
-                if ('correct' === currentStatus) {
+                if (LetterStatus.CORRECT === currentStatus) {
                     continue;
                 }
 
-                if ('correct' === newStatus) {
-                    statusMap[char] = 'correct';
-                } else if ('present' === newStatus) {
-                    statusMap[char] = 'present';
-                } else if ('absent' === newStatus && !currentStatus) {
-                    statusMap[char] = 'absent';
+                if (LetterStatus.CORRECT === newStatus) {
+                    statusMap[char] = LetterStatus.CORRECT;
+                } else if (LetterStatus.PRESENT === newStatus) {
+                    statusMap[char] = LetterStatus.PRESENT;
+                } else if (LetterStatus.ABSENT === newStatus && !currentStatus) {
+                    statusMap[char] = LetterStatus.ABSENT;
                 }
             }
         }
@@ -89,7 +89,7 @@ export class GameService {
      * @param letter The single character letter to add.
      */
     addLetter(letter: string): void {
-        if ('playing' !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
@@ -114,7 +114,7 @@ export class GameService {
      * Handles both clearing the current slot or moving back to clear the previous one.
      */
     removeLetter(): void {
-        if ('playing' !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
@@ -141,7 +141,7 @@ export class GameService {
      * Updates the game state to 'won' or 'lost' based on the result.
      */
     submitGuess(): void {
-        if ('playing' !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus) return;
 
         this.state.update((currentState) => {
             const guess = currentState.currentGuess.join('');
@@ -153,12 +153,12 @@ export class GameService {
             // TODO: Add dictionary validation here
 
             const newGuesses = [...currentState.guesses, guess];
-            let newStatus: 'playing' | 'won' | 'lost' = 'playing';
+            let newStatus: GameStatus = GameStatus.PLAYING;
 
             if (guess === currentState.answer) {
-                newStatus = 'won';
+                newStatus = GameStatus.WON;
             } else if (newGuesses.length >= MAX_GUESSES) {
-                newStatus = 'lost';
+                newStatus = GameStatus.LOST;
             }
 
             return {
@@ -180,7 +180,7 @@ export class GameService {
             guesses: [],
             currentGuess: this.createEmptyGuess(),
             answer: 'WORDL', // TODO: Pick random word
-            gameStatus: 'playing',
+            gameStatus: GameStatus.PLAYING,
             error: null,
             focusedIndex: 0
         });
@@ -193,14 +193,14 @@ export class GameService {
      * @returns An array of LetterStatus corresponding to each letter in the guess.
      */
     calculateValidation(guess: string, answer: string): LetterStatus[] {
-        const result: LetterStatus[] = Array(WORD_LENGTH).fill('absent');
+        const result: LetterStatus[] = Array(WORD_LENGTH).fill(LetterStatus.ABSENT);
         const answerArr = answer.split('');
         const guessArr = guess.split('');
 
         // First pass: Identify exact matches (Green)
         for (let i = 0; i < WORD_LENGTH; i++) {
             if (guessArr[i] === answerArr[i]) {
-                result[i] = 'correct';
+                result[i] = LetterStatus.CORRECT;
                 answerArr[i] = ''; // Mark used in answer
                 guessArr[i] = ''; // Mark used in guess
             }
@@ -211,7 +211,7 @@ export class GameService {
             if ('' !== guessArr[i]) {
                 const indexInAnswer = answerArr.indexOf(guessArr[i]);
                 if (-1 !== indexInAnswer) {
-                    result[i] = 'present';
+                    result[i] = LetterStatus.PRESENT;
                     answerArr[indexInAnswer] = ''; // Consumes the letter from the answer to prevent double counting
                 }
             }

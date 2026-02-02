@@ -3,9 +3,9 @@
     <div class="keyboard-row">
         @for (key of row; track key) {
         <button type="button" class="key" [class.wide]="key === 'Enter' || key === 'Backspace'"
-            [class.key-correct]="letterStatus()[key] === 'correct'"
-            [class.key-present]="letterStatus()[key] === 'present'"
-            [class.key-absent]="letterStatus()[key] === 'absent'" [class.pressed]="pressedKeys().has(key)"
+            [class.key-correct]="LetterStatus.CORRECT === letterStatus()[key]"
+            [class.key-present]="LetterStatus.PRESENT === letterStatus()[key]"
+            [class.key-absent]="LetterStatus.ABSENT === letterStatus()[key]" [class.pressed]="pressedKeys().has(key)"
             (click)="onKey(key)" (mousedown)="$event.preventDefault()"
             [attr.aria-label]="key === 'Backspace' ? 'Delete' : key">
             @if (key === 'Backspace') {

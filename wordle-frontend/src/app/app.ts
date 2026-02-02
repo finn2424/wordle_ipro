@@ -7,6 +7,8 @@ import { VirtualKeyboard } from './components/virtual-keyboard/virtual-keyboard'
 import { GameService } from './services/game.service';
 import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
 
+import { GameStatus } from './models/game-types';
+
 /**
  * Root component of the Wordle application.
  * Manages high-level game flow, keyboard events, and modal dialogs.
@@ -31,9 +33,9 @@ export class App {
     effect(() => {
       const status = this.gameService.gameStatus();
 
-      if ('won' === status || 'lost' === status) {
+      if (GameStatus.WON === status || GameStatus.LOST === status) {
         const modalRef = this.modalService.open(GameOverModalComponent, { centered: true, backdrop: 'static' });
-        modalRef.componentInstance.isWin = 'won' === status;
+        modalRef.componentInstance.isWin = GameStatus.WON === status;
         modalRef.componentInstance.solution = this.gameService.answer();
         modalRef.componentInstance.guesses = this.gameService.guesses().length;
 

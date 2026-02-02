@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, signal, WritableSignal } from '@angular/core';
-import { LetterStatus } from '../../services/game.service';
+import { LetterStatus } from '../../models/game-types';
 
 /**
  * Renders the on-screen virtual keyboard.
@@ -13,6 +13,7 @@ import { LetterStatus } from '../../services/game.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VirtualKeyboard {
+  protected readonly LetterStatus = LetterStatus;
   keyPress = output<string>();
   letterStatus = input<{ [key: string]: LetterStatus }>({});
 

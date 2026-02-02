@@ -1,5 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
-import { LetterStatus, WORD_LENGTH, MAX_GUESSES } from '../../services/game.service';
+import { WORD_LENGTH, MAX_GUESSES } from '../../services/game.service';
+import { LetterStatus } from '../../models/game-types';
 
 /**
  * Renders the 6x5 grid of guesses.
@@ -12,6 +13,7 @@ import { LetterStatus, WORD_LENGTH, MAX_GUESSES } from '../../services/game.serv
   styleUrl: './game-grid.scss'
 })
 export class GameGrid {
+  protected readonly LetterStatus = LetterStatus;
   evaluatedGuesses = input<{ word: string; validation: LetterStatus[] }[]>([]);
   currentGuess = input<string[]>([]);
   focusedIndex = input<number>(0);
@@ -42,7 +44,7 @@ export class GameGrid {
       const currentRow: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {
         const char = current[i] || '';
-        currentRow.push({ char, status: 'empty' });
+        currentRow.push({ char, status: LetterStatus.EMPTY });
       }
       rows.push(currentRow);
     }
@@ -51,7 +53,7 @@ export class GameGrid {
     while (rows.length < MAX_GUESSES) {
       const emptyRow: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {
-        emptyRow.push({ char: '', status: 'empty' });
+        emptyRow.push({ char: '', status: LetterStatus.EMPTY });
       }
       rows.push(emptyRow);
     }

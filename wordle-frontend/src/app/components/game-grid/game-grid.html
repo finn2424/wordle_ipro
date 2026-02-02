@@ -3,8 +3,9 @@
     <div class="grid-row" [class.shake]="error() && rowIndex === evaluatedGuesses().length"
         (animationend)="errorCleared.emit()">
         @for (item of row; track $index; let colIndex = $index) {
-        <div class="tile" [class.tile-correct]="item.status === 'correct'"
-            [class.tile-present]="item.status === 'present'" [class.tile-absent]="item.status === 'absent'"
+        <div class="tile" [class.tile-correct]="LetterStatus.CORRECT === item.status"
+            [class.tile-present]="LetterStatus.PRESENT === item.status"
+            [class.tile-absent]="LetterStatus.ABSENT === item.status"
             [class.tile-focused]="rowIndex === evaluatedGuesses().length && colIndex === focusedIndex()"
             (click)="onTileClick(rowIndex, colIndex)">
             {{ item.char }}

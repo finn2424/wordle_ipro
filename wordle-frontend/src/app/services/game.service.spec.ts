@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { GameService } from './game.service';
+import { GameStatus, LetterStatus } from '../models/game-types';
 
 describe('GameService', () => {
     let service: GameService;
@@ -16,7 +17,7 @@ describe('GameService', () => {
     it('should initialize with default state', () => {
         expect(service.guesses()).toEqual([]);
         expect(service.currentGuess()).toEqual(['', '', '', '', '']);
-        expect(service.gameStatus()).toBe('playing');
+        expect(service.gameStatus()).toBe(GameStatus.PLAYING);
         expect(service.focusedIndex()).toBe(0);
     });
 
@@ -76,7 +77,7 @@ describe('GameService', () => {
         service.addLetter('D');
         service.addLetter('L');
         service.submitGuess();
-        expect(service.gameStatus()).toBe('won');
+        expect(service.gameStatus()).toBe(GameStatus.WON);
     });
 
     it('should detect loss condition after 6 guesses', () => {
@@ -89,21 +90,21 @@ describe('GameService', () => {
             service.addLetter('S');
             service.submitGuess();
             if (i < 5) {
-                expect(service.gameStatus()).toBe('playing');
+                expect(service.gameStatus()).toBe(GameStatus.PLAYING);
             }
         }
-        expect(service.gameStatus()).toBe('lost');
+        expect(service.gameStatus()).toBe(GameStatus.LOST);
     });
 
     describe('calculateValidation', () => {
         it('should return all correct (green) for exact match', () => {
             const result = service.calculateValidation('APPLE', 'APPLE');
-            expect(result).toEqual(['correct', 'correct', 'correct', 'correct', 'correct']);
+            expect(result).toEqual([LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT]);
         });
 
         it('should return all absent (gray) for no matches', () => {
             const result = service.calculateValidation('ABCDE', 'FGHIJ');
-            expect(result).toEqual(['absent', 'absent', 'absent', 'absent', 'absent']);
+            expect(result).toEqual([LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
         });
 
         it('should handle simple present (yellow) cases', () => {
@@ -113,7 +114,7 @@ describe('GameService', () => {
             // L!=S, E!=T, A!=E, S!=A, T!=L. No greens.
             // All present.
             const result = service.calculateValidation('LEAST', 'STEAL');
-            expect(result).toEqual(['present', 'present', 'present', 'present', 'present']);
+            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT]);
         });
 
         it('should handle mixed results', () => {
@@ -125,7 +126,7 @@ describe('GameService', () => {
             // O(3): No -> Gray.
             // Y(4): No -> Gray.
             const result = service.calculateValidation('ALLOY', 'ALARM');
-            expect(result).toEqual(['correct', 'correct', 'absent', 'absent', 'absent']);
+            expect(result).toEqual([LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
         });
 
         it('should handle double letters correctly (only one present)', () => {
@@ -137,7 +138,7 @@ describe('GameService', () => {
             // A(1) in A,Y? Yes -> Yellow. Consume A.
             // S(4) in Y? No -> Gray.
             const result = service.calculateValidation('BABES', 'ABBEY');
-            expect(result).toEqual(['present', 'present', 'correct', 'correct', 'absent']);
+            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.ABSENT]);
         });
 
         it('should handle double letters correctly (excess in guess)', () => {
@@ -151,7 +152,7 @@ describe('GameService', () => {
             // B(3) in A,R,T? No -> Gray.
             // Y(4) in A,R,T? No -> Gray.
             const result = service.calculateValidation('BOBBY', 'ABORT');
-            expect(result).toEqual(['present', 'present', 'absent', 'absent', 'absent']);
+            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
         });
     });
 

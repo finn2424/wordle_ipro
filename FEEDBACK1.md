@@ -16,7 +16,7 @@
         }
     ```
 - [-] Document code with comments, like GameService
-- [ ] Don't check for strings when using types, do it like this instead:
+- [x] Don't check for strings when using types, do it like this instead:
     ```typescript
     export const LetterStatus = {CORRECT: 'correct', PRESENT: 'present', ABSENT: 'absent', EMPTY: 'empty'} as const;
     export type LetterStatus = typeof LetterStatus[keyof typeof LetterStatus];
