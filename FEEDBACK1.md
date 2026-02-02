@@ -2,7 +2,7 @@
 
 - [ ] Secure endpoints (user should not be able to cheat by accessing an endpoint)
 - [x] Individual field input with field highlighting (user should not be forced to input from left to right)
-- [ ] Rewrite this if/else more clean:
+- [x] Rewrite this if/else more clean:
      ```typescript
      if (key === 'Enter') {
           this.gameService.submitGuess();

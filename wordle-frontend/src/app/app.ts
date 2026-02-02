@@ -58,15 +58,21 @@ export class App {
     const key = event.key;
     let virtualKey = '';
 
-    if (key === 'Enter') {
-      this.gameService.submitGuess();
-      virtualKey = 'Enter';
-    } else if (key === 'Backspace') {
-      this.gameService.removeLetter();
-      virtualKey = 'Backspace';
-    } else if (/^[a-zA-Z]$/.test(key)) {
-      this.gameService.addLetter(key);
-      virtualKey = key.toUpperCase();
+    switch (key) {
+      case 'Enter':
+        this.gameService.submitGuess();
+        virtualKey = 'Enter';
+        break;
+      case 'Backspace':
+        this.gameService.removeLetter();
+        virtualKey = 'Backspace';
+        break;
+      default:
+        if (/^[a-zA-Z]$/.test(key)) {
+          this.gameService.addLetter(key);
+          virtualKey = key.toUpperCase();
+        }
+        break;
     }
 
     if (virtualKey && this.virtualKeyboard) {
