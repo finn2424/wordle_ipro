@@ -1,10 +1,23 @@
 :root {
+    color-scheme: light dark;
     // App Theme Colors
-    --app-color-dark: #1a1a1b;
-    --app-color-background: #f8f9fa;
-    --app-color-surface: #ffffff;
-    --app-color-border: #dee2e6;
+    --app-color-dark-light: #1a1a1b;
+    --app-color-dark-dark: #f8f9fa;
+    --app-color-dark: light-dark(var(--app-color-dark-light), var(--app-color-dark-dark));
+
+    --app-color-background-light: #f8f9fa;
+    --app-color-background-dark: #121213;
+    --app-color-background: light-dark(var(--app-color-background-light), var(--app-color-background-dark));
+
+    --app-color-surface-light: #ffffff;
+    --app-color-surface-dark: #1a1a1b;
+    --app-color-surface: light-dark(var(--app-color-surface-light), var(--app-color-surface-dark));
+
+    --app-color-border-light: #dee2e6;
+    --app-color-border-dark: #3a3a3c;
+    --app-color-border: light-dark(var(--app-color-border-light), var(--app-color-border-dark));
     --app-color-white: #ffffff;
+    --app-color-transparent: transparent;
 
     // Game Logic Colors
     --game-color-correct: #4CAF50;
@@ -12,9 +25,17 @@
     --game-color-absent: #94a3b8;
 
     // Keyboard Colors
-    --keyboard-color-bg: #d3d6da;
-    --keyboard-color-bg-hover: #c4c7cb;
-    --keyboard-color-bg-active: #a8abad;
+    --keyboard-color-bg-light: #d3d6da;
+    --keyboard-color-bg-dark: #818384;
+    --keyboard-color-bg: light-dark(var(--keyboard-color-bg-light), var(--keyboard-color-bg-dark));
+
+    --keyboard-color-bg-hover-light: #c4c7cb;
+    --keyboard-color-bg-hover-dark: #717374;
+    --keyboard-color-bg-hover: light-dark(var(--keyboard-color-bg-hover-light), var(--keyboard-color-bg-hover-dark));
+
+    --keyboard-color-bg-active-light: #a8abad;
+    --keyboard-color-bg-active-dark: #616364;
+    --keyboard-color-bg-active: light-dark(var(--keyboard-color-bg-active-light), var(--keyboard-color-bg-active-dark));
     --keyboard-color-text: var(--app-color-dark);
 
     // Text Colors

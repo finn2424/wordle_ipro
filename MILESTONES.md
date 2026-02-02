@@ -54,7 +54,7 @@
 
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17
-- [ ] Refactor and refine styling (use css vars, light-dark() function)
+- [x] Refactor and refine styling (use css vars, light-dark() function)
 - [ ] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend
 - [x] Setup Docker Containers (Frontend, Backend, Database)

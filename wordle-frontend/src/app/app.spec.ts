@@ -7,12 +7,14 @@ import { signal, computed, WritableSignal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
+import { ThemeService } from './services/theme.service';
 
 describe('App', () => {
   let component: App;
   let fixture: ComponentFixture<App>;
   let gameServiceMock: any;
   let modalServiceMock: any;
+  let themeServiceMock: any;
 
   beforeEach(async () => {
     gameServiceMock = {
@@ -39,11 +41,17 @@ describe('App', () => {
       })
     };
 
+    themeServiceMock = {
+      theme: signal('light'),
+      set: vi.fn()
+    };
+
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
         { provide: GameService, useValue: gameServiceMock },
-        { provide: NgbModal, useValue: modalServiceMock }
+        { provide: NgbModal, useValue: modalServiceMock },
+        { provide: ThemeService, useValue: themeServiceMock }
       ]
     }).compileComponents();
 

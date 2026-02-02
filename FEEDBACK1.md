@@ -23,5 +23,5 @@
     ```
 - [ ] Reformat code: for example when declaring multiple vars, get start of all words to the same col
 - [ ] Make code more typesafe
-- [ ] Use `light-dark()` CSS function for dark-mode support
+- [x] Use `light-dark()` CSS function for dark-mode support
 - [ ] Research design patterns and document usage or rewrite to use design-pattern

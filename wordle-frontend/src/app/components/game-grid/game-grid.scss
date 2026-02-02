@@ -75,12 +75,12 @@
 @keyframes flipIn {
     0% {
         transform: rotateX(0);
-        background-color: transparent;
+        background-color: var(--app-color-transparent);
         border-color: var(--app-color-border);
     }
 
     49% {
-        background-color: transparent;
+        background-color: var(--app-color-transparent);
         border-color: var(--app-color-border);
     }
 

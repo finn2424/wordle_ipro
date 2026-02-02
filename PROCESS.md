@@ -84,6 +84,21 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **GameService**: Updated `addLetter` and `removeLetter` to respect `focusedIndex` and allow arbitrary cursor placement.
   - **Visuals**: Highlighted the currently focused tile to indicate where the next letter will be typed.
 
+### Feature: Dark Mode / Theme System
+- **Goal**: Provide users with light, dark, and automatic (system preference) theme options.
+- **Implementation**:
+  - **`ThemeService`**: A singleton service managing theme state via Angular Signals. Persists preference to `localStorage` and listens for system `prefers-color-scheme` changes.
+  - **`ThemeToggleComponent`**: A dropdown UI component allowing users to select their preferred theme.
+  - **CSS `light-dark()` Function**: Refactored `_variables.scss` to use the native CSS `light-dark()` function, enabling automatic color switching based on the `color-scheme` property without JavaScript.
+  - **Bootstrap Integration**: Sets `data-bs-theme` attribute on `<html>` to ensure Bootstrap components also respect the chosen theme.
+
+### Feature: Type-Safe Game Types
+- **Goal**: Improve code robustness by using type-safe constant objects instead of string literals.
+- **Implementation**:
+  - **`game-types.ts`**: Created a dedicated file (`src/app/models/game-types.ts`) defining `LetterStatus` and `GameStatus` using the TypeScript const assertion pattern (`as const`).
+  - **Usage**: Replaced all string comparisons (e.g., `'correct'`, `'playing'`) with their typed counterparts (e.g., `LetterStatus.CORRECT`, `GameStatus.PLAYING`) throughout `GameService`.
+  - **Benefits**: Enables IDE autocompletion, prevents typos, and makes refactoring safer.
+
 ### Feature: Shared SCSS Architecture
 - **Decision**: I implemented a centralized CSS variables system and shared component styling.
 - **Reasoning**:
