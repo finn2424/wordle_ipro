@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "UserId",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "DeviceId",
+    "TypeName": "uniqueidentifier",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "DisplayName",
+    "TypeName": "nvarchar",
+    "IsNullable": true,
+    "MaxLength": 50
+  },
+  {
+    "Name": "CreatedAt",
+    "TypeName": "datetime2",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "LastActiveAt",
+    "TypeName": "datetime2",
+    "IsNullable": false,
+    "MaxLength": null
+  }
+]

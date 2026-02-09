@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "GameId",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GameStatus",
+    "TypeName": "varchar",
+    "IsNullable": false,
+    "MaxLength": 10
+  },
+  {
+    "Name": "AttemptsUsed",
+    "TypeName": "tinyint",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "StartedAt",
+    "TypeName": "datetime2",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TargetWord",
+    "TypeName": "char",
+    "IsNullable": true,
+    "MaxLength": 5
+  }
+]

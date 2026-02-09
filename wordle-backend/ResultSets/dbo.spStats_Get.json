@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "GamesPlayed",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "GamesWon",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "WinRate",
+    "TypeName": "float",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "CurrentStreak",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "MaxStreak",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  }
+]

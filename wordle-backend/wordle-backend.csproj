@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>wordle_backend</RootNamespace>
+		<UserSecretsId>bc0f0814-3804-44cc-b9c5-50295d82b1b5</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>

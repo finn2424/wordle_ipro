@@ -1,0 +1,44 @@
+[
+  {
+    "Name": "Status",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 10
+  },
+  {
+    "Name": "Message",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 100
+  },
+  {
+    "Name": "GuessWord",
+    "TypeName": "char",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "Result",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "AttemptsUsed",
+    "TypeName": "tinyint",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "GameStatus",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 10
+  },
+  {
+    "Name": "TargetWord",
+    "TypeName": "char",
+    "IsNullable": true,
+    "MaxLength": 5
+  }
+]
