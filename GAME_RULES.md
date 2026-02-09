@@ -35,7 +35,8 @@ If the secret word is **CRANE**:
 - Each guess must be a **valid English word**.
 - Invalid or incomplete words will not be accepted.
 - Use the color hints to refine your next guess.
-- letters can appear **more than once** in the secret word (e.g., "LEVEL").
+- Letters can appear **more than once** in the secret word (e.g., "LEVEL").
+- Unlike the original Wordle, you can **play as many times as you want** per day, with a different word each time.
 
 ## 💡 Tips & Strategies
 
