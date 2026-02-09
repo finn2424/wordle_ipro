@@ -49,24 +49,34 @@ wordle_ipro/
 - [npm](https://www.npmjs.com/) (v9 or higher)
 - Angular CLI (`npm install -g @angular/cli`)
 
-### Running the Frontend
+### Running Locally (Hybrid Mode)
 
-1. Navigate to the frontend directory:
+For development, you can run the frontend and backend locally while connecting to the production database via an SSH tunnel.
+
+1. **Setup**:
    ```bash
    cd wordle-frontend
-   ```
-
-2. Install dependencies:
-   ```bash
    npm install
    ```
 
-3. Start the development server:
+2. **Establish Database Tunnel** (Keep this terminal open):
+   ```bash
+   npm run ssh-db-tunnel
+   ```
+   > This forwards local port 1433 to the production database.
+
+3. **Start the Backend** (In a new terminal, inside `wordle-frontend`):
+   ```bash
+   npm run run-backend
+   ```
+   > Starts the .NET API on `http://localhost:5031`.
+
+4. **Start the Frontend** (In a new terminal, inside `wordle-frontend`):
    ```bash
    npm start
    ```
 
-4. Open your browser at `http://localhost:4200`
+5. Open your browser at `http://localhost:4200`.
 
 ## 🐳 Deployment (Docker & VM)
 
