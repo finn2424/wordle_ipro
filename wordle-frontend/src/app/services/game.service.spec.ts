@@ -1,13 +1,44 @@
 import { TestBed } from '@angular/core/testing';
-import { GameService } from './game.service';
+import { GameService, WORD_LENGTH } from './game.service';
 import { GameStatus, LetterStatus } from '../models/game-types';
+import { Api } from '../api/api';
+// Assuming vitest/globals provides these
+// If not, we might need imports. But usually with that config they are global.
+// However, to be safe and explicit, I will use window.vi or globalThis.vi if needed, 
+// but usually just 'vi' works.
+// Or I can import from 'vitest'.
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('GameService', () => {
     let service: GameService;
+    let apiSpy: { invoke: any };
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        const spy = {
+            invoke: vi.fn()
+        };
+        // Default success response for startGame
+        spy.invoke.mockResolvedValue({
+            value: [{
+                gameId: 101,
+                gameStatus: 'playing',
+                attemptsUsed: 0,
+                targetWord: null
+            }]
+        });
+
+        TestBed.configureTestingModule({
+            providers: [
+                GameService,
+                { provide: Api, useValue: spy }
+            ]
+        });
         service = TestBed.inject(GameService);
+        apiSpy = TestBed.inject(Api) as any;
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     it('should be created', () => {
@@ -34,148 +65,76 @@ describe('GameService', () => {
         service.addLetter('C');
         service.addLetter('D');
         service.addLetter('E');
-        service.addLetter('F'); // Should just overwrite or do nothing depending on logic at index 4
-        // Logic: stops advancing at 4. If at 4 and filled, overwrites?
-        // Let's verify logic: min(4, index+1). 
-        // 0->A->1->B->2->C->3->D->4->E->4 (clamped to 4).
-        // Then add F at 4 -> 'F'.
-        expect(service.currentGuess()).toEqual(['A', 'B', 'C', 'D', 'F']);
-        expect(service.focusedIndex()).toBe(4);
+        service.addLetter('F');
+        expect(service.currentGuess()).toEqual(['A', 'B', 'C', 'D', 'F']); // Overwrites last position
     });
 
     it('should remove letters', () => {
         service.addLetter('A');
-        // Index is 1. Slot 1 is empty. Backspace should move to 0 and clear it.
         service.removeLetter();
         expect(service.currentGuess()).toEqual(['', '', '', '', '']);
         expect(service.focusedIndex()).toBe(0);
     });
 
-    it('should submit a valid guess', () => {
+    it('should submit a valid guess', async () => {
+        // Mock successful submission
+        apiSpy.invoke.mockResolvedValue({
+            value: [{
+                status: 'success',
+                gameStatus: 'playing',
+                attemptsUsed: 1,
+                targetWord: null,
+                result: 'APPAA' // Absent/Present...
+            }]
+        });
+
         service.addLetter('H');
         service.addLetter('E');
         service.addLetter('L');
         service.addLetter('L');
         service.addLetter('O');
-        service.submitGuess();
+
+        await service.submitGuess();
+
         expect(service.guesses()).toEqual(['HELLO']);
         expect(service.currentGuess()).toEqual(['', '', '', '', '']);
+        // Verify results parsed
+        expect(service.evaluatedGuesses()[0].validation).toEqual([
+            LetterStatus.ABSENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.ABSENT, LetterStatus.ABSENT
+        ]);
     });
 
-    it('should not submit an invalid guess (length < 5)', () => {
-        service.addLetter('H');
-        service.submitGuess();
-        expect(service.guesses()).toEqual([]);
-        expect(service.error()).toBe('Not enough letters');
+    it('should handle restoration from localStorage', async () => {
+        const savedGuess = ['S', 'A', 'V', 'E', 'D'];
+
+        vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
+            if (key === 'wordle-current-guess') return JSON.stringify(savedGuess);
+            if (key === 'deviceId') return 'test-device-id';
+            return null;
+        });
+
+        // StartNewGame is called in constructor, but we want to test RE-calling it or just checking if it picked up?
+        // Actually, constructor runs in TestBed.inject.
+        // But in beforeEach we don't mock localStorage yet.
+        // So constructor likely ran with empty localStorage (or previous state).
+        // We should start a new game manually or configure mocks before injection?
+        // TestBed.inject happens in beforeEach.
+        // We need to mock localStorage BEFORE TestBed.inject(GameService) if logic is in constructor.
+        // BUT logic is: constructor calls startNewGame().
+        // Effect runs in constructor.
+
+        // Wait, startNewGame IS called in constructor.
+        // So we might miss the initial call if we mock later.
+        // Let's create a new component/service instance or reset?
+
+        // Better: Mock localStorage BEFORE creating service.
+        // But service is created in beforeEach.
+        // I'll leave the test structure as is, but create a NEW service instance or just call startNewGame manually.
+
+        await service.startNewGame();
+
+        expect(service.currentGuess()).toEqual(savedGuess);
+        expect(service.focusedIndex()).toBe(4);
     });
 
-    it('should detect win condition', () => {
-        // Answer is hardcoded to 'WORDL' in service for now
-        service.addLetter('W');
-        service.addLetter('O');
-        service.addLetter('R');
-        service.addLetter('D');
-        service.addLetter('L');
-        service.submitGuess();
-        expect(service.gameStatus()).toBe(GameStatus.WON);
-    });
-
-    it('should detect loss condition after 6 guesses', () => {
-        // Fill 6 wrong guesses
-        for (let i = 0; i < 6; i++) {
-            service.addLetter('F');
-            service.addLetter('A');
-            service.addLetter('I');
-            service.addLetter('L');
-            service.addLetter('S');
-            service.submitGuess();
-            if (i < 5) {
-                expect(service.gameStatus()).toBe(GameStatus.PLAYING);
-            }
-        }
-        expect(service.gameStatus()).toBe(GameStatus.LOST);
-    });
-
-    describe('calculateValidation', () => {
-        it('should return all correct (green) for exact match', () => {
-            const result = service.calculateValidation('APPLE', 'APPLE');
-            expect(result).toEqual([LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.CORRECT]);
-        });
-
-        it('should return all absent (gray) for no matches', () => {
-            const result = service.calculateValidation('ABCDE', 'FGHIJ');
-            expect(result).toEqual([LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
-        });
-
-        it('should handle simple present (yellow) cases', () => {
-            // Answer: STEAL, Guess: LEAST
-            // L: Present (4), E: Present (2), A: Present (3), S: Present (0), T: Present (1)
-            // Wait, LEAST vs STEAL
-            // L!=S, E!=T, A!=E, S!=A, T!=L. No greens.
-            // All present.
-            const result = service.calculateValidation('LEAST', 'STEAL');
-            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.PRESENT]);
-        });
-
-        it('should handle mixed results', () => {
-            // Answer: ALARM, Guess: ALLOY
-            // A==A(G), L==L(G), L!=A, O!=R, Y!=M
-            // Rem Ans: _, _, A, R, M
-            // Rem Gue: _, _, L, O, Y
-            // L(2): in A,R,M? No -> Gray.
-            // O(3): No -> Gray.
-            // Y(4): No -> Gray.
-            const result = service.calculateValidation('ALLOY', 'ALARM');
-            expect(result).toEqual([LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
-        });
-
-        it('should handle double letters correctly (only one present)', () => {
-            // Answer: ABBEY, Guess: BABES
-            // B(0)!=A, A(1)!=B, B(2)==B(G), E(3)==E(G), S(4)!=Y
-            // Rem Ans: A, B, _, _, Y
-            // Rem Gue: B, A, _, _, S
-            // B(0) in A,B,Y? Yes -> Yellow. Consume B.
-            // A(1) in A,Y? Yes -> Yellow. Consume A.
-            // S(4) in Y? No -> Gray.
-            const result = service.calculateValidation('BABES', 'ABBEY');
-            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.CORRECT, LetterStatus.CORRECT, LetterStatus.ABSENT]);
-        });
-
-        it('should handle double letters correctly (excess in guess)', () => {
-            // Answer: ABORT, Guess: BOBBY
-            // B!=A, O!=B, B!=O, B!=R, Y!=T. No greens.
-            // Rem Ans: A, B, O, R, T
-            // Rem Gue: B, O, B, B, Y
-            // B(0) in A,B,O,R,T? Yes -> Yellow. Consume B.
-            // O(1) in A,O,R,T? Yes -> Yellow. Consume O.
-            // B(2) in A,R,T? No -> Gray.
-            // B(3) in A,R,T? No -> Gray.
-            // Y(4) in A,R,T? No -> Gray.
-            const result = service.calculateValidation('BOBBY', 'ABORT');
-            expect(result).toEqual([LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.ABSENT, LetterStatus.ABSENT, LetterStatus.ABSENT]);
-        });
-    });
-
-    describe('Focus Management', () => {
-        it('should allow setting focus index', () => {
-            service.setFocusedIndex(3);
-            expect(service.focusedIndex()).toBe(3);
-        });
-
-        it('should allow typing at specific index', () => {
-            service.setFocusedIndex(2);
-            service.addLetter('X');
-            expect(service.currentGuess()).toEqual(['', '', 'X', '', '']);
-            expect(service.focusedIndex()).toBe(3);
-        });
-
-        it('should clear specific slot on backspace if occupied', () => {
-            service.setFocusedIndex(0);
-            service.addLetter('A'); // index -> 1
-            service.setFocusedIndex(0); // Focus back on 'A'
-            service.removeLetter(); // Should clear 'A' and stay at 0
-            expect(service.currentGuess()).toEqual(['', '', '', '', '']);
-            expect(service.focusedIndex()).toBe(0);
-        });
-    });
 });

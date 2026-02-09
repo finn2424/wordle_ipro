@@ -5,6 +5,12 @@ export interface SpStatsGetResult {
   currentStreak: number | null;
   gamesPlayed: number | null;
   gamesWon: number | null;
+  guess1: number;
+  guess2: number;
+  guess3: number;
+  guess4: number;
+  guess5: number;
+  guess6: number;
   maxStreak: number | null;
   winRate: number | null;
 }

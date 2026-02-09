@@ -1,52 +1,49 @@
 <div class="modal-header border-0 pb-0">
-    <h2 class="modal-title text-uppercase fw-bold ls-1">Statistics</h2>
+    <h4 class="modal-title w-100 text-center fw-bold">STATISTICS</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
 </div>
-<div class="modal-body pt-2">
+<div class="modal-body pt-0">
+    @if (loading()) {
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    } @else if (error()) {
+    <div class="alert alert-danger text-center">{{ error() }}</div>
+    } @else if (stats()) {
     <div class="d-flex justify-content-center gap-4 text-center mb-4">
-        <div class="d-flex flex-column">
-            <span class="fs-2 fw-bold">0</span>
-            <span class="fs-6 text-muted">Played</span>
+        <div class="stat-box">
+            <div class="stat-value">{{ stats()?.gamesPlayed }}</div>
+            <div class="stat-label">Played</div>
         </div>
-        <div class="d-flex flex-column">
-            <span class="fs-2 fw-bold">0</span>
-            <span class="fs-6 text-muted">Win %</span>
+        <div class="stat-box">
+            <div class="stat-value">{{ stats()?.winRate | number:'1.0-0' }}</div>
+            <div class="stat-label">Win %</div>
         </div>
-        <div class="d-flex flex-column">
-            <span class="fs-2 fw-bold">0</span>
-            <span class="fs-6 text-muted">Current Streak</span>
+        <div class="stat-box">
+            <div class="stat-value">{{ stats()?.currentStreak }}</div>
+            <div class="stat-label">Current<br>Streak</div>
         </div>
-        <div class="d-flex flex-column">
-            <span class="fs-2 fw-bold">0</span>
-            <span class="fs-6 text-muted">Max Streak</span>
+        <div class="stat-box">
+            <div class="stat-value">{{ stats()?.maxStreak }}</div>
+            <div class="stat-label">Max<br>Streak</div>
         </div>
     </div>
 
-    <h5 class="fw-bold mb-3 text-uppercase fs-6">Guess Distribution</h5>
-    <div class="mb-4">
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">1</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
+    <h5 class="fw-bold fs-6 mb-3">GUESS DISTRIBUTION</h5>
+    <div class="distribution-chart">
+        @for (item of stats()?.guessDistribution; track item.guessCount) {
+        <div class="d-flex align-items-center mb-1 gap-2">
+            <div class="guess-label">{{ item.guessCount }}</div>
+            <div class="progress flex-grow-1" style="height: 20px;">
+                <div class="progress-bar" [style.width.%]="(item.total / (stats()?.gamesWon || 1)) * 100"
+                    [class.bg-secondary]="item.total === 0" [class.bg-success]="item.total > 0">
+                    <span class="px-2 fw-bold text-end w-100">{{ item.total }}</span>
+                </div>
+            </div>
         </div>
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">2</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
-        </div>
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">3</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
-        </div>
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">4</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
-        </div>
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">5</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
-        </div>
-        <div class="d-flex align-items-center mb-1">
-            <div class="me-2 text-end" style="width: 10px;">6</div>
-            <div class="bg-secondary text-white px-2 fw-bold" style="width: 0%; min-width: fit-content;">0</div>
-        </div>
+        }
     </div>
+    }
 </div>

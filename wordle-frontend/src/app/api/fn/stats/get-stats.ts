@@ -7,25 +7,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AddUserGetOrCreateParameters } from '../../models/add-user-get-or-create-parameters';
-import { SpUserGetOrCreateResult } from '../../models/sp-user-get-or-create-result';
+import { SpStatsGetResult } from '../../models/sp-stats-get-result';
 
-export interface Add$Params {
-  
-    /**
-     * Parameters for dbo.spUser_GetOrCreate
-     */
-    body: AddUserGetOrCreateParameters
+export interface GetStats$Params {
+  deviceId?: string;
 }
 
-export function Add(http: HttpClient, rootUrl: string, params: Add$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-'value': Array<SpUserGetOrCreateResult>;
+export function getStats(http: HttpClient, rootUrl: string, params?: GetStats$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+'value': Array<SpStatsGetResult>;
 'additionalValues'?: Array<Array<{
 }>>;
 }>> {
-  const rb = new RequestBuilder(rootUrl, Add.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, getStats.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application /json');
+    rb.query('deviceId', params.deviceId, {});
   }
 
   return http.request(
@@ -34,7 +29,7 @@ export function Add(http: HttpClient, rootUrl: string, params: Add$Params, conte
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<{
-      'value': Array<SpUserGetOrCreateResult>;
+      'value': Array<SpStatsGetResult>;
       'additionalValues'?: Array<Array<{
       }>>;
       }>;
@@ -42,4 +37,4 @@ export function Add(http: HttpClient, rootUrl: string, params: Add$Params, conte
   );
 }
 
-Add.PATH = '/api/User/GetOrCreate';
+getStats.PATH = '/api/Stats';

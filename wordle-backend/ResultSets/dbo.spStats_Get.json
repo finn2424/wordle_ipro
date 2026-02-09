@@ -28,5 +28,41 @@
     "TypeName": "int",
     "IsNullable": true,
     "MaxLength": null
+  },
+  {
+    "Name": "Guess1",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "Guess2",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "Guess3",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "Guess4",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "Guess5",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "Guess6",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
   }
 ]

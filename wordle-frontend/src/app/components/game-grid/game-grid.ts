@@ -23,14 +23,13 @@ export class GameGrid {
 
   /**
    * Computed signal that transforms the game state into a complete 6x5 grid for rendering.
-   * It combines past evaluated guesses, the current unfinished guess, and empty rows.
    */
   rows = computed(() => {
     const guesses = this.evaluatedGuesses();
     const current = this.currentGuess();
     const rows: { char: string; status: LetterStatus }[][] = [];
 
-    // 1. Add completed and evaluated guesses
+    // 1. Add completed attempts
     for (const guess of guesses) {
       const row: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {
@@ -39,7 +38,7 @@ export class GameGrid {
       rows.push(row);
     }
 
-    // 2. Add the current active guess iteration
+    // 2. Add current attempt
     if (rows.length < MAX_GUESSES) {
       const currentRow: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {
@@ -49,7 +48,7 @@ export class GameGrid {
       rows.push(currentRow);
     }
 
-    // 3. Fill the rest with empty rows
+    // 3. Fill remaining rows
     while (rows.length < MAX_GUESSES) {
       const emptyRow: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {

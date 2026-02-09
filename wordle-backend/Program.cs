@@ -2,29 +2,29 @@ using Kull.GenericBackend;
 using Microsoft.OpenApi.Models;
 using System.Data.Common;
 
+/**
+ * Wordle Backend Entry Point
+ * Configures Kull.GenericBackend for auto-generated API endpoints from stored procedures.
+ */
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var services = builder.Services;
-services.AddMvcCore().AddApiExplorer(); //Or AddMvc() depending on your needs
+services.AddMvcCore().AddApiExplorer();
 services.AddGenericBackend()
     .ConfigureMiddleware(m =>
-    { // Set your options
-        m.AlwaysWrapJson = true; // Recommended
-        m.RequireAuthenticated = false; // default since 2.0. for local development, you might want to use false
+    {
+        m.AlwaysWrapJson = true;
+        m.RequireAuthenticated = false;
     })
-    .ConfigureOpenApiGeneration(o =>
-    { // Set your options
-    })
+    .ConfigureOpenApiGeneration(o => { })
     .AddFileSupport()
-    //.AddXmlSupport() if needed
-    .AddSystemParameters(); // You probably want to configure these, see https://github.com/Kull-AG/kull-generic-backend/wiki/System-Parameters
+    .AddSystemParameters();
 
 // You might have to register your Provider Factory
 if (!DbProviderFactories.TryGetFactory("Microsoft.Data.SqlClient", out var _))
     DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", Microsoft.Data.SqlClient.SqlClientFactory.Instance);
 
-// IMPORTANT: You have to inject a DbConnection somehow
+// Register DbConnection
 services.AddTransient(typeof(DbConnection), (s) =>
 {
     var conf = s.GetRequiredService<IConfiguration>();
@@ -36,8 +36,7 @@ services.AddSwaggerGen(c => {
     c.AddGenericBackend();
 });
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
+
 
 var app = builder.Build();
 
@@ -45,11 +44,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(o =>
     {
-        // Depending on your client, set this to true (eg, ng-swagger-gen)
         o.SerializeAsV2 = false;
     });
 
-    // If needed, Swagger UI, see https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -57,13 +55,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseCors(builder => builder
+    .WithOrigins("http://localhost:4200")
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 app.UseGenericBackend();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.MapOpenApi();
-//}
 
 app.UseHttpsRedirection();
 

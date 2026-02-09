@@ -7,20 +7,25 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SpStatsGetResult } from '../../models/sp-stats-get-result';
+import { AddGameSubmitGuessParameters } from '../../models/add-game-submit-guess-parameters';
+import { SpGameSubmitGuessResult } from '../../models/sp-game-submit-guess-result';
 
-export interface Get$Params {
-  deviceId?: string;
+export interface SubmitGuess$Params {
+  
+    /**
+     * Parameters for dbo.spGame_SubmitGuess
+     */
+    body: AddGameSubmitGuessParameters
 }
 
-export function Get(http: HttpClient, rootUrl: string, params?: Get$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-'value': Array<SpStatsGetResult>;
+export function submitGuess(http: HttpClient, rootUrl: string, params: SubmitGuess$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+'value': Array<SpGameSubmitGuessResult>;
 'additionalValues'?: Array<Array<{
 }>>;
 }>> {
-  const rb = new RequestBuilder(rootUrl, Get.PATH, 'get');
+  const rb = new RequestBuilder(rootUrl, submitGuess.PATH, 'post');
   if (params) {
-    rb.query('deviceId', params.deviceId, {});
+    rb.body(params.body, 'application /json');
   }
 
   return http.request(
@@ -29,7 +34,7 @@ export function Get(http: HttpClient, rootUrl: string, params?: Get$Params, cont
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<{
-      'value': Array<SpStatsGetResult>;
+      'value': Array<SpGameSubmitGuessResult>;
       'additionalValues'?: Array<Array<{
       }>>;
       }>;
@@ -37,4 +42,4 @@ export function Get(http: HttpClient, rootUrl: string, params?: Get$Params, cont
   );
 }
 
-Get.PATH = '/api/Stats';
+submitGuess.PATH = '/api/Game/SubmitGuess';

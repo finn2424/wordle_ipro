@@ -1,6 +1,11 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject, effect } from '@angular/core';
 
 import { LetterStatus, GameStatus } from '../models/game-types';
+import { Api } from '../api/api';
+import { startGame } from '../api/fn/game-start/start-game';
+import { submitGuess } from '../api/fn/game-submit-guess/submit-guess';
+import { StartGame$Params } from '../api/fn/game-start/start-game';
+import { SubmitGuess$Params } from '../api/fn/game-submit-guess/submit-guess';
 
 export const WORD_LENGTH = 5;
 export const MAX_GUESSES = 6;
@@ -9,12 +14,15 @@ export const MAX_GUESSES = 6;
  * Represents the state of the Wordle game.
  */
 export interface GameState {
+    gameId: number | null;
     guesses: string[];
     currentGuess: string[];
-    answer: string;
+    answer: string | null; // Hidden until game over
     gameStatus: GameStatus;
     error: string | null;
     focusedIndex: number;
+    results: LetterStatus[][]; // Store validation results from server
+    attemptsUsed: number;
 }
 
 /**
@@ -24,13 +32,18 @@ export interface GameState {
     providedIn: 'root'
 })
 export class GameService {
+    private api = inject(Api);
+
     private state = signal<GameState>({
+        gameId: null,
         guesses: [],
         currentGuess: this.createEmptyGuess(),
-        answer: 'WORDL', // hardcoded for now, will be dynamic later
+        answer: null,
         gameStatus: GameStatus.PLAYING,
         error: null,
-        focusedIndex: 0
+        focusedIndex: 0,
+        results: [],
+        attemptsUsed: 0
     });
 
     readonly guesses = computed(() => this.state().guesses);
@@ -42,13 +55,12 @@ export class GameService {
 
     /**
      * Computed signal that returns the validation status for every guess made so far.
-     * Each guess is compared against the answer to determine letter correctness.
+     * Uses the results returned from the server.
      */
     readonly evaluatedGuesses = computed(() => {
-        const answer = this.state().answer;
-        return this.state().guesses.map(guess => ({
+        return this.state().guesses.map((guess, index) => ({
             word: guess,
-            validation: this.calculateValidation(guess, answer)
+            validation: this.state().results[index] || Array(WORD_LENGTH).fill(LetterStatus.ABSENT)
         }));
     });
 
@@ -82,7 +94,22 @@ export class GameService {
         return statusMap;
     });
 
-    constructor() { }
+    constructor() {
+        effect(() => {
+            const guess = this.state().currentGuess;
+            localStorage.setItem('wordle-current-guess', JSON.stringify(guess));
+        });
+        this.startNewGame();
+    }
+
+    private getDeviceId(): string {
+        let deviceId = localStorage.getItem('deviceId');
+        if (!deviceId) {
+            deviceId = crypto.randomUUID();
+            localStorage.setItem('deviceId', deviceId);
+        }
+        return deviceId;
+    }
 
     /**
      * Adds a letter to the current guess if the game is active and the current slot is available.
@@ -137,87 +164,160 @@ export class GameService {
     }
 
     /**
-     * Validates and submits the current guess.
-     * Updates the game state to 'won' or 'lost' based on the result.
+     * Validates and submits the current guess via API.
      */
-    submitGuess(): void {
+    async submitGuess(): Promise<void> {
         if (GameStatus.PLAYING !== this.state().gameStatus) return;
 
-        this.state.update((currentState) => {
-            const guess = currentState.currentGuess.join('');
+        const currentState = this.state();
+        const guess = currentState.currentGuess.join('');
 
-            if (WORD_LENGTH !== guess.length || currentState.currentGuess.some(char => '' === char)) {
-                return { ...currentState, error: 'Not enough letters' };
+        if (WORD_LENGTH !== guess.length || currentState.currentGuess.some(char => '' === char)) {
+            this.state.update(s => ({ ...s, error: 'Not enough letters' }));
+            return;
+        }
+
+        try {
+            const params: SubmitGuess$Params = {
+                body: {
+                    deviceId: this.getDeviceId(),
+                    gameId: currentState.gameId!,
+                    guessWord: guess
+                }
+            };
+
+            const response = await this.api.invoke(submitGuess, params);
+            // The API returns an array, we expect one result
+            const resultData = response.value ? response.value[0] : null;
+
+            if (!resultData) {
+                this.state.update(s => ({ ...s, error: 'Invalid response from server' }));
+                return;
             }
 
-            // TODO: Add dictionary validation here
-
-            const newGuesses = [...currentState.guesses, guess];
-            let newStatus: GameStatus = GameStatus.PLAYING;
-
-            if (guess === currentState.answer) {
-                newStatus = GameStatus.WON;
-            } else if (newGuesses.length >= MAX_GUESSES) {
-                newStatus = GameStatus.LOST;
+            if (resultData.status === 'error') {
+                this.state.update(s => ({ ...s, error: resultData.message || 'Unknown error' }));
+                return;
             }
 
-            return {
-                ...currentState,
-                guesses: newGuesses,
+            // Map server result string (e.g. "CCPAA") to LetterStatus[]
+            const validation: LetterStatus[] = (resultData.result || '').split('').map(char => {
+                switch (char) {
+                    case 'C': return LetterStatus.CORRECT;
+                    case 'P': return LetterStatus.PRESENT;
+                    default: return LetterStatus.ABSENT;
+                }
+            });
+
+            this.state.update(s => ({
+                ...s,
+                guesses: [...s.guesses, guess],
+                results: [...s.results, validation],
                 currentGuess: this.createEmptyGuess(),
                 focusedIndex: 0,
-                gameStatus: newStatus,
-                error: null,
-            };
-        });
-    }
+                gameStatus: (resultData.gameStatus as GameStatus) || GameStatus.PLAYING,
+                answer: resultData.targetWord || null, // Only reveals on end
+                attemptsUsed: resultData.attemptsUsed || 0,
+                error: null
+            }));
 
-    /**
-     * Resets the game state for a new round.
-     */
-    startNewGame(): void {
-        this.state.set({
-            guesses: [],
-            currentGuess: this.createEmptyGuess(),
-            answer: 'WORDL', // TODO: Pick random word
-            gameStatus: GameStatus.PLAYING,
-            error: null,
-            focusedIndex: 0
-        });
-    }
-
-    /**
-     * Determines the status (correct, present, absent) of each letter in a guess.
-     * @param guess The word guessed by the player.
-     * @param answer The target word.
-     * @returns An array of LetterStatus corresponding to each letter in the guess.
-     */
-    calculateValidation(guess: string, answer: string): LetterStatus[] {
-        const result: LetterStatus[] = Array(WORD_LENGTH).fill(LetterStatus.ABSENT);
-        const answerArr = answer.split('');
-        const guessArr = guess.split('');
-
-        // First pass: Identify exact matches (Green)
-        for (let i = 0; i < WORD_LENGTH; i++) {
-            if (guessArr[i] === answerArr[i]) {
-                result[i] = LetterStatus.CORRECT;
-                answerArr[i] = ''; // Mark used in answer
-                guessArr[i] = ''; // Mark used in guess
-            }
+        } catch (err) {
+            console.error('Submit Check Error', err);
+            this.state.update(s => ({ ...s, error: 'Failed to submit guess' }));
         }
+    }
 
-        // Second pass: Identify present but misplaced letters (Yellow)
-        for (let i = 0; i < WORD_LENGTH; i++) {
-            if ('' !== guessArr[i]) {
-                const indexInAnswer = answerArr.indexOf(guessArr[i]);
-                if (-1 !== indexInAnswer) {
-                    result[i] = LetterStatus.PRESENT;
-                    answerArr[indexInAnswer] = ''; // Consumes the letter from the answer to prevent double counting
+    /**
+     * Resets the game state for a new round via API.
+     */
+    async startNewGame(): Promise<void> {
+        let savedGuess: string[] | null = null;
+        try {
+            const saved = localStorage.getItem('wordle-current-guess');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && WORD_LENGTH === parsed.length) {
+                    savedGuess = parsed;
                 }
             }
+        } catch (e) {
+            console.warn('Failed to restore guess', e);
         }
 
-        return result;
+        try {
+            // Initial empty state
+            this.state.set({
+                gameId: null,
+                guesses: [],
+                currentGuess: this.createEmptyGuess(),
+                answer: null,
+                gameStatus: GameStatus.PLAYING,
+                error: null,
+                focusedIndex: 0,
+                results: [],
+                attemptsUsed: 0
+            });
+
+            const params: StartGame$Params = {
+                body: { deviceId: this.getDeviceId() }
+            };
+
+            const response = await this.api.invoke(startGame, params);
+
+            // Result Set: Flattened Game State + Attempts
+            const rows = response.value || [];
+            if (!rows.length) throw new Error('Failed to start game');
+
+            const gameState = rows[0];
+
+            // Reconstruct local state from server state
+            const reconstructedGuesses: string[] = [];
+            const reconstructedResults: LetterStatus[][] = [];
+
+            // Rows contain joined attempts
+            for (const row of rows) {
+                if (row.attemptNumber) {
+                    reconstructedGuesses.push(row.guessWord?.trim() || '');
+                    const validation: LetterStatus[] = (row.result || '').split('').map((char: string) => {
+                        switch (char) {
+                            case 'C': return LetterStatus.CORRECT;
+                            case 'P': return LetterStatus.PRESENT;
+                            default: return LetterStatus.ABSENT;
+                        }
+                    });
+                    reconstructedResults.push(validation);
+                }
+            }
+
+            this.state.update(s => {
+                const gameStatus = (gameState.gameStatus as GameStatus) || GameStatus.PLAYING;
+                let currentGuess = this.createEmptyGuess();
+                let focusedIndex = 0;
+
+                // Restore draft if playing and available
+                if (GameStatus.PLAYING === gameStatus && savedGuess) {
+                    currentGuess = savedGuess;
+                    const firstEmpty = currentGuess.findIndex(c => '' === c);
+                    focusedIndex = -1 === firstEmpty ? WORD_LENGTH - 1 : firstEmpty;
+                }
+
+                return {
+                    ...s,
+                    gameId: gameState.gameId,
+                    gameStatus: gameStatus,
+                    attemptsUsed: gameState.attemptsUsed || 0,
+                    answer: gameState.targetWord || null,
+                    guesses: reconstructedGuesses,
+                    results: reconstructedResults,
+                    currentGuess,
+                    focusedIndex
+                };
+            });
+
+        } catch (err) {
+            console.error('Start Game Error', err);
+            this.state.update(s => ({ ...s, error: 'Could not load game. Is backend running?' }));
+        }
     }
 
     /**
@@ -240,4 +340,3 @@ export class GameService {
         return Array(WORD_LENGTH).fill('');
     }
 }
-

@@ -7,23 +7,23 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AddGameSubmitGuessParameters } from '../../models/add-game-submit-guess-parameters';
-import { SpGameSubmitGuessResult } from '../../models/sp-game-submit-guess-result';
+import { AddUserGetOrCreateParameters } from '../../models/add-user-get-or-create-parameters';
+import { SpUserGetOrCreateResult } from '../../models/sp-user-get-or-create-result';
 
-export interface Add$Params {
+export interface GetOrCreateUser$Params {
   
     /**
-     * Parameters for dbo.spGame_SubmitGuess
+     * Parameters for dbo.spUser_GetOrCreate
      */
-    body: AddGameSubmitGuessParameters
+    body: AddUserGetOrCreateParameters
 }
 
-export function Add(http: HttpClient, rootUrl: string, params: Add$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-'value': Array<SpGameSubmitGuessResult>;
+export function getOrCreateUser(http: HttpClient, rootUrl: string, params: GetOrCreateUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+'value': Array<SpUserGetOrCreateResult>;
 'additionalValues'?: Array<Array<{
 }>>;
 }>> {
-  const rb = new RequestBuilder(rootUrl, Add.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, getOrCreateUser.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application /json');
   }
@@ -34,7 +34,7 @@ export function Add(http: HttpClient, rootUrl: string, params: Add$Params, conte
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<{
-      'value': Array<SpGameSubmitGuessResult>;
+      'value': Array<SpUserGetOrCreateResult>;
       'additionalValues'?: Array<Array<{
       }>>;
       }>;
@@ -42,4 +42,4 @@ export function Add(http: HttpClient, rootUrl: string, params: Add$Params, conte
   );
 }
 
-Add.PATH = '/api/Game/SubmitGuess';
+getOrCreateUser.PATH = '/api/User/GetOrCreate';

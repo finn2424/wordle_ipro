@@ -1,15 +1,8 @@
 /*
  * Wordle Database Schema & Stored Procedures
- * Version: 2.1
- * Date: 2026-02-09
- * Description: Database schema and API endpoints (stored procedures) for the Wordle application.
- *              Designed for use with Kull.GenericBackend.
  * 
- * Features:
- * - Anonymous user tracking via DeviceId
- * - Infinite gameplay support (multiple games per day)
- * - Server-side validation and anti-cheat mechanisms
- * - Strict type casting for reliable metadata generation
+ * Provides anonymous user tracking, game session management, and statistics.
+ * Designed for Kull.GenericBackend.
  */
 
 -- ==========================================================================================
@@ -17,15 +10,13 @@
 -- ==========================================================================================
 
 /*
- * Table: Users
- * Description: Stores anonymous user identities identified by a unique DeviceId.
+ * Stores anonymous user identities identified by a unique DeviceId.
  */
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users' AND schema_id = SCHEMA_ID('dbo'))
 BEGIN
     CREATE TABLE dbo.Users (
         UserId          INT IDENTITY(1,1) PRIMARY KEY,
         DeviceId        UNIQUEIDENTIFIER NOT NULL UNIQUE,
-        DisplayName     NVARCHAR(50) NULL,
         CreatedAt       DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
         LastActiveAt    DATETIME2 NOT NULL DEFAULT GETUTCDATE()
     );
@@ -35,29 +26,21 @@ END;
 GO
 
 /*
- * Table: WordDictionary
- * Description: Contains the list of valid 5-letter words.
- *              Flags distinguish between potential answers and valid guesses.
+ * Contains the list of valid 5-letter words.
  */
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'WordDictionary' AND schema_id = SCHEMA_ID('dbo'))
 BEGIN
     CREATE TABLE dbo.WordDictionary (
         WordId          INT IDENTITY(1,1) PRIMARY KEY,
         Word            CHAR(5) NOT NULL UNIQUE,
-        IsAnswer        BIT NOT NULL DEFAULT 1,
-        IsValidGuess    BIT NOT NULL DEFAULT 1,
-        LastUsedAt      DATETIME2 NULL
     );
 
     CREATE INDEX IX_WordDictionary_Word ON dbo.WordDictionary(Word);
-    CREATE INDEX IX_WordDictionary_IsAnswer ON dbo.WordDictionary(IsAnswer);
 END;
 GO
 
 /*
- * Table: Games
- * Description: Records individual game sessions.
- *              Links specific users to specific target words.
+ * Records individual game sessions and links users to target words.
  */
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Games' AND schema_id = SCHEMA_ID('dbo'))
 BEGIN
@@ -80,9 +63,7 @@ END;
 GO
 
 /*
- * Table: Attempts
- * Description: Stores every guess made within a game session.
- *              Includes the calculated result string (e.g., 'CPPAA').
+ * Stores every guess made within a game session.
  */
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Attempts' AND schema_id = SCHEMA_ID('dbo'))
 BEGIN
@@ -109,9 +90,8 @@ GO
 
 
 /*
- * Procedure: spUser_GetOrCreate
+ * Retrieves an existing user or registers a new one based on the provided DeviceId.
  * Endpoint: POST /api/User/GetOrCreate
- * Description: Retreives an existing user or registers a new one based on the provided DeviceId.
  */
 CREATE OR ALTER PROCEDURE dbo.spUser_GetOrCreate
     @DeviceId UNIQUEIDENTIFIER
@@ -145,7 +125,6 @@ BEGIN
     SELECT 
         UserId,
         DeviceId,
-        DisplayName,
         CreatedAt,
         LastActiveAt
     FROM dbo.Users 
@@ -155,11 +134,9 @@ GO
 
 
 /*
- * Procedure: spGame_Start
+ * Starts a new game or resumes an existing active game for the user.
+ * Returns game state and previous attempts. TargetWord is hidden unless game over.
  * Endpoint: POST /api/Game/Start
- * Description: Starts a new game or resumes an existing active game for the user.
- *              Returns game state and previous attempts.
- *              Does NOT reveal the TargetWord unless the game is over.
  */
 CREATE OR ALTER PROCEDURE dbo.spGame_Start
     @DeviceId UNIQUEIDENTIFIER
@@ -197,7 +174,6 @@ BEGIN
         -- Select a random target word
         SELECT TOP 1 @WordId = WordId
         FROM dbo.WordDictionary
-        WHERE IsAnswer = 1
         ORDER BY NEWID();
         
         IF @WordId IS NULL
@@ -210,8 +186,6 @@ BEGIN
         
         SET @GameId = SCOPE_IDENTITY();
         SET @GameStatus = 'playing';
-        
-        UPDATE dbo.WordDictionary SET LastUsedAt = GETUTCDATE() WHERE WordId = @WordId;
     END
     ELSE
     BEGIN
@@ -221,7 +195,7 @@ BEGIN
     -- 4. Retrieve Target Word (Hidden unless game over)
     SELECT @TargetWord = Word FROM dbo.WordDictionary WHERE WordId = @WordId;
     
-    -- Result Set 1: Game State
+    -- Return Single Result Set with Join (Game State + History)
     SELECT 
         g.GameId,
         g.GameStatus,
@@ -230,28 +204,22 @@ BEGIN
         CASE 
             WHEN g.GameStatus IN ('won', 'lost') THEN @TargetWord 
             ELSE NULL 
-        END AS TargetWord
+        END AS TargetWord,
+        a.AttemptNumber,
+        a.GuessWord,
+        a.Result
     FROM dbo.Games g
-    WHERE g.GameId = @GameId;
-    
-    -- Result Set 2: Previous Attempts (History)
-    SELECT 
-        AttemptNumber,
-        GuessWord,
-        Result
-    FROM dbo.Attempts
-    WHERE GameId = @GameId
-    ORDER BY AttemptNumber;
+    LEFT JOIN dbo.Attempts a ON g.GameId = a.GameId
+    WHERE g.GameId = @GameId
+    ORDER BY a.AttemptNumber;
 END;
 GO
 
 
 /*
- * Procedure: spGame_SubmitGuess
+ * Validates and processes a player's guess.
+ * Calculates letter matches (Correct/Present/Absent) and updates game status.
  * Endpoint: POST /api/Game/SubmitGuess
- * Description: Validates and processes a player's guess.
- *              Calculates letter matches (Correct/Present/Absent).
- *              Updates game status (Won/Lost/Playing).
  */
 CREATE OR ALTER PROCEDURE dbo.spGame_SubmitGuess
     @DeviceId UNIQUEIDENTIFIER,
@@ -334,7 +302,7 @@ BEGIN
     END
 
     -- 3. Validate Dictionary Existence
-    IF NOT EXISTS (SELECT 1 FROM dbo.WordDictionary WHERE Word = @GuessWord AND IsValidGuess = 1)
+    IF NOT EXISTS (SELECT 1 FROM dbo.WordDictionary WHERE Word = @GuessWord)
     BEGIN
         SELECT 
             CAST('error' AS VARCHAR(10)) AS Status, 
@@ -372,18 +340,29 @@ BEGIN
     END
     
     -- Second pass: identify present letters (Yellow)
-    UPDATE m
-    SET Status = CASE 
-        WHEN CHARINDEX(m.Letter, @TargetRemaining) > 0 THEN 'P'
-        ELSE 'A'
-    END,
-    @TargetRemaining = CASE 
-        WHEN CHARINDEX(m.Letter, @TargetRemaining) > 0 
-        THEN STUFF(@TargetRemaining, CHARINDEX(m.Letter, @TargetRemaining), 1, '_')
-        ELSE @TargetRemaining
+    SET @i = 1;
+    WHILE @i <= 5
+    BEGIN
+        DECLARE @CurrentStatus CHAR(1);
+        DECLARE @CurrentLetter CHAR(1);
+        
+        SELECT @CurrentStatus = Status, @CurrentLetter = Letter FROM @MatchTable WHERE Pos = @i;
+
+        IF @CurrentStatus = '?'
+        BEGIN
+             DECLARE @CharIndex INT = CHARINDEX(@CurrentLetter, @TargetRemaining);
+             IF @CharIndex > 0
+             BEGIN
+                 UPDATE @MatchTable SET Status = 'P' WHERE Pos = @i;
+                 SET @TargetRemaining = STUFF(@TargetRemaining, @CharIndex, 1, '_');
+             END
+             ELSE
+             BEGIN
+                 UPDATE @MatchTable SET Status = 'A' WHERE Pos = @i;
+             END
+        END
+        SET @i = @i + 1;
     END
-    FROM @MatchTable m
-    WHERE m.Status = '?';
 
     SELECT @Result = STRING_AGG(Status, '') WITHIN GROUP (ORDER BY Pos) FROM @MatchTable;
 
@@ -415,10 +394,8 @@ GO
 
 
 /*
- * Procedure: spStats_Get
+ * Retrieves aggregate statistics for the user (Win rate, streaks, guess distribution).
  * Endpoint: GET /api/Stats/Get
- * Description: Retreives aggregate statistics for the user.
- *              Returns two result sets: General Stats and Guess Distribution.
  */
 CREATE OR ALTER PROCEDURE dbo.spStats_Get
     @DeviceId UNIQUEIDENTIFIER
@@ -428,61 +405,84 @@ BEGIN
     DECLARE @UserId INT;
     SELECT @UserId = UserId FROM dbo.Users WHERE DeviceId = @DeviceId;
 
-    IF @UserId IS NULL
+    -- Default Return Values
+    DECLARE @GamesPlayed INT = 0;
+    DECLARE @GamesWon INT = 0;
+    DECLARE @WinRate FLOAT = 0.0;
+    DECLARE @CurrentStreak INT = 0;
+    DECLARE @MaxStreak INT = 0;
+    DECLARE @Guess1 INT = 0;
+    DECLARE @Guess2 INT = 0;
+    DECLARE @Guess3 INT = 0;
+    DECLARE @Guess4 INT = 0;
+    DECLARE @Guess5 INT = 0;
+    DECLARE @Guess6 INT = 0;
+
+    IF @UserId IS NOT NULL
     BEGIN
-        -- Empty Stats Response
+        -- 1. General Stats
         SELECT 
-            CAST(0 AS INT) AS GamesPlayed, 
-            CAST(0 AS INT) AS GamesWon, 
-            CAST(0.0 AS FLOAT) AS WinRate, 
-            CAST(0 AS INT) AS CurrentStreak, 
-            CAST(0 AS INT) AS MaxStreak;
-            
-        -- Empty Distribution Response
+            @GamesPlayed = COUNT(*),
+            @GamesWon = SUM(CASE WHEN GameStatus = 'won' THEN 1 ELSE 0 END)
+        FROM dbo.Games
+        WHERE UserId = @UserId AND GameStatus IN ('won', 'lost');
+
+        IF @GamesPlayed > 0
+            SET @WinRate = CAST(@GamesWon AS FLOAT) * 100.0 / CAST(@GamesPlayed AS FLOAT);
+
+        -- 2. Current Streak
+        ;WITH OrderedGames AS (
+            SELECT GameStatus, ROW_NUMBER() OVER(ORDER BY CompletedAt DESC) as rn
+            FROM dbo.Games
+            WHERE UserId = @UserId AND GameStatus IN ('won', 'lost')
+        )
+        SELECT @CurrentStreak = ISNULL(COUNT(*), 0)
+        FROM OrderedGames
+        WHERE GameStatus = 'won' 
+        AND rn < ISNULL((SELECT TOP 1 rn FROM OrderedGames WHERE GameStatus = 'lost'), 999999);
+
+        -- 3. Max Streak (Gaps and Islands)
+        ;WITH GradedGames AS (
+            SELECT 
+                GameStatus,
+                ROW_NUMBER() OVER(ORDER BY CompletedAt) - 
+                ROW_NUMBER() OVER(PARTITION BY GameStatus ORDER BY CompletedAt) AS Grp
+            FROM dbo.Games
+            WHERE UserId = @UserId AND GameStatus IN ('won', 'lost')
+        ),
+        StreakLengths AS (
+            SELECT COUNT(*) as Streak
+            FROM GradedGames
+            WHERE GameStatus = 'won'
+            GROUP BY Grp
+        )
+        SELECT @MaxStreak = ISNULL(MAX(Streak), 0)
+        FROM StreakLengths;
+
+        -- 4. Guess Distribution (Pivot)
         SELECT 
-            CAST(0 AS INT) AS GuessCount, 
-            CAST(0 AS INT) AS Total 
-        WHERE 1 = 0; 
-        
-        RETURN;
+            @Guess1 = SUM(CASE WHEN AttemptsUsed = 1 THEN 1 ELSE 0 END),
+            @Guess2 = SUM(CASE WHEN AttemptsUsed = 2 THEN 1 ELSE 0 END),
+            @Guess3 = SUM(CASE WHEN AttemptsUsed = 3 THEN 1 ELSE 0 END),
+            @Guess4 = SUM(CASE WHEN AttemptsUsed = 4 THEN 1 ELSE 0 END),
+            @Guess5 = SUM(CASE WHEN AttemptsUsed = 5 THEN 1 ELSE 0 END),
+            @Guess6 = SUM(CASE WHEN AttemptsUsed = 6 THEN 1 ELSE 0 END)
+        FROM dbo.Games
+        WHERE UserId = @UserId AND GameStatus = 'won';
     END
 
-    -- Calculate General Stats
-    DECLARE @GamesPlayed INT, @GamesWon INT;
-    
+    -- 5. Return Single Result Set
     SELECT 
-        @GamesPlayed = COUNT(*),
-        @GamesWon = SUM(CASE WHEN GameStatus = 'won' THEN 1 ELSE 0 END)
-    FROM dbo.Games
-    WHERE UserId = @UserId AND GameStatus IN ('won', 'lost');
-
-    DECLARE @CurrentStreak INT = 0;
-    
-    ;WITH OrderedGames AS (
-        SELECT GameStatus, ROW_NUMBER() OVER(ORDER BY CompletedAt DESC) as rn
-        FROM dbo.Games
-        WHERE UserId = @UserId AND GameStatus IN ('won', 'lost')
-    )
-    SELECT @CurrentStreak = ISNULL(COUNT(*), 0)
-    FROM OrderedGames
-    WHERE GameStatus = 'won' 
-    AND rn < ISNULL((SELECT TOP 1 rn FROM OrderedGames WHERE GameStatus = 'lost'), 999999);
-
-    -- Result Set 1: General Statistics
-    SELECT 
-        CAST(ISNULL(@GamesPlayed, 0) AS INT) as GamesPlayed,
-        CAST(ISNULL(@GamesWon, 0) AS INT) as GamesWon,
-        CAST(CASE WHEN @GamesPlayed > 0 THEN (@GamesWon * 100.0 / @GamesPlayed) ELSE 0.0 END AS FLOAT) as WinRate,
-        CAST(@CurrentStreak AS INT) as CurrentStreak,
-        CAST(@CurrentStreak AS INT) as MaxStreak;
-
-    -- Result Set 2: Guess Distribution
-    SELECT 
-        CAST(AttemptsUsed AS INT) as GuessCount,
-        CAST(COUNT(*) AS INT) as Total
-    FROM dbo.Games
-    WHERE UserId = @UserId AND GameStatus = 'won'
-    GROUP BY AttemptsUsed
-    ORDER BY AttemptsUsed;
+        @GamesPlayed AS GamesPlayed,
+        @GamesWon AS GamesWon,
+        @WinRate AS WinRate,
+        @CurrentStreak AS CurrentStreak,
+        @MaxStreak AS MaxStreak,
+        ISNULL(@Guess1, 0) AS Guess1,
+        ISNULL(@Guess2, 0) AS Guess2,
+        ISNULL(@Guess3, 0) AS Guess3,
+        ISNULL(@Guess4, 0) AS Guess4,
+        ISNULL(@Guess5, 0) AS Guess5,
+        ISNULL(@Guess6, 0) AS Guess6;
 END;
 GO

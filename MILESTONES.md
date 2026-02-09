@@ -44,16 +44,16 @@
 - [x] Setup DB and connect to .NET Backend
 - [x] Design API Specification (Endpoints for Game State & User Stats)
 - [x] Provision SQL Database & Define Schema (Users, Games, Attempts)
-- [ ] Populate Database with Word Dictionary for Validation
+- [x] Populate Database with Word Dictionary for Validation (Source: [slushman/wordle-list](https://gist.github.com/slushman/34e60d6bc479ac8fc698df8c226e4264))
 - [x] Implement Backend Endpoints for Storing Game Results
 - [x] Implement "Valid English Word" Rule (Backend Dictionary Validation & Random Selection)
     - [x] Verify Dictionary Check & Random Word
-- [ ] Integrate Frontend with Backend APIs
-    - [ ] Integrated User Identification (`POST /api/User/GetOrCreate`)
-    - [ ] Integrated Game Logic (`POST /api/Game/Start`, `POST /api/Game/SubmitGuess`)
-    - [ ] Integrated Statistics (`GET /api/Stats/Get`)
-- [ ] Create `StatisticsModal` (Games Played, Win %, Cur/Max Streak, Guess Distribution)
-    - [ ] Verify Statistics Calculation & Display per GAME_RULES.md
+- [x] Integrate Frontend with Backend APIs
+    - [x] Integrated User Identification (`POST /api/User/GetOrCreate`)
+    - [x] Integrated Game Logic (`POST /api/Game/Start`, `POST /api/Game/SubmitGuess`)
+    - [x] Integrated Statistics (`GET /api/Stats/Get`)
+- [x] Create `StatisticsModal` (Games Played, Win %, Cur/Max Streak, Guess Distribution)
+    - [x] Verify Statistics Calculation & Display per GAME_RULES.md
 
 ## Milestone 6: Deployment & Presentation
 **Deadline:** 2026-08-17

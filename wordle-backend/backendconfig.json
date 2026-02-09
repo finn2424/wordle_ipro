@@ -2,16 +2,28 @@
   "$schema": "https://raw.githubusercontent.com/Kull-AG/kull-generic-backend/master/backendconfig.schema.json",
   "Entities": {
     "User/GetOrCreate": {
-      "POST": "dbo.spUser_GetOrCreate"
+      "POST": {
+        "SP": "dbo.spUser_GetOrCreate",
+        "OperationId": "GetOrCreateUser"
+      }
     },
     "Game/Start": {
-      "POST": "dbo.spGame_Start"
+      "POST": {
+        "SP": "dbo.spGame_Start",
+        "OperationId": "StartGame"
+      }
     },
     "Game/SubmitGuess": {
-      "POST": "dbo.spGame_SubmitGuess"
+      "POST": {
+        "SP": "dbo.spGame_SubmitGuess",
+        "OperationId": "SubmitGuess"
+      }
     },
     "Stats": {
-      "GET": "dbo.spStats_Get"
+      "GET": {
+        "SP": "dbo.spStats_Get",
+        "OperationId": "GetStats"
+      }
     }
   }
 }

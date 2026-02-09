@@ -4,7 +4,6 @@
 export interface SpUserGetOrCreateResult {
   createdAt: string;
   deviceId: string;
-  displayName: string | null;
   lastActiveAt: string;
   userId: number;
 }

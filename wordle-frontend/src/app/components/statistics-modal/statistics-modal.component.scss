@@ -1,7 +1,29 @@
-.modal-body {
+.stat-box {
+    flex: 1;
+}
 
-    // Ensure numbers don't wrap weirdly on small screens
-    .fs-2 {
-        line-height: 1.2;
-    }
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+.guess-label {
+    width: 15px;
+    font-weight: bold;
+}
+
+.progress {
+    background: transparent;
+}
+
+.progress-bar {
+    justify-content: flex-end;
+    font-size: 0.8rem;
+    min-width: 20px;
+    /* Ensure 0 counts or small bars are visible mostly as text container */
 }

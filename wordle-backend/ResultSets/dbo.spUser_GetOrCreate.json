@@ -12,12 +12,6 @@
     "MaxLength": null
   },
   {
-    "Name": "DisplayName",
-    "TypeName": "nvarchar",
-    "IsNullable": true,
-    "MaxLength": 50
-  },
-  {
     "Name": "CreatedAt",
     "TypeName": "datetime2",
     "IsNullable": false,

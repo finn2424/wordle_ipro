@@ -28,5 +28,23 @@
     "TypeName": "char",
     "IsNullable": true,
     "MaxLength": 5
+  },
+  {
+    "Name": "AttemptNumber",
+    "TypeName": "tinyint",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "GuessWord",
+    "TypeName": "char",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "Result",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
   }
 ]

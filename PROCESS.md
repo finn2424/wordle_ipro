@@ -157,10 +157,18 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **`Attempts`**: Records each guess within a game session with its validation result (e.g., `CPPAA` for Correct/Present/Absent).
 - **Stored Procedures (API Endpoints)**:
   - `spUser_GetOrCreate`: Retrieves or creates a user based on device ID.
-  - `spGame_Start`: Starts a new game with a random target word or resumes an existing active game.
+  - `spGame_Start`: Starts a new game with a random target word or resumes an existing active game. Returns a single flattened result set combining game state and history.
   - `spGame_SubmitGuess`: Validates guesses against the dictionary, calculates letter statuses, and updates game state.
-  - `spStats_Get`: Calculates and returns user statistics (games played, win rate, streaks) and guess distribution.
+  - `spStats_Get`: Calculates and returns user statistics (games played, win rate, streaks) and guess distribution in a single result set.
+- **Data Population**:
+  - The word list is populated using [this GitHub Gist](https://gist.github.com/slushman/34e60d6bc479ac8fc698df8c226e4264) (slushman/wordle-list).
 - **Security**: The schema file contains no sensitive data; credentials are managed via environment variables.
+
+### Refactoring: Stored Procedures (Single Result Sets)
+- **Problem**: The generic backend library had issues handling multiple result sets returned by stored procedures.
+- **Solution**: Refactored `spGame_Start` and `spStats_Get` to return single, flattened result sets.
+  - `spGame_Start` uses a `LEFT JOIN` to combine game details with the list of attempts.
+  - `spStats_Get` aggregates all statistics into a single row of columns.
 
 ### Feature: Local Development Database Access
 - **Goal**: Allow developers to connect to the production database from their local machine for testing and debugging.

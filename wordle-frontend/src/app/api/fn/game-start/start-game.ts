@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { AddGameStartParameters } from '../../models/add-game-start-parameters';
 import { SpGameStartResult } from '../../models/sp-game-start-result';
 
-export interface Add$Params {
+export interface StartGame$Params {
   
     /**
      * Parameters for dbo.spGame_Start
@@ -18,12 +18,12 @@ export interface Add$Params {
     body: AddGameStartParameters
 }
 
-export function Add(http: HttpClient, rootUrl: string, params: Add$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+export function startGame(http: HttpClient, rootUrl: string, params: StartGame$Params, context?: HttpContext): Observable<StrictHttpResponse<{
 'value': Array<SpGameStartResult>;
 'additionalValues'?: Array<Array<{
 }>>;
 }>> {
-  const rb = new RequestBuilder(rootUrl, Add.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, startGame.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application /json');
   }
@@ -42,4 +42,4 @@ export function Add(http: HttpClient, rootUrl: string, params: Add$Params, conte
   );
 }
 
-Add.PATH = '/api/Game/Start';
+startGame.PATH = '/api/Game/Start';
