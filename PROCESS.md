@@ -153,15 +153,13 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
 - **Schema Design** (`wordle-backend/database/schema.sql`):
   - **`Users`**: Anonymous users identified by a `DeviceId` (GUID), with optional `DisplayName`.
   - **`WordDictionary`**: Stores valid 5-letter words with flags for answer eligibility and usage tracking.
-  - **`DailyWord`**: Links a specific word to each game date, ensuring one word per day.
-  - **`Games`**: Tracks individual game sessions with status (`playing`, `won`, `lost`) and attempt count.
-  - **`Attempts`**: Records each guess with its validation result (e.g., `CPPAA` for Correct/Present/Absent).
+  - **`Games`**: Tracks individual game sessions linking `UserId` to `WordId`, with status (`playing`, `won`, `lost`) and attempt count. Supports infinite gameplay.
+  - **`Attempts`**: Records each guess within a game session with its validation result (e.g., `CPPAA` for Correct/Present/Absent).
 - **Stored Procedures (API Endpoints)**:
-  - `spUser_GetOrCreate` / `spUser_UpdateDisplayName`: User management.
-  - `spGame_GetTodaysGame`: Retrieves or creates the daily game for a user, selecting a random word if needed.
+  - `spUser_GetOrCreate`: Retrieves or creates a user based on device ID.
+  - `spGame_Start`: Starts a new game with a random target word or resumes an existing active game.
   - `spGame_SubmitGuess`: Validates guesses against the dictionary, calculates letter statuses, and updates game state.
-  - `spStats_GetUserStats`: Calculates games played, win rate, streaks, and guess distribution.
-  - `spWord_Validate` / `spWord_BulkAdd`: Dictionary management.
+  - `spStats_Get`: Calculates and returns user statistics (games played, win rate, streaks) and guess distribution.
 - **Security**: The schema file contains no sensitive data; credentials are managed via environment variables.
 
 ### Feature: Local Development Database Access

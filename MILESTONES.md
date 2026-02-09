@@ -45,10 +45,13 @@
 - [x] Design API Specification (Endpoints for Game State & User Stats)
 - [x] Provision SQL Database & Define Schema (Users, Games, Attempts)
 - [ ] Populate Database with Word Dictionary for Validation
-- [ ] Implement Backend Endpoints for Storing Game Results
-- [ ] Implement "Valid English Word" Rule (Backend Dictionary Validation & Random Selection)
-    - [ ] Verify Dictionary Check & Random Word
-- [ ] Integrate Frontend with Backend Stats API
+- [x] Implement Backend Endpoints for Storing Game Results
+- [x] Implement "Valid English Word" Rule (Backend Dictionary Validation & Random Selection)
+    - [x] Verify Dictionary Check & Random Word
+- [ ] Integrate Frontend with Backend APIs
+    - [ ] Integrated User Identification (`POST /api/User/GetOrCreate`)
+    - [ ] Integrated Game Logic (`POST /api/Game/Start`, `POST /api/Game/SubmitGuess`)
+    - [ ] Integrated Statistics (`GET /api/Stats/Get`)
 - [ ] Create `StatisticsModal` (Games Played, Win %, Cur/Max Streak, Guess Distribution)
     - [ ] Verify Statistics Calculation & Display per GAME_RULES.md
 
