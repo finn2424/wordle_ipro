@@ -1,3 +1,9 @@
+:host {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .keyboard-container {
     display: flex;
     flex-direction: column;
@@ -66,5 +72,31 @@
     &.key-absent {
         background-color: var(--game-color-absent);
         color: var(--app-color-white);
+    }
+}
+
+@media (max-width: 600px) {
+    .keyboard-container {
+        padding: 0.5rem 0;
+        gap: 0.25rem;
+    }
+
+    .keyboard-row {
+        gap: 0.2rem;
+    }
+
+    .key {
+        height: 48px; // Better touch target
+        font-size: 0.9rem; // More legible
+        min-width: 0;
+        max-width: none;
+        flex: 1;
+
+        &.wide {
+            min-width: 0;
+            max-width: none;
+            flex: 1.5;
+            font-size: 0.75rem; // Slightly smaller for long text like Enter
+        }
     }
 }

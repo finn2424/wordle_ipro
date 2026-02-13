@@ -1,11 +1,16 @@
 <header class="header border-bottom py-2 mb-3">
-    <div class="container position-relative d-flex justify-content-center align-items-center">
-        <h1 class="m-0 fw-bold text-uppercase">Wordle</h1>
+    <div class="container d-flex align-items-center">
+        <!-- Left Spacer -->
+        <div class="flex-spacer"></div>
 
-        <div class="position-absolute end-0 d-flex align-items-center gap-2">
+        <!-- Title -->
+        <h1 class="m-0 fw-bold text-uppercase text-center">Wordle</h1>
+
+        <!-- Right Icons -->
+        <div class="flex-spacer d-flex align-items-center justify-content-end gap-2">
             <app-theme-toggle></app-theme-toggle>
 
-            <div role="button" (click)="openInstructions()">
+            <div role="button" (click)="openInstructions()" class="d-flex align-items-center">
                 <svg class="fa-icon" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                     <path
@@ -13,7 +18,7 @@
                 </svg>
             </div>
 
-            <div role="button" (click)="openStatistics()">
+            <div role="button" (click)="openStatistics()" class="d-flex align-items-center">
                 <svg class="fa-icon" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                     <path
@@ -22,5 +27,4 @@
             </div>
         </div>
     </div>
-
 </header>

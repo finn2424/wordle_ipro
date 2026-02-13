@@ -1,0 +1,22 @@
+.ls-1 {
+    letter-spacing: 1px;
+}
+
+.btn-play-again {
+    background-color: var(--app-color-dark);
+    color: var(--app-color-surface);
+    border: 2px solid var(--app-color-dark);
+    transition: all 0.2s ease-in-out;
+
+    &:hover,
+    &:focus {
+        background-color: var(--app-color-surface);
+        color: var(--app-color-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
