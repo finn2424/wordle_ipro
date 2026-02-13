@@ -33,7 +33,10 @@ export class GameGrid {
     for (const guess of guesses) {
       const row: { char: string; status: LetterStatus }[] = [];
       for (let i = 0; i < WORD_LENGTH; i++) {
-        row.push({ char: guess.word[i], status: guess.validation[i] });
+        row.push({
+          char: guess.word[i] ?? '',
+          status: guess.validation[i] ?? LetterStatus.EMPTY
+        });
       }
       rows.push(row);
     }

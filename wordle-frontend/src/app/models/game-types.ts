@@ -30,3 +30,7 @@ export const GameStatus = {
     LOST: 'lost'
 } as const;
 export type GameStatus = typeof GameStatus[keyof typeof GameStatus];
+
+export function isGameStatus(value: unknown): value is GameStatus {
+    return typeof value === 'string' && Object.values(GameStatus).includes(value as GameStatus);
+}

@@ -3,18 +3,45 @@ import { By } from '@angular/platform-browser';
 import { App } from './app';
 import { GameService } from './services/game.service';
 import { describe, it, expect, beforeEach, vi, type MockInstance } from 'vitest';
-import { signal, computed, WritableSignal } from '@angular/core';
+import { signal, computed, WritableSignal, Signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
 import { ThemeService } from './services/theme.service';
 
+// Define Mock Interfaces
+interface GameServiceMock {
+  gameStatus: WritableSignal<string>;
+  answer: WritableSignal<string | null>;
+  guesses: WritableSignal<string[]>;
+  currentGuess: WritableSignal<string[]>;
+  evaluatedGuesses: Signal<any[]>;
+  letterStatus: Signal<any>;
+  error: WritableSignal<string | null>;
+  focusedIndex: WritableSignal<number>;
+  addLetter: MockInstance;
+  removeLetter: MockInstance;
+  submitGuess: MockInstance;
+  startNewGame: MockInstance;
+  clearError: MockInstance;
+  setFocusedIndex: MockInstance;
+}
+
+interface ModalServiceMock {
+  open: MockInstance;
+}
+
+interface ThemeServiceMock {
+  theme: WritableSignal<string>;
+  set: MockInstance;
+}
+
 describe('App', () => {
   let component: App;
   let fixture: ComponentFixture<App>;
-  let gameServiceMock: any;
-  let modalServiceMock: any;
-  let themeServiceMock: any;
+  let gameServiceMock: GameServiceMock;
+  let modalServiceMock: ModalServiceMock;
+  let themeServiceMock: ThemeServiceMock;
 
   beforeEach(async () => {
     gameServiceMock = {
@@ -117,7 +144,7 @@ describe('App', () => {
       expect(modalServiceMock.open).toHaveBeenCalledWith(GameOverModalComponent, expect.anything());
 
       // Verify data passed to modal
-      const modalRef = modalServiceMock.open.mock.results[0].value;
+      const modalRef = modalServiceMock.open.mock.results[0]?.value;
       expect(modalRef.componentInstance.isWin).toBe(true);
       expect(modalRef.componentInstance.solution).toBe('WORDL');
       expect(modalRef.componentInstance.guesses).toBe(3);
@@ -132,7 +159,7 @@ describe('App', () => {
       expect(modalServiceMock.open).toHaveBeenCalledWith(GameOverModalComponent, expect.anything());
 
       // Verify data
-      const modalRef = modalServiceMock.open.mock.results[0].value;
+      const modalRef = modalServiceMock.open.mock.results[0]?.value;
       expect(modalRef.componentInstance.isWin).toBe(false);
     });
 

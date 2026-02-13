@@ -1,12 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService, Theme } from './theme.service';
 import { DOCUMENT } from '@angular/common';
+import { vi, type MockInstance } from 'vitest';
+
+interface MatchMediaMock {
+    matches: boolean;
+    addEventListener: MockInstance;
+    removeEventListener: MockInstance;
+}
 
 describe('ThemeService Verification', () => {
     let service: ThemeService;
     let document: Document;
     let htmlElement: HTMLElement;
-    let matchMediaMock: any;
+    let matchMediaMock: MatchMediaMock;
 
     beforeEach(() => {
         // Mock matchMedia

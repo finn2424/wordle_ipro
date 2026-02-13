@@ -7,11 +7,11 @@ import { Api } from '../api/api';
 // However, to be safe and explicit, I will use window.vi or globalThis.vi if needed, 
 // but usually just 'vi' works.
 // Or I can import from 'vitest'.
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 describe('GameService', () => {
     let service: GameService;
-    let apiSpy: { invoke: any };
+    let apiSpy: { invoke: MockInstance };
 
     beforeEach(() => {
         const spy = {
@@ -34,7 +34,7 @@ describe('GameService', () => {
             ]
         });
         service = TestBed.inject(GameService);
-        apiSpy = TestBed.inject(Api) as any;
+        apiSpy = TestBed.inject(Api) as unknown as { invoke: MockInstance };
     });
 
     afterEach(() => {
@@ -99,7 +99,7 @@ describe('GameService', () => {
         expect(service.guesses()).toEqual(['HELLO']);
         expect(service.currentGuess()).toEqual(['', '', '', '', '']);
         // Verify results parsed
-        expect(service.evaluatedGuesses()[0].validation).toEqual([
+        expect(service.evaluatedGuesses()[0]?.validation).toEqual([
             LetterStatus.ABSENT, LetterStatus.PRESENT, LetterStatus.PRESENT, LetterStatus.ABSENT, LetterStatus.ABSENT
         ]);
     });

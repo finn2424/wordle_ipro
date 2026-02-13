@@ -1,6 +1,6 @@
 # Feedback
 
-- [ ] Secure endpoints (user should not be able to cheat by accessing an endpoint)
+- [x] Secure endpoints (user should not be able to cheat by accessing an endpoint)
 - [x] Individual field input with field highlighting (user should not be forced to input from left to right)
 - [x] Rewrite this if/else more clean:
      ```typescript
@@ -22,6 +22,6 @@
     export type LetterStatus = typeof LetterStatus[keyof typeof LetterStatus];
     ```
 - [ ] Reformat code: for example when declaring multiple vars, get start of all words to the same col
-- [ ] Make code more typesafe
+- [x] Make code more typesafe
 - [x] Use `light-dark()` CSS function for dark-mode support
 - [ ] Research design patterns and document usage or rewrite to use design-pattern

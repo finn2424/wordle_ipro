@@ -1,6 +1,6 @@
 import { Injectable, computed, signal, inject, effect } from '@angular/core';
 
-import { LetterStatus, GameStatus } from '../models/game-types';
+import { LetterStatus, GameStatus, isGameStatus } from '../models/game-types';
 import { Api } from '../api/api';
 import { startGame } from '../api/fn/game-start/start-game';
 import { submitGuess } from '../api/fn/game-submit-guess/submit-guess';
@@ -75,8 +75,12 @@ export class GameService {
         for (const guess of evaluated) {
             for (let i = 0; i < guess.word.length; i++) {
                 const char = guess.word[i];
+                if (!char) continue;
+
                 const currentStatus = statusMap[char];
                 const newStatus = guess.validation[i];
+
+                if (!newStatus) continue;
 
                 if (LetterStatus.CORRECT === currentStatus) {
                     continue;
@@ -202,12 +206,19 @@ export class GameService {
 
             // Map server result string (e.g. "CCPAA") to LetterStatus[]
             const validation: LetterStatus[] = (resultData.result || '').split('').map(char => {
+                let status: LetterStatus = LetterStatus.ABSENT;
                 switch (char) {
-                    case 'C': return LetterStatus.CORRECT;
-                    case 'P': return LetterStatus.PRESENT;
-                    default: return LetterStatus.ABSENT;
+                    case 'C': status = LetterStatus.CORRECT; break;
+                    case 'P': status = LetterStatus.PRESENT; break;
+                    default: status = LetterStatus.ABSENT;
                 }
+                return status;
             });
+
+            const gameStatus = resultData.gameStatus;
+            if (!isGameStatus(gameStatus)) {
+                console.warn('Invalid game status from server:', gameStatus);
+            }
 
             this.state.update(s => ({
                 ...s,
@@ -215,7 +226,7 @@ export class GameService {
                 results: [...s.results, validation],
                 currentGuess: this.createEmptyGuess(),
                 focusedIndex: 0,
-                gameStatus: (resultData.gameStatus as GameStatus) || GameStatus.PLAYING,
+                gameStatus: isGameStatus(gameStatus) ? gameStatus : GameStatus.PLAYING,
                 answer: resultData.targetWord || null, // Only reveals on end
                 attemptsUsed: resultData.attemptsUsed || 0,
                 error: null
@@ -269,6 +280,7 @@ export class GameService {
             if (!rows.length) throw new Error('Failed to start game');
 
             const gameState = rows[0];
+            if (!gameState) throw new Error('Failed to start game');
 
             // Reconstruct local state from server state
             const reconstructedGuesses: string[] = [];
@@ -290,7 +302,9 @@ export class GameService {
             }
 
             this.state.update(s => {
-                const gameStatus = (gameState.gameStatus as GameStatus) || GameStatus.PLAYING;
+                const rawGameStatus = gameState.gameStatus;
+                const gameStatus = isGameStatus(rawGameStatus) ? rawGameStatus : GameStatus.PLAYING;
+
                 let currentGuess = this.createEmptyGuess();
                 let focusedIndex = 0;
 
