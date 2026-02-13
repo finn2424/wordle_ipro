@@ -59,6 +59,7 @@
 **Deadline:** 2026-08-17
 - [x] Refactor and refine styling (use css vars, light-dark() function)
 - [x] Improve styling
+- [ ] Fix bugs
 - [ ] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend
 - [x] Setup Docker Containers (Frontend, Backend, Database)
@@ -72,6 +73,5 @@
 - [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [x] Expose Database for Local Development
 - [ ] Fulfill and document requirements from teams document
-- [ ] Fix bugs
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script
