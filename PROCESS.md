@@ -38,9 +38,9 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
 - **Decision**: I chose Angular over Native HTML/JS.
 - **Reasoning**:
   - **State Management**: Wordle has a complex state (6 attempts, 5 letters each, keyboard status, game outcome). Angular Signals provide a clean, reactive way to manage this state without the "spaghetti code" often found in manual DOM manipulation.
-  - **Component Reusability**: The game grid, rows, and keyboard keys are repeating elements. Angular's component architecture allows us to encapsulate logic and styles for these elements, promoting reusability and cleaner code.
+  - **Component Reusability**: The game grid, rows, and keyboard keys are repeating elements. Angular's component architecture allows encapsulating logic and styles for these elements, promoting reusability and cleaner code.
   - **Scalability & Structure**: While native JS is sufficient for a basic clone, using Angular ensures the project is scalable. It simplifies adding future features like backend integration, user auth, and persistent stats.
-  - **TypeScript**: First-class support for TypeScript ensures type safety for our game logic (interfaces for Guesses, GameState, etc.), reducing runtime errors.
+  - **TypeScript**: First-class support for TypeScript ensures type safety for the game logic (interfaces for Guesses, GameState, etc.), reducing runtime errors.
   - **Tooling**: Angular CLI provides out-of-the-box build optimization, SCSS support, and PWA capabilities, which are manually configured in a native setup.
 
 ### Decision: Backend Technology (.NET vs. Node.js)
