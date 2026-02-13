@@ -19,6 +19,9 @@ This document serves as a log for the tools, resources, and methodologies used d
 ### Workflows
 - **Update Docs**: A workflow (`.agent/workflows/update-docs.md`) to automatically check for and document changes in the repository.
 
+### Architecture & Design
+- **Design Patterns**: Documented in [DESIGN_PATTERNS.md](./DESIGN_PATTERNS.md), detailing the use of Singleton, Observer, Facade, and Component patterns.
+
 ## 🤖 AI Usage Report
 
 ### Role of AI & Developer Responsibility
@@ -147,6 +150,8 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **Integration**:
     - Certificates mounted into the `wordle-ui` container via volumes (`/etc/letsencrypt:/etc/letsencrypt:ro`).
     - Nginx configured to listen on port 443 (SSL) and redirect HTTP (80) to HTTPS.
+  - **Environment Configuration**:
+    - Updated `environment.ts` (Production) to use a relative `apiUrl: ''`. This ensures requests are correctly routed through the Nginx proxy (which forwards `/api` to the backend) without needing hardcoded absolute URLs.
 
 ### Feature: Database Schema & Stored Procedure API
 - **Goal**: Design a robust database schema and leverage SQL stored procedures as the API layer via `Kull.GenericBackend`.
