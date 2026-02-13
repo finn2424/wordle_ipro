@@ -12,6 +12,15 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--app-color-background);
     color: var(--app-color-text-primary);
+
+    /* Mobile UX Improvements */
+    overscroll-behavior-y: none;
+    /* Prevent pull-to-refresh */
+    user-select: none;
+    /* Disable text selection */
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    /* Remove tap highlight */
 }
 
 .fa-icon {
@@ -24,4 +33,10 @@ body {
     width: 1.25rem;
     height: 1.25rem;
     fill: currentColor;
+}
+
+/* Allow text selection in modals */
+.modal-body {
+    user-select: text;
+    -webkit-user-select: text;
 }
