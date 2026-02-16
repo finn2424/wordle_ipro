@@ -72,6 +72,6 @@
 
 - [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [x] Expose Database for Local Development
-- [ ] Fulfill and document requirements from teams document
+- [-] Fulfill and document requirements from teams document
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script

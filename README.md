@@ -36,7 +36,9 @@ wordle_ipro/
 ├── wordle-backend/       # .NET Web API backend
 │   └── Dockerfile        # Multi-stage build for .NET 10
 ├── docker-compose.yml    # Container orchestration
+├── DESIGN_PATTERNS.md    # Software architecture patterns
 ├── GAME_RULES.md         # How to play Wordle
+├── IPRO_NACHWEIS.md      # Competence proof for IPRO module
 ├── MILESTONES.md         # Project roadmap and deadlines
 ├── PROCESS.md            # Development process & decisions
 └── README.md             # This file
