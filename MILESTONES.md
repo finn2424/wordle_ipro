@@ -61,7 +61,7 @@
 - [x] Improve styling
 - [ ] Fix bugs
 - [ ] Optimize Production Build (AOT, Lazy Loading)
-- [ ] Make vanilla JS version of frontend
+- [ ] Make vanilla JS version of frontend (opensource library kolibri)
 - [x] Setup Docker Containers (Frontend, Backend, Database)
 - [x] Configure Nginx Reverse Proxy for API routing
 - [x] Setup VM (Debian 13) with UFW Firewall
@@ -69,6 +69,11 @@
 - [x] Deploy Frontend & Backend to Cloud Provider
 - [x] Choose Domain (.nip.io or real domain) -> wordle-fb.duckdns.org
 - [x] Finish Hosting (Nginx configuration)
+
+- [ ] Add "Show Stats" button next to "Play Again" button
+- [ ] Implement Advanced Analytics (e.g., most common starting words)
+- [ ] Add more tests
+- [ ] Post update in Teams channel
 
 - [ ] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [x] Expose Database for Local Development
