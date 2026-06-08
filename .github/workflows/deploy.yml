@@ -21,7 +21,7 @@ jobs:
           envs: DB_PASSWORD
           script: |
             # STOP! Ensure this folder name matches what you clone in Step 4
-            cd /home/debian/wordle_ipro 
+            cd /releaserepo/wordle_ipro
 
             # 1. Pull latest code
             git pull origin main
