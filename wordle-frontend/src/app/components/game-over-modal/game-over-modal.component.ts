@@ -26,5 +26,9 @@ export class GameOverModalComponent {
     playAgain() {
         this.activeModal.close('Play Again');
     }
+
+    showStats() {
+        this.activeModal.close('Show Stats');
+    }
 }
 

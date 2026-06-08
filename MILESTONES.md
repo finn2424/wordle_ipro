@@ -70,7 +70,7 @@
 - [x] Choose Domain (.nip.io or real domain) -> `wordle-fb.ddns.net` (moved from DuckDNS to No-IP)
 - [x] Finish Hosting (Nginx configuration)
 
-- [ ] Add "Show Stats" button next to "Play Again" button
+- [x] Add "Show Stats" button next to "Play Again" button
 - [ ] Implement Advanced Analytics (e.g., most common starting words)
 - [ ] Add more tests
 - [ ] Post update in Teams channel

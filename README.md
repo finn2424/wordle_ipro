@@ -80,6 +80,41 @@ For development, you can run the frontend and backend locally while connecting t
 
 5. Open your browser at `http://localhost:4200`.
 
+### Running Locally (LocalDB - No Docker Required)
+
+If you don't have Docker installed or SSH access to the production VM, you can use **SQL Server LocalDB** (bundled with Visual Studio) as a fully local database.
+
+1. **Start LocalDB**:
+   ```bash
+   SqlLocalDB start MSSQLLocalDB
+   ```
+
+2. **Create the database and apply schema**:
+   ```bash
+   sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "CREATE DATABASE WordleDb"
+   sqlcmd -S "(localdb)\MSSQLLocalDB" -d WordleDb -i "wordle-backend/database/schema.sql"
+   sqlcmd -S "(localdb)\MSSQLLocalDB" -d WordleDb -i "wordle-backend/database/populate.sql"
+   ```
+
+3. **Set the connection string** (in the `wordle-backend` directory):
+   ```bash
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=(localdb)\MSSQLLocalDB;Database=WordleDb;Integrated Security=true;TrustServerCertificate=True;"
+   ```
+
+4. **Start the Backend**:
+   ```bash
+   cd wordle-backend
+   dotnet run
+   ```
+
+5. **Start the Frontend** (in a new terminal):
+   ```bash
+   cd wordle-frontend
+   npm start
+   ```
+
+6. Open your browser at `http://localhost:4200`.
+
 ## 🐳 Deployment (Docker & VM)
 
 ### Prerequisites

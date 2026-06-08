@@ -6,6 +6,7 @@ import { GameGrid } from './components/game-grid/game-grid';
 import { VirtualKeyboard } from './components/virtual-keyboard/virtual-keyboard';
 import { GameService } from './services/game.service';
 import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
+import { StatisticsModalComponent } from './components/statistics-modal/statistics-modal.component';
 
 import { GameStatus } from './models/game-types';
 
@@ -42,6 +43,8 @@ export class App {
         modalRef.closed.subscribe((result) => {
           if ('Play Again' === result) {
             this.gameService.startNewGame();
+          } else if ('Show Stats' === result) {
+            this.modalService.open(StatisticsModalComponent, { centered: true });
           }
         });
       }

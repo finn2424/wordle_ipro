@@ -192,5 +192,11 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **Domain Provider**: Swapped `DuckDNS` (which was returning 404s) for `No-IP` (wordle-fb.ddns.net).
   - **Database Restoration**: Used the `npm run ssh-db-tunnel` (updated to port `1434`) to connect to the new live database. Executed `schema.sql` to recreate tables, and created a Node.js script to chunk the dictionary data into a `populate.sql` file (bypassing SQL Server's 1,000-row `INSERT` limit). This resolved a `400 Bad Request` API error caused by the empty dictionary validation.
 
+### Feature: Show Stats Button in Game Over Modal
+- Added a "Show Stats" button next to "Play Again" in the game-over modal. Clicking it opens the `StatisticsModalComponent` so users can view stats without starting a new game.
+
+### Feature: Local Development with SQL Server LocalDB
+- Added LocalDB as an alternative to Docker for local development. Uses Windows Integrated Security — see `README.md` for setup instructions.
+
 ---
 *This document will be updated continuously as the project evolves.*
