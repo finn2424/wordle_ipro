@@ -183,5 +183,14 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **Backend Port Removal**: Removed direct `8080` port exposure for the backend; it's now accessible only through the internal Docker network via Nginx.
 
 
+### Migration: Server Replacement & Domain Change (June 2026)
+- **Context**: The original production VM was unexpectedly deleted, requiring a migration to a new server.
+- **Challenge**: The new server was already hosting another containerized application using Nginx on ports 80/443 and an MSSQL container on port 1433.
+- **Resolution**:
+  - **Port Adjustments**: Updated `docker-compose.yml` to bind the Wordle frontend to host port `8083` and the database to host port `1434` to prevent port collisions.
+  - **SSL Architecture Change**: Removed SSL handling from the `wordle-ui` container. Nginx on the host machine now handles SSL termination and reverse-proxies traffic to the internal `8083` port.
+  - **Domain Provider**: Swapped `DuckDNS` (which was returning 404s) for `No-IP` (wordle-fb.ddns.net).
+  - **Database Restoration**: Used the `npm run ssh-db-tunnel` (updated to port `1434`) to connect to the new live database. Executed `schema.sql` to recreate tables, and created a Node.js script to chunk the dictionary data into a `populate.sql` file (bypassing SQL Server's 1,000-row `INSERT` limit). This resolved a `400 Bad Request` API error caused by the empty dictionary validation.
+
 ---
 *This document will be updated continuously as the project evolves.*

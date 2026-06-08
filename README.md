@@ -1,6 +1,6 @@
 # Wordle IPRO
 
-[**Live Demo**](https://wordle-fb.duckdns.org)
+[**Live Demo**](https://wordle-fb.ddns.net)
 
 
 
@@ -65,7 +65,7 @@ For development, you can run the frontend and backend locally while connecting t
    ```bash
    npm run ssh-db-tunnel
    ```
-   > This forwards local port 1433 to the production database.
+   > This forwards local port 1433 to the production database (running on host port 1434).
 
 3. **Start the Backend** (In a new terminal, inside `wordle-frontend`):
    ```bash
@@ -86,7 +86,7 @@ For development, you can run the frontend and backend locally while connecting t
 - A Linux VM (e.g., Debian 13) with Docker installed
 - UFW firewall configured to allow ports 80/443 (HTTP/HTTPS) and 22 (SSH)
 - GitHub repository secrets configured: `HOST`, `USERNAME`, `KEY`, `DB_PASSWORD`
-- **Domain**: Pointed to the VM's IP (e.g., `wordle-fb.duckdns.org`)
+- **Domain**: Pointed to the VM's IP (e.g., `wordle-fb.ddns.net`)
 - **SSL Certificates**: Generated via Certbot directly on the host machine at `/etc/letsencrypt`
 
 
@@ -95,7 +95,7 @@ The application runs as a containerized stack orchestrated by Docker Compose:
 
 | Service | Container | Description |
 |---------|-----------|-------------|
-| **Frontend** | `wordle-ui` | Angular app served via Nginx on port 80 & 443 (SSL) |
+| **Frontend** | `wordle-ui` | Angular app served via internal Nginx on port 80 (exposed to host on 8083, proxied by host Nginx) |
 | **Backend** | `wordle-api` | .NET 10 API on internal port 8080 |
 | **Database** | `wordle-db` | SQL Server Express 2022 |
 
@@ -113,7 +113,7 @@ The application runs as a containerized stack orchestrated by Docker Compose:
 
 3. Access the application at `http://localhost`
 
-> **Note**: The `docker-compose.yml` mounts SSL certificates from `/etc/letsencrypt` on the host. If running locally on Windows/Mac without these files, you may need to comment out the volume mount and the 443 server block in `nginx.conf` or map local dummy certificates.
+> **Note**: Nginx on the host machine handles SSL and proxies traffic to the frontend container on port `8083`.
 
 
 ### Automatic Deployment (GitHub Actions)

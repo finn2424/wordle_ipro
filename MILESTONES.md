@@ -67,7 +67,7 @@
 - [x] Setup VM (Debian 13) with UFW Firewall
 - [x] Implement CI/CD Pipeline (GitHub Actions)
 - [x] Deploy Frontend & Backend to Cloud Provider
-- [x] Choose Domain (.nip.io or real domain) -> wordle-fb.duckdns.org
+- [x] Choose Domain (.nip.io or real domain) -> `wordle-fb.ddns.net` (moved from DuckDNS to No-IP)
 - [x] Finish Hosting (Nginx configuration)
 
 - [ ] Add "Show Stats" button next to "Play Again" button
