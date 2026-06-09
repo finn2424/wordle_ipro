@@ -3,47 +3,144 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
 </div>
 <div class="modal-body pt-0">
-    @if (loading()) {
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-    } @else if (error()) {
-    <div class="alert alert-danger text-center">{{ error() }}</div>
-    } @else if (stats()) {
-    <div class="d-flex justify-content-center gap-4 text-center mb-4">
-        <div class="stat-box">
-            <div class="stat-value">{{ stats()?.gamesPlayed }}</div>
-            <div class="stat-label">Played</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-value">{{ stats()?.winRate | number:'1.0-0' }}</div>
-            <div class="stat-label">Win %</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-value">{{ stats()?.currentStreak }}</div>
-            <div class="stat-label">Current<br>Streak</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-value">{{ stats()?.maxStreak }}</div>
-            <div class="stat-label">Max<br>Streak</div>
-        </div>
-    </div>
+    <!-- Tab Navigation -->
+    <div class="d-flex justify-content-center mb-4">
+        <ul ngbNav #nav="ngbNav" [activeId]="activeTab" (activeIdChange)="onTabChange($event)" class="nav stats-nav">
+            <li [ngbNavItem]="1">
+                <button ngbNavLink>Your Stats</button>
+                <ng-template ngbNavContent>
+                    <!-- Personal Stats Content -->
+                    @if (loading()) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    } @else if (error()) {
+                    <div class="alert alert-danger text-center">{{ error() }}</div>
+                    } @else if (stats()) {
+                    <div class="d-flex justify-content-center gap-4 text-center mb-4">
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats()?.gamesPlayed }}</div>
+                            <div class="stat-label">Played</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats()?.winRate | number:'1.0-0' }}</div>
+                            <div class="stat-label">Win %</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats()?.currentStreak }}</div>
+                            <div class="stat-label">Current<br>Streak</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ stats()?.maxStreak }}</div>
+                            <div class="stat-label">Max<br>Streak</div>
+                        </div>
+                    </div>
 
-    <h5 class="fw-bold fs-6 mb-3">GUESS DISTRIBUTION</h5>
-    <div class="distribution-chart">
-        @for (item of stats()?.guessDistribution; track item.guessCount) {
-        <div class="d-flex align-items-center mb-1 gap-2">
-            <div class="guess-label">{{ item.guessCount }}</div>
-            <div class="progress flex-grow-1" style="height: 20px;">
-                <div class="progress-bar" [style.width.%]="(item.total / (stats()?.gamesWon || 1)) * 100"
-                    [class.bg-secondary]="item.total === 0" [class.bg-success]="item.total > 0">
-                    <span class="px-2 fw-bold text-end w-100">{{ item.total }}</span>
-                </div>
-            </div>
-        </div>
-        }
+                    <h5 class="fw-bold fs-6 mb-3">GUESS DISTRIBUTION</h5>
+                    <div class="distribution-chart">
+                        @for (item of stats()?.guessDistribution; track item.guessCount) {
+                        <div class="d-flex align-items-center mb-1 gap-2">
+                            <div class="guess-label">{{ item.guessCount }}</div>
+                            <div class="progress flex-grow-1" style="height: 20px;">
+                                <div class="progress-bar" [style.width.%]="(item.total / (stats()?.gamesWon || 1)) * 100"
+                                    [class.bg-secondary]="item.total === 0" [class.bg-success]="item.total > 0">
+                                    <span class="px-2 fw-bold text-end w-100">{{ item.total }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    }
+                </ng-template>
+            </li>
+
+            <li [ngbNavItem]="2">
+                <button ngbNavLink>Global Analytics</button>
+                <ng-template ngbNavContent>
+                    <!-- Advanced Analytics Content -->
+                    @if (advancedLoading()) {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    } @else if (advancedError()) {
+                    <div class="alert alert-danger text-center">{{ advancedError() }}</div>
+                    } @else if (advancedStats()) {
+
+                    <!-- Global Summary -->
+                    <div class="d-flex justify-content-center gap-4 text-center mb-4">
+                        <div class="stat-box">
+                            <div class="stat-value">{{ advancedStats()?.avgGuessesToWin | number:'1.1-1' }}</div>
+                            <div class="stat-label">Avg. Guesses<br>to Win</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ advancedStats()?.totalGamesPlayed }}</div>
+                            <div class="stat-label">Total<br>Games</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">{{ advancedStats()?.globalWinRate | number:'1.0-0' }}</div>
+                            <div class="stat-label">Global<br>Win %</div>
+                        </div>
+                    </div>
+
+                    <!-- Top Starting Words -->
+                    @if (advancedStats()?.topStartingWords?.length) {
+                    <h5 class="fw-bold fs-6 mb-3">TOP STARTING WORDS</h5>
+                    <div class="word-ranking mb-4">
+                        @for (item of advancedStats()?.topStartingWords; track item.word; let i = $index) {
+                        <div class="ranking-row d-flex align-items-center gap-2 mb-1">
+                            <span class="rank-number">{{ i + 1 }}.</span>
+                            <span class="rank-word fw-bold text-uppercase">{{ item.word }}</span>
+                            <span class="rank-bar flex-grow-1">
+                                <span class="rank-bar-fill"
+                                    [style.width.%]="(item.count / (advancedStats()?.topStartingWords?.[0]?.count || 1)) * 100">
+                                </span>
+                            </span>
+                            <span class="rank-count">{{ item.count }}</span>
+                        </div>
+                        }
+                    </div>
+                    }
+
+                    <!-- Hardest Words -->
+                    @if (advancedStats()?.hardestWords?.length) {
+                    <h5 class="fw-bold fs-6 mb-3">HARDEST WORDS</h5>
+                    <div class="word-ranking mb-4">
+                        @for (item of advancedStats()?.hardestWords; track item.word; let i = $index) {
+                        <div class="ranking-row d-flex align-items-center gap-2 mb-1">
+                            <span class="rank-number">{{ i + 1 }}.</span>
+                            <span class="rank-word fw-bold text-uppercase">{{ item.word }}</span>
+                            <span class="rank-meta">{{ item.winRate | number:'1.0-0' }}% win · {{ item.games }} games</span>
+                        </div>
+                        }
+                    </div>
+                    }
+
+                    <!-- Global Guess Distribution -->
+                    <h5 class="fw-bold fs-6 mb-3">GLOBAL GUESS DISTRIBUTION</h5>
+                    <div class="distribution-chart">
+                        @for (item of advancedStats()?.globalGuessDistribution; track item.guessCount) {
+                        <div class="d-flex align-items-center mb-1 gap-2">
+                            <div class="guess-label">{{ item.guessCount }}</div>
+                            <div class="progress flex-grow-1" style="height: 20px;">
+                                <div class="progress-bar" [style.width.%]="(item.total / (advancedStats()?.totalGamesWon || 1)) * 100"
+                                    [class.bg-secondary]="item.total === 0" [class.bg-success]="item.total > 0">
+                                    <span class="px-2 fw-bold text-end w-100">{{ item.total }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+
+                    } @else {
+                    <p class="text-center text-muted p-4">No analytics data available yet. Play some games first!</p>
+                    }
+                </ng-template>
+            </li>
+        </ul>
     </div>
-    }
+    <div [ngbNavOutlet]="nav"></div>
 </div>

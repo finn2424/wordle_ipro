@@ -1,0 +1,272 @@
+[
+  {
+    "Name": "TotalGamesPlayed",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "TotalGamesWon",
+    "TypeName": "int",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalWinRate",
+    "TypeName": "float",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "AvgGuessesToWin",
+    "TypeName": "decimal",
+    "IsNullable": true,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess1",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess2",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess3",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess4",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess5",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "GlobalGuess6",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord1",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount1",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord2",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount2",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord3",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount3",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord4",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount4",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord5",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount5",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord6",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount6",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord7",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount7",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord8",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount8",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord9",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount9",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "TopWord10",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "TopWordCount10",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWord1",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "HardWordWinRate1",
+    "TypeName": "decimal",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWordGames1",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWord2",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "HardWordWinRate2",
+    "TypeName": "decimal",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWordGames2",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWord3",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "HardWordWinRate3",
+    "TypeName": "decimal",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWordGames3",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWord4",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "HardWordWinRate4",
+    "TypeName": "decimal",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWordGames4",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWord5",
+    "TypeName": "varchar",
+    "IsNullable": true,
+    "MaxLength": 5
+  },
+  {
+    "Name": "HardWordWinRate5",
+    "TypeName": "decimal",
+    "IsNullable": false,
+    "MaxLength": null
+  },
+  {
+    "Name": "HardWordGames5",
+    "TypeName": "int",
+    "IsNullable": false,
+    "MaxLength": null
+  }
+]

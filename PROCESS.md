@@ -198,5 +198,9 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
 ### Feature: Local Development with SQL Server LocalDB
 - Added LocalDB as an alternative to Docker for local development. Uses Windows Integrated Security — see `README.md` for setup instructions.
 
+### Feature: Advanced Analytics (Global Stats)
+- Added a "Global Analytics" tab to the statistics modal using `NgbNav`. Shows avg. guesses to win, top 10 starting words, 5 hardest words (by win rate), and global guess distribution.
+- New stored procedure `spStats_GetAdvanced` queries across all players with no `@DeviceId` filter. Returns a single flattened result set. Mapped to `GET /api/Stats/Advanced`.
+
 ---
 *This document will be updated continuously as the project evolves.*

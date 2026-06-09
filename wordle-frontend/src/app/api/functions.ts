@@ -9,3 +9,5 @@ export type { SubmitGuess$Params as SubmitGuess$Params } from './fn/game-submit-
 export { submitGuess as submitGuess } from './fn/game-submit-guess/submit-guess';
 export type { GetStats$Params as GetStats$Params } from './fn/stats/get-stats';
 export { getStats as getStats } from './fn/stats/get-stats';
+export type { GetAdvancedStats$Params as GetAdvancedStats$Params } from './fn/stats-advanced/get-advanced-stats';
+export { getAdvancedStats as getAdvancedStats } from './fn/stats-advanced/get-advanced-stats';

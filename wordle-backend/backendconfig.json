@@ -24,6 +24,12 @@
         "SP": "dbo.spStats_Get",
         "OperationId": "GetStats"
       }
+    },
+    "Stats/Advanced": {
+      "GET": {
+        "SP": "dbo.spStats_GetAdvanced",
+        "OperationId": "GetAdvancedStats"
+      }
     }
   }
 }

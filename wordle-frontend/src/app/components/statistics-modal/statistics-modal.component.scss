@@ -1,3 +1,45 @@
+/* Tab navigation */
+.stats-nav {
+    display: inline-flex;
+    background-color: var(--app-color-background);
+    border: 1px solid var(--app-color-border);
+    border-radius: 30px;
+    padding: 3px;
+    gap: 2px;
+
+    .nav-item {
+        margin: 0;
+        display: flex;
+    }
+
+    .nav-link {
+        color: var(--app-color-text-primary);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.75px;
+        border-radius: 30px;
+        padding: 0.5rem 1.25rem;
+        border: none;
+        background-color: transparent !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0.55;
+
+        &:hover:not(.active) {
+            opacity: 0.95;
+            background-color: rgba(128, 128, 128, 0.08) !important;
+        }
+
+        &.active {
+            background-color: var(--app-color-surface) !important;
+            color: var(--app-color-text-primary) !important;
+            opacity: 1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+    }
+}
+
+/* Stat boxes */
 .stat-box {
     flex: 1;
 }
@@ -12,6 +54,7 @@
     line-height: 1.2;
 }
 
+/* Guess distribution */
 .guess-label {
     width: 15px;
     font-weight: bold;
@@ -25,5 +68,60 @@
     justify-content: flex-end;
     font-size: 0.8rem;
     min-width: 20px;
-    /* Ensure 0 counts or small bars are visible mostly as text container */
+}
+
+/* Word rankings (top starting words, hardest words) */
+.word-ranking {
+    .ranking-row {
+        padding: 0.35rem 0.5rem;
+        border-radius: 6px;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+            background-color: var(--app-color-border);
+        }
+    }
+
+    .rank-number {
+        width: 1.5rem;
+        font-weight: 600;
+        opacity: 0.5;
+        font-size: 0.85rem;
+        text-align: right;
+    }
+
+    .rank-word {
+        width: 4rem;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+    }
+
+    .rank-bar {
+        height: 6px;
+        background-color: var(--app-color-border);
+        border-radius: 3px;
+        overflow: hidden;
+
+        .rank-bar-fill {
+            display: block;
+            height: 100%;
+            background-color: var(--game-color-correct, #4CAF50);
+            border-radius: 3px;
+            min-width: 4px;
+            transition: width 0.4s ease-out;
+        }
+    }
+
+    .rank-count {
+        font-weight: 600;
+        font-size: 0.85rem;
+        min-width: 2rem;
+        text-align: right;
+    }
+
+    .rank-meta {
+        font-size: 0.8rem;
+        opacity: 0.65;
+        margin-left: auto;
+    }
 }

@@ -71,7 +71,7 @@
 - [x] Finish Hosting (Nginx configuration)
 
 - [x] Add "Show Stats" button next to "Play Again" button
-- [ ] Implement Advanced Analytics (e.g., most common starting words)
+- [x] Implement Advanced Analytics (e.g., most common starting words)
 - [ ] Add more tests
 - [ ] Post update in Teams channel
 

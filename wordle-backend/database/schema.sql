@@ -486,3 +486,149 @@ BEGIN
         ISNULL(@Guess6, 0) AS Guess6;
 END;
 GO
+
+
+/*
+ * Retrieves global advanced analytics across all players.
+ * Returns top starting words, average guesses, hardest words, and global distribution.
+ * Endpoint: GET /api/Stats/Advanced
+ */
+CREATE OR ALTER PROCEDURE dbo.spStats_GetAdvanced
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Global summary stats
+    DECLARE @TotalGamesPlayed INT = 0;
+    DECLARE @TotalGamesWon INT = 0;
+    DECLARE @GlobalWinRate FLOAT = 0.0;
+    DECLARE @AvgGuessesToWin DECIMAL(4,2) = 0;
+
+    -- Global guess distribution
+    DECLARE @GlobalGuess1 INT = 0;
+    DECLARE @GlobalGuess2 INT = 0;
+    DECLARE @GlobalGuess3 INT = 0;
+    DECLARE @GlobalGuess4 INT = 0;
+    DECLARE @GlobalGuess5 INT = 0;
+    DECLARE @GlobalGuess6 INT = 0;
+
+    -- Top 10 starting words
+    DECLARE @TopWord1 VARCHAR(5) = NULL, @TopWordCount1 INT = 0;
+    DECLARE @TopWord2 VARCHAR(5) = NULL, @TopWordCount2 INT = 0;
+    DECLARE @TopWord3 VARCHAR(5) = NULL, @TopWordCount3 INT = 0;
+    DECLARE @TopWord4 VARCHAR(5) = NULL, @TopWordCount4 INT = 0;
+    DECLARE @TopWord5 VARCHAR(5) = NULL, @TopWordCount5 INT = 0;
+    DECLARE @TopWord6 VARCHAR(5) = NULL, @TopWordCount6 INT = 0;
+    DECLARE @TopWord7 VARCHAR(5) = NULL, @TopWordCount7 INT = 0;
+    DECLARE @TopWord8 VARCHAR(5) = NULL, @TopWordCount8 INT = 0;
+    DECLARE @TopWord9 VARCHAR(5) = NULL, @TopWordCount9 INT = 0;
+    DECLARE @TopWord10 VARCHAR(5) = NULL, @TopWordCount10 INT = 0;
+
+    -- Top 5 hardest words
+    DECLARE @HardWord1 VARCHAR(5) = NULL, @HardWordWinRate1 DECIMAL(5,1) = 0, @HardWordGames1 INT = 0;
+    DECLARE @HardWord2 VARCHAR(5) = NULL, @HardWordWinRate2 DECIMAL(5,1) = 0, @HardWordGames2 INT = 0;
+    DECLARE @HardWord3 VARCHAR(5) = NULL, @HardWordWinRate3 DECIMAL(5,1) = 0, @HardWordGames3 INT = 0;
+    DECLARE @HardWord4 VARCHAR(5) = NULL, @HardWordWinRate4 DECIMAL(5,1) = 0, @HardWordGames4 INT = 0;
+    DECLARE @HardWord5 VARCHAR(5) = NULL, @HardWordWinRate5 DECIMAL(5,1) = 0, @HardWordGames5 INT = 0;
+
+    -- 1. Global Summary
+    SELECT
+        @TotalGamesPlayed = COUNT(*),
+        @TotalGamesWon = SUM(CASE WHEN GameStatus = 'won' THEN 1 ELSE 0 END)
+    FROM dbo.Games
+    WHERE GameStatus IN ('won', 'lost');
+
+    IF @TotalGamesPlayed > 0
+        SET @GlobalWinRate = CAST(@TotalGamesWon AS FLOAT) * 100.0 / CAST(@TotalGamesPlayed AS FLOAT);
+
+    -- 2. Average Guesses to Win
+    SELECT @AvgGuessesToWin = ISNULL(AVG(CAST(AttemptsUsed AS DECIMAL(4,2))), 0)
+    FROM dbo.Games
+    WHERE GameStatus = 'won';
+
+    -- 3. Global Guess Distribution
+    SELECT
+        @GlobalGuess1 = SUM(CASE WHEN AttemptsUsed = 1 THEN 1 ELSE 0 END),
+        @GlobalGuess2 = SUM(CASE WHEN AttemptsUsed = 2 THEN 1 ELSE 0 END),
+        @GlobalGuess3 = SUM(CASE WHEN AttemptsUsed = 3 THEN 1 ELSE 0 END),
+        @GlobalGuess4 = SUM(CASE WHEN AttemptsUsed = 4 THEN 1 ELSE 0 END),
+        @GlobalGuess5 = SUM(CASE WHEN AttemptsUsed = 5 THEN 1 ELSE 0 END),
+        @GlobalGuess6 = SUM(CASE WHEN AttemptsUsed = 6 THEN 1 ELSE 0 END)
+    FROM dbo.Games
+    WHERE GameStatus = 'won';
+
+    -- 4. Top 10 Starting Words (AttemptNumber = 1)
+    ;WITH TopWords AS (
+        SELECT TOP 10
+            UPPER(RTRIM(a.GuessWord)) AS Word,
+            COUNT(*) AS Cnt,
+            ROW_NUMBER() OVER(ORDER BY COUNT(*) DESC) AS Rn
+        FROM dbo.Attempts a
+        WHERE a.AttemptNumber = 1
+        GROUP BY UPPER(RTRIM(a.GuessWord))
+        ORDER BY COUNT(*) DESC
+    )
+    SELECT
+        @TopWord1 = MAX(CASE WHEN Rn = 1 THEN Word END), @TopWordCount1 = MAX(CASE WHEN Rn = 1 THEN Cnt END),
+        @TopWord2 = MAX(CASE WHEN Rn = 2 THEN Word END), @TopWordCount2 = MAX(CASE WHEN Rn = 2 THEN Cnt END),
+        @TopWord3 = MAX(CASE WHEN Rn = 3 THEN Word END), @TopWordCount3 = MAX(CASE WHEN Rn = 3 THEN Cnt END),
+        @TopWord4 = MAX(CASE WHEN Rn = 4 THEN Word END), @TopWordCount4 = MAX(CASE WHEN Rn = 4 THEN Cnt END),
+        @TopWord5 = MAX(CASE WHEN Rn = 5 THEN Word END), @TopWordCount5 = MAX(CASE WHEN Rn = 5 THEN Cnt END),
+        @TopWord6 = MAX(CASE WHEN Rn = 6 THEN Word END), @TopWordCount6 = MAX(CASE WHEN Rn = 6 THEN Cnt END),
+        @TopWord7 = MAX(CASE WHEN Rn = 7 THEN Word END), @TopWordCount7 = MAX(CASE WHEN Rn = 7 THEN Cnt END),
+        @TopWord8 = MAX(CASE WHEN Rn = 8 THEN Word END), @TopWordCount8 = MAX(CASE WHEN Rn = 8 THEN Cnt END),
+        @TopWord9 = MAX(CASE WHEN Rn = 9 THEN Word END), @TopWordCount9 = MAX(CASE WHEN Rn = 9 THEN Cnt END),
+        @TopWord10 = MAX(CASE WHEN Rn = 10 THEN Word END), @TopWordCount10 = MAX(CASE WHEN Rn = 10 THEN Cnt END)
+    FROM TopWords;
+
+    -- 5. Top 5 Hardest Words (lowest win rate, minimum 3 games played)
+    ;WITH WordStats AS (
+        SELECT TOP 5
+            UPPER(RTRIM(wd.Word)) AS Word,
+            COUNT(*) AS TotalGames,
+            CAST(SUM(CASE WHEN g.GameStatus = 'won' THEN 1 ELSE 0 END) AS FLOAT) * 100.0 / COUNT(*) AS WinRate,
+            ROW_NUMBER() OVER(ORDER BY CAST(SUM(CASE WHEN g.GameStatus = 'won' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) ASC) AS Rn
+        FROM dbo.Games g
+        JOIN dbo.WordDictionary wd ON g.WordId = wd.WordId
+        WHERE g.GameStatus IN ('won', 'lost')
+        GROUP BY wd.Word
+        HAVING COUNT(*) >= 3
+        ORDER BY CAST(SUM(CASE WHEN g.GameStatus = 'won' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) ASC
+    )
+    SELECT
+        @HardWord1 = MAX(CASE WHEN Rn = 1 THEN Word END), @HardWordWinRate1 = MAX(CASE WHEN Rn = 1 THEN WinRate END), @HardWordGames1 = MAX(CASE WHEN Rn = 1 THEN TotalGames END),
+        @HardWord2 = MAX(CASE WHEN Rn = 2 THEN Word END), @HardWordWinRate2 = MAX(CASE WHEN Rn = 2 THEN WinRate END), @HardWordGames2 = MAX(CASE WHEN Rn = 2 THEN TotalGames END),
+        @HardWord3 = MAX(CASE WHEN Rn = 3 THEN Word END), @HardWordWinRate3 = MAX(CASE WHEN Rn = 3 THEN WinRate END), @HardWordGames3 = MAX(CASE WHEN Rn = 3 THEN TotalGames END),
+        @HardWord4 = MAX(CASE WHEN Rn = 4 THEN Word END), @HardWordWinRate4 = MAX(CASE WHEN Rn = 4 THEN WinRate END), @HardWordGames4 = MAX(CASE WHEN Rn = 4 THEN TotalGames END),
+        @HardWord5 = MAX(CASE WHEN Rn = 5 THEN Word END), @HardWordWinRate5 = MAX(CASE WHEN Rn = 5 THEN WinRate END), @HardWordGames5 = MAX(CASE WHEN Rn = 5 THEN TotalGames END)
+    FROM WordStats;
+
+    -- 6. Return Single Flattened Result Set
+    SELECT
+        @TotalGamesPlayed AS TotalGamesPlayed,
+        @TotalGamesWon AS TotalGamesWon,
+        @GlobalWinRate AS GlobalWinRate,
+        @AvgGuessesToWin AS AvgGuessesToWin,
+        ISNULL(@GlobalGuess1, 0) AS GlobalGuess1,
+        ISNULL(@GlobalGuess2, 0) AS GlobalGuess2,
+        ISNULL(@GlobalGuess3, 0) AS GlobalGuess3,
+        ISNULL(@GlobalGuess4, 0) AS GlobalGuess4,
+        ISNULL(@GlobalGuess5, 0) AS GlobalGuess5,
+        ISNULL(@GlobalGuess6, 0) AS GlobalGuess6,
+        @TopWord1 AS TopWord1, ISNULL(@TopWordCount1, 0) AS TopWordCount1,
+        @TopWord2 AS TopWord2, ISNULL(@TopWordCount2, 0) AS TopWordCount2,
+        @TopWord3 AS TopWord3, ISNULL(@TopWordCount3, 0) AS TopWordCount3,
+        @TopWord4 AS TopWord4, ISNULL(@TopWordCount4, 0) AS TopWordCount4,
+        @TopWord5 AS TopWord5, ISNULL(@TopWordCount5, 0) AS TopWordCount5,
+        @TopWord6 AS TopWord6, ISNULL(@TopWordCount6, 0) AS TopWordCount6,
+        @TopWord7 AS TopWord7, ISNULL(@TopWordCount7, 0) AS TopWordCount7,
+        @TopWord8 AS TopWord8, ISNULL(@TopWordCount8, 0) AS TopWordCount8,
+        @TopWord9 AS TopWord9, ISNULL(@TopWordCount9, 0) AS TopWordCount9,
+        @TopWord10 AS TopWord10, ISNULL(@TopWordCount10, 0) AS TopWordCount10,
+        @HardWord1 AS HardWord1, ISNULL(@HardWordWinRate1, 0) AS HardWordWinRate1, ISNULL(@HardWordGames1, 0) AS HardWordGames1,
+        @HardWord2 AS HardWord2, ISNULL(@HardWordWinRate2, 0) AS HardWordWinRate2, ISNULL(@HardWordGames2, 0) AS HardWordGames2,
+        @HardWord3 AS HardWord3, ISNULL(@HardWordWinRate3, 0) AS HardWordWinRate3, ISNULL(@HardWordGames3, 0) AS HardWordGames3,
+        @HardWord4 AS HardWord4, ISNULL(@HardWordWinRate4, 0) AS HardWordWinRate4, ISNULL(@HardWordGames4, 0) AS HardWordGames4,
+        @HardWord5 AS HardWord5, ISNULL(@HardWordWinRate5, 0) AS HardWordWinRate5, ISNULL(@HardWordGames5, 0) AS HardWordGames5;
+END;
+GO

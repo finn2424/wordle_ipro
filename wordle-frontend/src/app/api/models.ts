@@ -7,5 +7,6 @@ export type { AddUserGetOrCreateParameters } from './models/add-user-get-or-crea
 export type { GetStatsParameters } from './models/get-stats-parameters';
 export type { SpGameStartResult } from './models/sp-game-start-result';
 export type { SpGameSubmitGuessResult } from './models/sp-game-submit-guess-result';
+export type { SpStatsGetAdvancedResult } from './models/sp-stats-get-advanced-result';
 export type { SpStatsGetResult } from './models/sp-stats-get-result';
 export type { SpUserGetOrCreateResult } from './models/sp-user-get-or-create-result';
