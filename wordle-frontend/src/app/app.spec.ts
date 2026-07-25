@@ -29,6 +29,7 @@ interface GameServiceMock {
 
 interface ModalServiceMock {
   open: MockInstance;
+  hasOpenModals: MockInstance;
 }
 
 interface ThemeServiceMock {
@@ -65,7 +66,8 @@ describe('App', () => {
       open: vi.fn().mockReturnValue({
         componentInstance: { isWin: false, solution: '', guesses: 0 },
         closed: of('Play Again')
-      })
+      }),
+      hasOpenModals: vi.fn().mockReturnValue(false)
     };
 
     themeServiceMock = {

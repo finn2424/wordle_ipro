@@ -15,9 +15,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class GameOverModalComponent {
     activeModal = inject(NgbActiveModal);
 
-    isWin!: boolean;
-    solution!: string;
-    guesses!: number;
+    isWin = false;
+    solution = '';
+    guesses = 0;
 
     closeModal() {
         this.activeModal.dismiss('Cross click');

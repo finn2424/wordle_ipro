@@ -72,7 +72,7 @@
 
 - [x] Add "Show Stats" button next to "Play Again" button
 - [x] Implement Advanced Analytics (e.g., most common starting words)
-- [ ] Add more tests
+- [x] Add more tests (80 unit tests across 9 suites: components, services, models)
 - [ ] Post update in Teams channel
 
 - [x] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)

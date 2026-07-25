@@ -1,15 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ThemeService } from '../../services/theme.service';
 import { signal } from '@angular/core';
-import { vi } from 'vitest';
+import { vi, type MockInstance } from 'vitest';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { InstructionsModalComponent } from '../instructions-modal/instructions-modal.component';
+import { StatisticsModalComponent } from '../statistics-modal/statistics-modal.component';
 
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let modalServiceMock: { open: MockInstance };
 
   beforeEach(async () => {
+    modalServiceMock = {
+      open: vi.fn().mockReturnValue({
+        componentInstance: {},
+        closed: { subscribe: vi.fn() }
+      })
+    };
+
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
       providers: [
@@ -19,6 +30,10 @@ describe('HeaderComponent', () => {
             theme: signal('light'),
             set: vi.fn()
           }
+        },
+        {
+          provide: NgbModal,
+          useValue: modalServiceMock
         }
       ]
     })
@@ -31,5 +46,25 @@ describe('HeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should open InstructionsModalComponent when openInstructions is called', () => {
+    component.openInstructions();
+    expect(modalServiceMock.open).toHaveBeenCalledWith(InstructionsModalComponent, { size: 'md' });
+  });
+
+  it('should open StatisticsModalComponent when openStatistics is called', () => {
+    component.openStatistics();
+    expect(modalServiceMock.open).toHaveBeenCalledWith(StatisticsModalComponent, { size: 'md' });
+  });
+
+  it('should call modalService.open exactly once per method call', () => {
+    component.openInstructions();
+    expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
+
+    modalServiceMock.open.mockClear();
+
+    component.openStatistics();
+    expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService, Theme } from './theme.service';
 import { DOCUMENT } from '@angular/common';
-import { vi, type MockInstance } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 interface MatchMediaMock {
     matches: boolean;
@@ -9,101 +9,121 @@ interface MatchMediaMock {
     removeEventListener: MockInstance;
 }
 
-describe('ThemeService Verification', () => {
+describe('ThemeService', () => {
     let service: ThemeService;
-    let document: Document;
+    let doc: Document;
     let htmlElement: HTMLElement;
     let matchMediaMock: MatchMediaMock;
+    let getItemSpy: MockInstance;
+    let setItemSpy: MockInstance;
 
-    beforeEach(() => {
-        // Mock matchMedia
+    function setupMatchMediaMock(isDark = false): void {
         matchMediaMock = {
-            matches: false, // Default to light
+            matches: isDark,
             addEventListener: vi.fn(),
             removeEventListener: vi.fn(),
         };
 
-        // Assign to window
         Object.defineProperty(window, 'matchMedia', {
             writable: true,
-            value: vi.fn().mockImplementation(query => ({
+            value: vi.fn().mockImplementation((query: string) => ({
                 matches: matchMediaMock.matches,
                 media: query,
                 onchange: null,
-                addListener: vi.fn(), // Deprecated
-                removeListener: vi.fn(), // Deprecated
+                addListener: vi.fn(),
+                removeListener: vi.fn(),
                 addEventListener: matchMediaMock.addEventListener,
                 removeEventListener: matchMediaMock.removeEventListener,
                 dispatchEvent: vi.fn(),
             })),
         });
+    }
 
+    function createService(): void {
         TestBed.configureTestingModule({
-            providers: [ThemeService]
+            providers: [ThemeService],
         });
 
         service = TestBed.inject(ThemeService);
-        document = TestBed.inject(DOCUMENT);
-        htmlElement = document.documentElement;
+        doc = TestBed.inject(DOCUMENT);
+        htmlElement = doc.documentElement;
+    }
+
+    beforeEach(() => {
+        getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(null);
+        setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {});
+        setupMatchMediaMock(false);
     });
 
     afterEach(() => {
-        localStorage.clear();
+        vi.restoreAllMocks();
     });
 
     it('should be created', () => {
+        createService();
         expect(service).toBeTruthy();
     });
 
-    describe('Attribute Application (Core Verification)', () => {
-        it('should apply "dark" to both data-bs-theme and color-scheme when set to dark', () => {
-            // Act
-            service.set(Theme.DARK);
-            TestBed.flushEffects();
+    describe('Initial Theme', () => {
+        it('should default to auto when no localStorage value exists', () => {
+            getItemSpy.mockReturnValue(null);
+            createService();
 
-            // Assert - Verify Bootstrap hook
-            expect(htmlElement.getAttribute('data-bs-theme')).toBe(Theme.DARK);
-
-            // Assert - Verify Custom CSS hook (light-dark() support)
-            expect(htmlElement.style.colorScheme).toBe(Theme.DARK);
+            expect(service.theme()).toBe(Theme.AUTO);
         });
 
-        it('should apply "light" to both data-bs-theme and color-scheme when set to light', () => {
-            // Act
-            service.set(Theme.LIGHT);
-            TestBed.flushEffects();
+        it('should restore saved theme from localStorage if valid', () => {
+            getItemSpy.mockReturnValue('dark');
+            createService();
 
-            // Assert
-            expect(htmlElement.getAttribute('data-bs-theme')).toBe(Theme.LIGHT);
-            expect(htmlElement.style.colorScheme).toBe(Theme.LIGHT);
+            expect(service.theme()).toBe(Theme.DARK);
+        });
+
+        it('should default to auto if localStorage has an invalid value', () => {
+            getItemSpy.mockReturnValue('invalid-theme-value');
+            createService();
+
+            expect(service.theme()).toBe(Theme.AUTO);
         });
     });
 
-    describe('Auto Mode Logic', () => {
-        it('should apply system "dark" preference when mode is auto', () => {
-            // Arrange - Simulate System Dark Mode
-            matchMediaMock.matches = true;
-
-            // Act
-            service.set(Theme.AUTO);
-            TestBed.flushEffects();
-
-            // Assert - Should resolve to dark
-            expect(htmlElement.getAttribute('data-bs-theme')).toBe(Theme.DARK);
-            expect(htmlElement.style.colorScheme).toBe(Theme.DARK);
+    describe('set()', () => {
+        beforeEach(() => {
+            createService();
         });
 
-        it('should apply system "light" preference when mode is auto', () => {
-            // Arrange - Simulate System Light Mode
-            matchMediaMock.matches = false;
+        it('should update the theme signal', () => {
+            service.set(Theme.DARK);
 
-            // Act
-            service.set(Theme.AUTO);
+            expect(service.theme()).toBe(Theme.DARK);
+        });
+
+        it('should apply data-bs-theme="light" and colorScheme="light" when set to light', () => {
+            service.set(Theme.LIGHT);
             TestBed.flushEffects();
 
-            // Assert - Should resolve to light
-            expect(htmlElement.getAttribute('data-bs-theme')).toBe(Theme.LIGHT);
-            expect(htmlElement.style.colorScheme).toBe(Theme.LIGHT);
+            expect(htmlElement.getAttribute('data-bs-theme')).toBe('light');
+            expect(htmlElement.style.colorScheme).toBe('light');
+        });
+
+        it('should apply data-bs-theme="dark" and colorScheme="dark" when set to dark', () => {
+            service.set(Theme.DARK);
+            TestBed.flushEffects();
+
+            expect(htmlElement.getAttribute('data-bs-theme')).toBe('dark');
+            expect(htmlElement.style.colorScheme).toBe('dark');
+        });
+    });
+
+    describe('Persistence', () => {
+        it('should persist theme preference to localStorage on change', () => {
+            createService();
+            setItemSpy.mockClear();
+
+            service.set(Theme.DARK);
+            TestBed.flushEffects();
+
+            expect(setItemSpy).toHaveBeenCalledWith('theme-preference', 'dark');
         });
     });
 });

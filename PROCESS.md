@@ -206,7 +206,17 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
 - **Input & Modal Guarding**: Prevented physical keyboard events (`app.ts`) from triggering game actions or virtual keyboard animations while modals are open or when game status is won/lost.
 - **Race Condition Protection**: Added an `isSubmitting` Signal guard to `GameService` to prevent duplicate guess submissions on rapid/double Enter inputs.
 - **Security Headers & CORS Hardening**: Added HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `X-XSS-Protection`) and body size limits to Nginx (`nginx.conf`), and updated .NET backend CORS allowed origins (`Program.cs`).
-- **Yoda Conditions**: Enforced strict Yoda condition formatting (`coding-style.md`) across frontend comparisons.
+### Quality Assurance: Comprehensive Unit Test Suite (July 2026)
+- **Comprehensive Coverage**: Expanded frontend test coverage to **80 automated unit tests** across **9 test suites** (100% passing via Vitest):
+  - **Models**: `game-types.spec.ts` (16 tests covering type guards and constants).
+  - **Services**: `game.service.spec.ts` (7 tests covering game state management) and `theme.service.spec.ts` (8 tests covering theme persistence, DOM color-scheme updates, and auto/system preference logic).
+  - **Components**:
+    - `game-grid.spec.ts` (9 tests covering tile state computation, evaluated guesses, active guess rows, and tile click focus emission).
+    - `virtual-keyboard.spec.ts` (8 tests covering layout, key emissions, and key animation lifecycle signals).
+    - `game-over-modal.component.spec.ts` (7 tests covering modal actions and default property rendering).
+    - `statistics-modal.component.spec.ts` (8 tests covering personal stats, error states, and lazy-loaded global analytics caching).
+    - `header.component.spec.ts` (4 tests covering header modals and theme toggle).
+    - `app.spec.ts` (13 tests covering keyboard handling and modal interaction guarding).
 
 ---
 *This document will be updated continuously as the project evolves.*
