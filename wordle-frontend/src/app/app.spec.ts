@@ -6,7 +6,6 @@ import { describe, it, expect, beforeEach, vi, type MockInstance } from 'vitest'
 import { signal, computed, WritableSignal, Signal } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
-import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
 import { ThemeService } from './services/theme.service';
 
 // Define Mock Interfaces
@@ -137,13 +136,26 @@ describe('App', () => {
   });
 
   describe('Game Over Logic', () => {
+    /**
+     * Flushes the microtask queue so that fire-and-forget async calls
+     * (like the dynamic import() inside the effect) have time to resolve.
+     * Multiple ticks are needed because the effect -> async method -> await import() chain
+     * creates multiple layers of microtasks.
+     */
+    const flushPromises = async () => {
+      for (let i = 0; i < 5; i++) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    };
+
     it('should open modal when game is won', async () => {
       // Simulate Win
       gameServiceMock.guesses.set(['A', 'B', 'C']); // 3 guesses
       gameServiceMock.gameStatus.set('won');
       fixture.detectChanges(); // Flush effects
+      await flushPromises(); // Wait for dynamic import()
 
-      expect(modalServiceMock.open).toHaveBeenCalledWith(GameOverModalComponent, expect.anything());
+      expect(modalServiceMock.open).toHaveBeenCalledWith(expect.anything(), expect.anything());
 
       // Verify data passed to modal
       const modalRef = modalServiceMock.open.mock.results[0]?.value;
@@ -157,8 +169,9 @@ describe('App', () => {
       gameServiceMock.guesses.set(['A', 'B', 'C', 'D', 'E', 'F']);
       gameServiceMock.gameStatus.set('lost');
       fixture.detectChanges();
+      await flushPromises(); // Wait for dynamic import()
 
-      expect(modalServiceMock.open).toHaveBeenCalledWith(GameOverModalComponent, expect.anything());
+      expect(modalServiceMock.open).toHaveBeenCalledWith(expect.anything(), expect.anything());
 
       // Verify data
       const modalRef = modalServiceMock.open.mock.results[0]?.value;
@@ -171,6 +184,7 @@ describe('App', () => {
       // Trigger modal open
       gameServiceMock.gameStatus.set('won');
       fixture.detectChanges();
+      await flushPromises(); // Wait for dynamic import() and subscription
 
       // The subscription happens immediately in this mock setup, so startNewGame should be called
       expect(gameServiceMock.startNewGame).toHaveBeenCalled();

@@ -60,7 +60,7 @@
 - [x] Refactor and refine styling (use css vars, light-dark() function)
 - [x] Improve styling
 - [x] Fix bugs
-- [ ] Optimize Production Build (AOT, Lazy Loading)
+- [x] Optimize Production Build (AOT, Lazy Loading)
 - [ ] Make vanilla JS version of frontend (opensource library kolibri)
 - [x] Setup Docker Containers (Frontend, Backend, Database)
 - [x] Configure Nginx Reverse Proxy for API routing

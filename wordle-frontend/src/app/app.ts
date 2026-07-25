@@ -5,8 +5,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { GameGrid } from './components/game-grid/game-grid';
 import { VirtualKeyboard } from './components/virtual-keyboard/virtual-keyboard';
 import { GameService } from './services/game.service';
-import { GameOverModalComponent } from './components/game-over-modal/game-over-modal.component';
-import { StatisticsModalComponent } from './components/statistics-modal/statistics-modal.component';
+
 
 import { GameStatus } from './models/game-types';
 
@@ -35,18 +34,7 @@ export class App {
       const status = this.gameService.gameStatus();
 
       if (GameStatus.WON === status || GameStatus.LOST === status) {
-        const modalRef = this.modalService.open(GameOverModalComponent, { centered: true, backdrop: 'static' });
-        modalRef.componentInstance.isWin = GameStatus.WON === status;
-        modalRef.componentInstance.solution = this.gameService.answer();
-        modalRef.componentInstance.guesses = this.gameService.guesses().length;
-
-        modalRef.closed.subscribe((result) => {
-          if ('Play Again' === result) {
-            this.gameService.startNewGame();
-          } else if ('Show Stats' === result) {
-            this.modalService.open(StatisticsModalComponent, { centered: true });
-          }
-        });
+        this.showGameOverModal(status);
       }
     });
   }
@@ -104,6 +92,28 @@ export class App {
     } else {
       this.gameService.addLetter(key);
     }
+  }
+
+  /**
+   * Lazily loads and opens the game-over modal.
+   * Both GameOverModalComponent and StatisticsModalComponent are loaded on demand
+   * to reduce the initial bundle size.
+   */
+  private async showGameOverModal(status: GameStatus) {
+    const { GameOverModalComponent } = await import('./components/game-over-modal/game-over-modal.component');
+    const modalRef = this.modalService.open(GameOverModalComponent, { centered: true, backdrop: 'static' });
+    modalRef.componentInstance.isWin = GameStatus.WON === status;
+    modalRef.componentInstance.solution = this.gameService.answer();
+    modalRef.componentInstance.guesses = this.gameService.guesses().length;
+
+    modalRef.closed.subscribe(async (result) => {
+      if ('Play Again' === result) {
+        this.gameService.startNewGame();
+      } else if ('Show Stats' === result) {
+        const { StatisticsModalComponent } = await import('./components/statistics-modal/statistics-modal.component');
+        this.modalService.open(StatisticsModalComponent, { centered: true });
+      }
+    });
   }
 }
 

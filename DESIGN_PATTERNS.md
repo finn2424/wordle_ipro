@@ -21,3 +21,8 @@ This document outlines the software design patterns used in the Wordle applicati
 **Description**: The UI is broken down into small, reusable components.
 - **Presentational Components**: `GameGrid` (receives data via inputs, emits events via outputs).
 - **Container Components**: `App` (manages layout and orchestrates smart components).
+
+## 5. Lazy Loading Pattern
+**Usage**: Modal Components (`GameOverModal`, `StatisticsModal`, `InstructionsModal`).
+**Description**: Components that are not needed on initial page load are loaded on demand using dynamic `import()` expressions. This splits them into separate JavaScript chunks that are only downloaded when the user triggers the corresponding action (e.g., opening a modal).
+**Example**: `const { GameOverModalComponent } = await import('./components/game-over-modal/game-over-modal.component');` — the modal code is fetched only when the game ends.

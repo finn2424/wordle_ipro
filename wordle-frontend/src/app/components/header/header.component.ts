@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { InstructionsModalComponent } from '../instructions-modal/instructions-modal.component';
-import { StatisticsModalComponent } from '../statistics-modal/statistics-modal.component';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 /**
@@ -18,16 +16,18 @@ export class HeaderComponent {
   private modalService = inject(NgbModal);
 
   /**
-   * Opens the instructions modal dialog.
+   * Lazily loads and opens the instructions modal dialog.
    */
-  openInstructions() {
+  async openInstructions() {
+    const { InstructionsModalComponent } = await import('../instructions-modal/instructions-modal.component');
     this.modalService.open(InstructionsModalComponent, { size: 'md' });
   }
 
   /**
-   * Opens the statistics modal dialog.
+   * Lazily loads and opens the statistics modal dialog.
    */
-  openStatistics() {
+  async openStatistics() {
+    const { StatisticsModalComponent } = await import('../statistics-modal/statistics-modal.component');
     this.modalService.open(StatisticsModalComponent, { size: 'md' });
   }
 }

@@ -48,23 +48,23 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open InstructionsModalComponent when openInstructions is called', () => {
-    component.openInstructions();
+  it('should open InstructionsModalComponent when openInstructions is called', async () => {
+    await component.openInstructions();
     expect(modalServiceMock.open).toHaveBeenCalledWith(InstructionsModalComponent, { size: 'md' });
   });
 
-  it('should open StatisticsModalComponent when openStatistics is called', () => {
-    component.openStatistics();
+  it('should open StatisticsModalComponent when openStatistics is called', async () => {
+    await component.openStatistics();
     expect(modalServiceMock.open).toHaveBeenCalledWith(StatisticsModalComponent, { size: 'md' });
   });
 
-  it('should call modalService.open exactly once per method call', () => {
-    component.openInstructions();
+  it('should call modalService.open exactly once per method call', async () => {
+    await component.openInstructions();
     expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
 
     modalServiceMock.open.mockClear();
 
-    component.openStatistics();
+    await component.openStatistics();
     expect(modalServiceMock.open).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,8 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Importing Bootstrap SCSS file. */
+/*
+ * Bootstrap selective imports — only include modules actually used.
+ * Bootstrap 5.3 internally relies on @import for shared scope between partials,
+ * so we use @import for Bootstrap modules but only pull in what we need.
+ */
+
+// 1. Required Bootstrap core (must come first)
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+
+// 2. Root & base styles
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+
+// 3. Typography
+@import 'bootstrap/scss/type';
+
+// 4. Layout
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+
+// 5. Components used in the app
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/button-group';
+@import 'bootstrap/scss/close';        // .btn-close in modals
+@import 'bootstrap/scss/modal';        // modal-header, modal-body, modal-title
+@import 'bootstrap/scss/dropdown';     // theme toggle dropdown (ng-bootstrap)
+@import 'bootstrap/scss/nav';          // stats modal tabs (ngbNav)
+@import 'bootstrap/scss/alert';        // error alerts in stats modal
+@import 'bootstrap/scss/progress';     // guess distribution bars
+@import 'bootstrap/scss/spinners';     // loading spinners
+
+// 6. Helpers & utilities
+@import 'bootstrap/scss/helpers';      // visually-hidden, etc.
+@import 'bootstrap/scss/transitions';  // fade transitions for modals
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/utilities/api';
+
+// App-specific imports
 @import 'styles/variables';
-@import 'bootstrap/scss/bootstrap';
 @import 'styles/tiles';
 
 html,

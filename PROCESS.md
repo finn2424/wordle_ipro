@@ -218,5 +218,14 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
     - `header.component.spec.ts` (4 tests covering header modals and theme toggle).
     - `app.spec.ts` (13 tests covering keyboard handling and modal interaction guarding).
 
+### Optimization: Production Build (AOT, Lazy Loading) (July 2026)
+- **Problem**: The initial production bundle was **585.77 kB**, exceeding the Angular budget warning of 500 kB by 85.77 kB. The CSS bundle alone was 229.51 kB because the full Bootstrap framework was imported.
+- **AOT Status**: Already enabled by default with `@angular/build:application` (Angular 17+). No changes needed.
+- **Selective Bootstrap Imports**: Replaced `@import 'bootstrap/scss/bootstrap'` with selective imports of only the ~18 Bootstrap modules actually used (buttons, modals, dropdowns, nav, alerts, progress, spinners, utilities, etc.). This reduced CSS from **229.51 kB → 137.38 kB** (–40%).
+- **Lazy-Loaded Modal Components**: Moved three modal components (`GameOverModalComponent`, `StatisticsModalComponent`, `InstructionsModalComponent`) from eager static imports to dynamic `import()` expressions. These components are only loaded when the user actually opens them, splitting them into separate lazy chunks.
+- **Hardened `angular.json`**: Added explicit `optimization: true`, `extractLicenses: true`, and `namedChunks: false` to the production configuration for clarity and safety.
+- **Result**: Initial bundle reduced from **585.77 kB → 471.27 kB** (–19.5%), well under the 500 kB budget. Three lazy chunks totaling 25.92 kB are loaded on demand.
+- **Test Updates**: Updated `app.spec.ts` and `header.component.spec.ts` to handle the now-async modal methods. All **80 tests pass**.
+
 ---
 *This document will be updated continuously as the project evolves.*
