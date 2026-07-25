@@ -111,7 +111,10 @@ export class App {
         this.gameService.startNewGame();
       } else if ('Show Stats' === result) {
         const { StatisticsModalComponent } = await import('./components/statistics-modal/statistics-modal.component');
-        this.modalService.open(StatisticsModalComponent, { centered: true });
+        const statsRef = this.modalService.open(StatisticsModalComponent, { centered: true });
+        statsRef.hidden.subscribe(() => {
+          this.gameService.startNewGame();
+        });
       }
     });
   }
