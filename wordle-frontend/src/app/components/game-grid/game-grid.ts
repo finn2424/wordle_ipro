@@ -70,7 +70,7 @@ export class GameGrid {
    * @param colIndex Index of the column/letter clicked.
    */
   onTileClick(rowIndex: number, colIndex: number) {
-    if (rowIndex === this.evaluatedGuesses().length) {
+    if (this.evaluatedGuesses().length === rowIndex) {
       this.focusRequest.emit(colIndex);
     }
   }

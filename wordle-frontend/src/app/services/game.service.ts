@@ -34,6 +34,8 @@ export interface GameState {
 export class GameService {
     private api = inject(Api);
 
+    readonly isSubmitting = signal<boolean>(false);
+
     private state = signal<GameState>({
         gameId: null,
         guesses: [],
@@ -120,7 +122,7 @@ export class GameService {
      * @param letter The single character letter to add.
      */
     addLetter(letter: string): void {
-        if (GameStatus.PLAYING !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus || this.isSubmitting() || !/^[a-zA-Z]$/.test(letter)) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
@@ -145,7 +147,7 @@ export class GameService {
      * Handles both clearing the current slot or moving back to clear the previous one.
      */
     removeLetter(): void {
-        if (GameStatus.PLAYING !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus || this.isSubmitting()) return;
 
         this.state.update((currentState) => {
             const newGuess = [...currentState.currentGuess];
@@ -171,7 +173,7 @@ export class GameService {
      * Validates and submits the current guess via API.
      */
     async submitGuess(): Promise<void> {
-        if (GameStatus.PLAYING !== this.state().gameStatus) return;
+        if (GameStatus.PLAYING !== this.state().gameStatus || this.isSubmitting()) return;
 
         const currentState = this.state();
         const guess = currentState.currentGuess.join('');
@@ -181,6 +183,7 @@ export class GameService {
             return;
         }
 
+        this.isSubmitting.set(true);
         try {
             const params: SubmitGuess$Params = {
                 body: {
@@ -199,7 +202,7 @@ export class GameService {
                 return;
             }
 
-            if (resultData.status === 'error') {
+            if ('error' === resultData.status) {
                 this.state.update(s => ({ ...s, error: resultData.message || 'Unknown error' }));
                 return;
             }
@@ -235,6 +238,8 @@ export class GameService {
         } catch (err) {
             console.error('Submit Check Error', err);
             this.state.update(s => ({ ...s, error: 'Failed to submit guess' }));
+        } finally {
+            this.isSubmitting.set(false);
         }
     }
 

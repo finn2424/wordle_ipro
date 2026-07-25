@@ -62,8 +62,11 @@ export class StatisticsModalComponent implements OnInit {
         this.loading.set(true);
         this.error.set(null);
         try {
-            const deviceId = localStorage.getItem('deviceId');
-            if (!deviceId) throw new Error('No User ID found');
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = crypto.randomUUID();
+                localStorage.setItem('deviceId', deviceId);
+            }
 
             const params: GetStats$Params = { deviceId };
             const response = await this.api.invoke(getStats, params);

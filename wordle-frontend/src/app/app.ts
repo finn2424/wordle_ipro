@@ -59,6 +59,11 @@ export class App {
    */
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.ctrlKey || event.altKey || event.metaKey) return;
+    if (this.modalService.hasOpenModals()) return;
+    if (GameStatus.PLAYING !== this.gameService.gameStatus()) return;
+
+    const target = event.target as HTMLElement | null;
+    if (target && ('INPUT' === target.tagName || 'TEXTAREA' === target.tagName || target.isContentEditable)) return;
 
     const key = event.key;
     let virtualKey = '';
@@ -90,6 +95,8 @@ export class App {
    * @param key The key string emitted by the virtual keyboard.
    */
   handleVirtualKey(key: string) {
+    if (this.modalService.hasOpenModals() || GameStatus.PLAYING !== this.gameService.gameStatus()) return;
+
     if ('Enter' === key) {
       this.gameService.submitGuess();
     } else if ('Backspace' === key) {

@@ -202,5 +202,11 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
 - Added a "Global Analytics" tab to the statistics modal using `NgbNav`. Shows avg. guesses to win, top 10 starting words, 5 hardest words (by win rate), and global guess distribution.
 - New stored procedure `spStats_GetAdvanced` queries across all players with no `@DeviceId` filter. Returns a single flattened result set. Mapped to `GET /api/Stats/Advanced`.
 
+### Quality Assurance & Security Hardening (July 2026)
+- **Input & Modal Guarding**: Prevented physical keyboard events (`app.ts`) from triggering game actions or virtual keyboard animations while modals are open or when game status is won/lost.
+- **Race Condition Protection**: Added an `isSubmitting` Signal guard to `GameService` to prevent duplicate guess submissions on rapid/double Enter inputs.
+- **Security Headers & CORS Hardening**: Added HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `X-XSS-Protection`) and body size limits to Nginx (`nginx.conf`), and updated .NET backend CORS allowed origins (`Program.cs`).
+- **Yoda Conditions**: Enforced strict Yoda condition formatting (`coding-style.md`) across frontend comparisons.
+
 ---
 *This document will be updated continuously as the project evolves.*

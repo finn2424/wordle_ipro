@@ -57,7 +57,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors(builder => builder
-    .WithOrigins("http://localhost:4200", "https://wordle-fb.duckdns.org")
+    .WithOrigins("http://localhost:4200", "http://localhost:8083", "https://wordle-fb.ddns.net")
     .AllowAnyMethod()
     .AllowAnyHeader());
 
