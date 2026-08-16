@@ -1,0 +1,290 @@
+:root {
+  --color-bg: #121213;
+  --color-text: #ffffff;
+  --color-correct: #538d4e;
+  --color-present: #b59f3b;
+  --color-absent: #3a3a3c;
+  --color-empty: #121213;
+  --color-border: #3a3a3c;
+  --color-key: #818384;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Fix inheritance for Kolibri dialogs which have white backgrounds */
+kol-dialog, kol-card {
+  color: #000000;
+  text-align: left;
+}
+
+#app {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: 50px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-left, .header-right {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-center {
+  display: flex;
+  justify-content: center;
+}
+
+.header-center kol-heading {
+  margin: 0;
+}
+
+.game-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  gap: 5px;
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 5 / 6;
+  margin: 0 auto;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.grid-cell {
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  user-select: none;
+  cursor: pointer;
+  background-color: var(--color-empty);
+  transition: all 0.2s ease-in-out;
+}
+
+.grid-cell.active {
+  border-color: #565758;
+}
+
+.grid-cell.focused {
+  border-color: #ffffff;
+}
+
+.grid-cell.correct {
+  background-color: var(--color-correct);
+  border-color: var(--color-correct);
+}
+
+.grid-cell.present {
+  background-color: var(--color-present);
+  border-color: var(--color-present);
+}
+
+.grid-cell.absent {
+  background-color: var(--color-absent);
+  border-color: var(--color-absent);
+}
+
+.virtual-keyboard {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  gap: 6px;
+}
+
+.key-btn {
+  font-family: inherit;
+  font-weight: bold;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  height: 58px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--color-key);
+  color: var(--color-text);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  transition: background-color 0.1s;
+}
+
+.key-btn:active {
+  opacity: 0.8;
+}
+
+.key-wide {
+  flex: 1.5;
+  font-size: 0.85rem;
+}
+
+.key-btn.correct { background-color: var(--color-correct); }
+.key-btn.present { background-color: var(--color-present); }
+.key-btn.absent { background-color: var(--color-absent); }
+
+.error-toast {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+/* Modal Custom Styles */
+.modal-content-custom {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.modal-header-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title-custom {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal-close-custom {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-subtitle-custom {
+  color: #555;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.modal-list-custom {
+  color: #555;
+  padding-left: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.modal-list-custom li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-examples-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.modal-example {
+  margin-bottom: 1.5rem;
+}
+
+.modal-tiles {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: 2px solid #d3d6da;
+  text-transform: uppercase;
+  color: #000;
+  background-color: #fff;
+}
+
+.modal-cell[data-state="correct"] {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+  color: white;
+}
+
+.modal-cell[data-state="present"] {
+  background-color: #c9b458;
+  border-color: #c9b458;
+  color: white;
+}
+
+.modal-cell[data-state="absent"] {
+  background-color: #86888a;
+  border-color: #86888a;
+  color: white;
+}
+
+.modal-example p {
+  color: #555;
+  font-size: 0.9rem;
+  margin: 0;
+}

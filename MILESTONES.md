@@ -61,7 +61,7 @@
 - [x] Improve styling
 - [x] Fix bugs
 - [x] Optimize Production Build (AOT, Lazy Loading)
-- [ ] Make vanilla JS version of frontend (opensource library kolibri)
+- [x] Make vanilla JS version of frontend (opensource library kolibri)
 - [x] Setup Docker Containers (Frontend, Backend, Database)
 - [x] Configure Nginx Reverse Proxy for API routing
 - [x] Setup VM (Debian 13) with UFW Firewall

@@ -46,6 +46,13 @@ I leverage my existing expertise in **Angular** to validate AI outputs, ensuring
   - **TypeScript**: First-class support for TypeScript ensures type safety for the game logic (interfaces for Guesses, GameState, etc.), reducing runtime errors.
   - **Tooling**: Angular CLI provides out-of-the-box build optimization, SCSS support, and PWA capabilities, which are manually configured in a native setup.
 
+### Decision: Kolibri / Vanilla JS Evaluation
+- **Decision**: Implemented an alternative, purely Vanilla JS version of the frontend (`wordle-vanilla`) integrating the Kolibri open-source UI component library.
+- **Reasoning**:
+  - **Overhead Evaluation**: To evaluate whether the Angular framework was "overkill" for a project of this scope, I built a secondary lightweight vanilla implementation to compare the development experience and bundle size.
+  - **Kolibri Integration**: Used Kolibri's web components (`kol-button`, `kol-dialog`, `kol-icon`, etc.) to speed up UI development and assess how seamlessly external web components can be integrated into a raw HTML/JS stack.
+  - **Production Strategy**: This vanilla evaluation branch is strictly for local testing and development; it is deliberately excluded from the production deployment script (`deploy.yml`) to keep the production VM clean.
+
 ### Decision: Backend Technology (.NET vs. Node.js)
 - **Decision**: I chose .NET 10 (ASP.NET Core) over Node.js.
 - **Reasoning**:

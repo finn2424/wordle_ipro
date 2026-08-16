@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "run-backend": "dotnet watch run --project ../wordle-backend --launch-profile http",
+    "run-vanilla": "npm run dev --prefix ../wordle-vanilla",
     "ssh-db-tunnel": "ssh -L 1433:127.0.0.1:1434 root@ssh.herbfarm.ch",
     "generate-swagger": "ng-openapi-gen -c ng-openapi-gen.json",
     "build": "ng build",

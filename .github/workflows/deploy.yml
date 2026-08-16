@@ -26,6 +26,9 @@ jobs:
             # 1. Pull latest code
             git pull origin main
 
+            # 1.5 Remove vanilla js version since it's local only
+            rm -rf wordle-vanilla
+
             # 2. Create the .env file dynamically on the server
             # This takes the secret from GitHub and writes it to a file the server can read
             printf "DB_PASSWORD=%s\n" "$DB_PASSWORD" > .env
