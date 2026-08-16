@@ -21,7 +21,7 @@
     export const LetterStatus = {CORRECT: 'correct', PRESENT: 'present', ABSENT: 'absent', EMPTY: 'empty'} as const;
     export type LetterStatus = typeof LetterStatus[keyof typeof LetterStatus];
     ```
-- [ ] Reformat code: for example when declaring multiple vars, get start of all words to the same col
+- [x] Reformat code: for example when declaring multiple vars, get start of all words to the same col -> decided to use prettier formatter
 - [x] Make code more typesafe
 - [x] Use `light-dark()` CSS function for dark-mode support
 - [x] Research design patterns and document usage or rewrite to use design-pattern

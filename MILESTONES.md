@@ -73,10 +73,10 @@
 - [x] Add "Show Stats" button next to "Play Again" button
 - [x] Implement Advanced Analytics (e.g., most common starting words)
 - [x] Add more tests (80 unit tests across 9 suites: components, services, models)
-- [ ] Post update in Teams channel
 
 - [x] Improve Security (avoid known vulnerabilities, configure host VM, secure endpoints)
 - [x] Expose Database for Local Development
-- [-] Fulfill and document requirements from teams document
+- [x] Fulfill and document requirements from teams document
+- [x] Address vulnerabilities from npm audit
 - [ ] Perform Final manual Testing
 - [ ] Create Presentation Slides & Live Demo Script
