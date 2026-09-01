@@ -35,7 +35,7 @@ wordle_ipro/
 │   └── nginx.conf        # Nginx config (serves app & proxies API)
 ├── wordle-backend/       # .NET Web API backend
 │   └── Dockerfile        # Multi-stage build for .NET 10
-├── wordle-vanilla/       # Alternative Vanilla JS frontend evaluating Kolibri components
+├── wordle-vanilla/       # Alternative Vanilla JS frontend built with antigravity, evaluating Kolibri components
 ├── docker-compose.yml    # Container orchestration
 ├── DESIGN_PATTERNS.md    # Software architecture patterns
 ├── GAME_RULES.md         # How to play Wordle

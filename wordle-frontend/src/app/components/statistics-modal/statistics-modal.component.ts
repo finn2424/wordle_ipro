@@ -58,6 +58,9 @@ export class StatisticsModalComponent implements OnInit {
         this.loadStats();
     }
 
+    /**
+     * Fetches the user's personal statistics from the API and updates the local state.
+     */
     async loadStats() {
         this.loading.set(true);
         this.error.set(null);
@@ -111,6 +114,9 @@ export class StatisticsModalComponent implements OnInit {
         }
     }
 
+    /**
+     * Fetches advanced global statistics from the API and updates the local state.
+     */
     async loadAdvancedStats() {
         this.advancedLoading.set(true);
         this.advancedError.set(null);

@@ -15,7 +15,7 @@
           virtualKey = key.toUpperCase();
         }
     ```
-- [-] Document code with comments, like GameService
+- [x] Document code with comments, like GameService
 - [x] Don't check for strings when using types, do it like this instead:
     ```typescript
     export const LetterStatus = {CORRECT: 'correct', PRESENT: 'present', ABSENT: 'absent', EMPTY: 'empty'} as const;
